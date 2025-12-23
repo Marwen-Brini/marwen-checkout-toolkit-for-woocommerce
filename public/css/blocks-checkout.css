@@ -1,0 +1,166 @@
+/**
+ * Checkout Toolkit - WooCommerce Blocks Styles
+ *
+ * @package WooCheckoutToolkit
+ */
+
+/* Wrapper */
+.checkout-toolkit-blocks-wrapper {
+    margin: 1.5em 0;
+    padding: 0;
+}
+
+/* Delivery Date Block */
+.checkout-toolkit-delivery-date-block {
+    margin-bottom: 1.5em;
+}
+
+.checkout-toolkit-delivery-date-block label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    color: inherit;
+}
+
+.checkout-toolkit-delivery-date-block label .required {
+    color: #cc0000;
+}
+
+.checkout-toolkit-date-wrapper {
+    position: relative;
+}
+
+.checkout-toolkit-datepicker {
+    width: 100%;
+    padding: 0.75em 1em;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.checkout-toolkit-datepicker:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 1px #007cba;
+    outline: none;
+}
+
+.checkout-toolkit-datepicker::placeholder {
+    color: #757575;
+}
+
+/* Custom Field Block */
+.checkout-toolkit-custom-field-block {
+    margin-bottom: 1.5em;
+}
+
+.checkout-toolkit-custom-field-block label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    color: inherit;
+}
+
+.checkout-toolkit-custom-field-block label .required {
+    color: #cc0000;
+}
+
+.checkout-toolkit-custom-field {
+    width: 100%;
+    padding: 0.75em 1em;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 1em;
+    font-family: inherit;
+    background-color: #fff;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.checkout-toolkit-custom-field:focus {
+    border-color: #007cba;
+    box-shadow: 0 0 0 1px #007cba;
+    outline: none;
+}
+
+.checkout-toolkit-custom-field::placeholder {
+    color: #757575;
+}
+
+textarea.checkout-toolkit-custom-field {
+    min-height: 100px;
+}
+
+/* Character Counter */
+.checkout-toolkit-char-count {
+    margin-top: 0.5em;
+    font-size: 0.85em;
+    color: #757575;
+    text-align: right;
+}
+
+/* Flatpickr Overrides for Blocks */
+.flatpickr-calendar {
+    font-family: inherit;
+    border-radius: 4px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: #007cba;
+    border-color: #007cba;
+}
+
+.flatpickr-day:hover {
+    background: #f0f0f0;
+}
+
+.flatpickr-day.disabled,
+.flatpickr-day.disabled:hover {
+    color: #ccc;
+    background: transparent;
+    cursor: not-allowed;
+}
+
+/* Validation Error States */
+.checkout-toolkit-delivery-date-block.has-error .checkout-toolkit-datepicker,
+.checkout-toolkit-custom-field-block.has-error .checkout-toolkit-custom-field {
+    border-color: #cc0000;
+}
+
+.checkout-toolkit-error-message {
+    color: #cc0000;
+    font-size: 0.85em;
+    margin-top: 0.5em;
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .checkout-toolkit-datepicker,
+    .checkout-toolkit-custom-field {
+        background-color: #1e1e1e;
+        border-color: #3c3c3c;
+        color: #fff;
+    }
+
+    .checkout-toolkit-datepicker::placeholder,
+    .checkout-toolkit-custom-field::placeholder {
+        color: #a0a0a0;
+    }
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .checkout-toolkit-blocks-wrapper {
+        margin: 1em 0;
+    }
+
+    .checkout-toolkit-datepicker,
+    .checkout-toolkit-custom-field {
+        padding: 0.6em 0.8em;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}

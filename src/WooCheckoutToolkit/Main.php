@@ -16,6 +16,8 @@ use WooCheckoutToolkit\Display\OrderDisplay;
 use WooCheckoutToolkit\Display\EmailDisplay;
 use WooCheckoutToolkit\Display\AccountDisplay;
 use WooCheckoutToolkit\Logger;
+use WooCheckoutToolkit\CheckoutDetector;
+use WooCheckoutToolkit\Blocks\BlocksIntegration;
 
 defined('ABSPATH') || exit;
 
@@ -95,11 +97,13 @@ final class Main
         Logger::info('Initializing Checkout Toolkit for WooCommerce', [
             'version' => CHECKOUT_TOOLKIT_VERSION,
             'php_version' => PHP_VERSION,
+            'checkout_type' => CheckoutDetector::get_checkout_type(),
         ]);
 
         $this->init_admin();
         $this->init_frontend();
         $this->init_display();
+        $this->init_blocks_integration();
 
         Logger::debug('Plugin initialization complete');
     }
@@ -117,17 +121,108 @@ final class Main
 
     /**
      * Initialize frontend components
+     *
+     * Classic checkout hooks are only registered for classic checkout.
+     * Blocks checkout uses the BlocksIntegration class.
      */
     private function init_frontend(): void
     {
-        $this->delivery_date = new DeliveryDate();
-        $this->delivery_date->init();
+        // Classic checkout components - only init if using classic checkout
+        // We check this late (on wp hook) to ensure checkout page is loaded
+        add_action('wp', function () {
+            if (is_checkout() && CheckoutDetector::is_blocks_checkout()) {
+                Logger::debug('Blocks checkout detected - skipping classic checkout hooks');
+                return;
+            }
 
-        $this->order_fields = new OrderFields();
-        $this->order_fields->init();
+            // For non-checkout pages or classic checkout, initialize components
+            if ($this->delivery_date === null) {
+                $this->delivery_date = new DeliveryDate();
+                $this->delivery_date->init();
+            }
 
-        // Enqueue frontend assets
+            if ($this->order_fields === null) {
+                $this->order_fields = new OrderFields();
+                $this->order_fields->init();
+            }
+        }, 5);
+
+        // Always initialize for admin/AJAX contexts
+        if (is_admin() || wp_doing_ajax()) {
+            $this->delivery_date = new DeliveryDate();
+            $this->delivery_date->init();
+
+            $this->order_fields = new OrderFields();
+            $this->order_fields->init();
+        }
+
+        // Enqueue frontend assets for classic checkout only
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
+    }
+
+    /**
+     * Initialize WooCommerce Blocks integration
+     */
+    private function init_blocks_integration(): void
+    {
+        // Only initialize if WooCommerce Blocks is available
+        if (!CheckoutDetector::has_wc_blocks()) {
+            Logger::debug('WooCommerce Blocks not available');
+            return;
+        }
+
+        // Register blocks integration
+        add_action('woocommerce_blocks_checkout_block_registration', function ($integration_registry) {
+            $integration_registry->register(new BlocksIntegration());
+            Logger::debug('Blocks integration registered');
+        });
+
+        // Enqueue blocks assets
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_blocks_assets']);
+    }
+
+    /**
+     * Enqueue blocks checkout assets
+     */
+    public function enqueue_blocks_assets(): void
+    {
+        if (!is_checkout() || !CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
+        $delivery_settings = $this->get_delivery_settings();
+        $field_settings = $this->get_field_settings();
+
+        // Only load if at least one feature is enabled
+        if (!$delivery_settings['enabled'] && !$field_settings['enabled']) {
+            return;
+        }
+
+        // Flatpickr for date picker
+        if ($delivery_settings['enabled']) {
+            wp_enqueue_script(
+                'checkout-toolkit-flatpickr',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+                [],
+                '4.6.13',
+                true
+            );
+
+            wp_enqueue_style(
+                'checkout-toolkit-flatpickr',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+                [],
+                '4.6.13'
+            );
+        }
+
+        // Blocks checkout styles
+        wp_enqueue_style(
+            'checkout-toolkit-blocks-style',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/blocks-checkout.css',
+            [],
+            CHECKOUT_TOOLKIT_VERSION
+        );
     }
 
     /**
@@ -146,7 +241,7 @@ final class Main
     }
 
     /**
-     * Enqueue frontend assets on checkout page
+     * Enqueue frontend assets on checkout page (classic checkout only)
      */
     public function enqueue_frontend_assets(): void
     {
@@ -154,8 +249,13 @@ final class Main
             return;
         }
 
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $field_settings = get_option('checkout_toolkit_field_settings', []);
+        // Skip for blocks checkout - handled by enqueue_blocks_assets
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
+        $delivery_settings = $this->get_delivery_settings();
+        $field_settings = $this->get_field_settings();
 
         // Only load if at least one feature is enabled
         if (empty($delivery_settings['enabled']) && empty($field_settings['enabled'])) {
@@ -216,8 +316,8 @@ final class Main
      */
     private function get_frontend_config(): array
     {
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', $this->get_default_delivery_settings());
-        $field_settings = get_option('checkout_toolkit_field_settings', $this->get_default_field_settings());
+        $delivery_settings = $this->get_delivery_settings();
+        $field_settings = $this->get_field_settings();
 
         $config = [
             'delivery' => [
@@ -315,5 +415,25 @@ final class Main
             'show_in_emails' => true,
             'show_in_admin' => true,
         ];
+    }
+
+    /**
+     * Get delivery settings (with defaults)
+     */
+    public function get_delivery_settings(): array
+    {
+        $defaults = $this->get_default_delivery_settings();
+        $settings = get_option('checkout_toolkit_delivery_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get field settings (with defaults)
+     */
+    public function get_field_settings(): array
+    {
+        $defaults = $this->get_default_field_settings();
+        $settings = get_option('checkout_toolkit_field_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 }
