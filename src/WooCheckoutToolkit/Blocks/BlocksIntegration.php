@@ -120,11 +120,11 @@ class BlocksIntegration implements IntegrationInterface
             'checkout-toolkit-blocks',
             $script_url,
             [
-                'wc-blocks-checkout',
-                'wc-blocks-components',
+                'wp-plugins',
                 'wp-element',
-                'wp-html-entities',
-                'wp-i18n',
+                'wp-data',
+                'wc-blocks-checkout',
+                'wc-settings',
             ],
             CHECKOUT_TOOLKIT_VERSION,
             true

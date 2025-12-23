@@ -1,151 +1,140 @@
 /**
  * Checkout Toolkit - WooCommerce Blocks Integration
  *
+ * Uses the ExperimentalOrderMeta slot to add fields to blocks checkout.
+ *
  * @package WooCheckoutToolkit
  */
 
 (function () {
     'use strict';
 
-    const { registerCheckoutBlock } = wc.blocksCheckout;
+    const { registerPlugin } = wp.plugins;
+    const { ExperimentalOrderMeta } = wc.blocksCheckout;
     const { useEffect, useState, useRef, createElement: el } = wp.element;
     const { getSetting } = wc.wcSettings;
-    const { extensionCartUpdate } = wc.blocksCheckout;
 
     // Get settings from PHP
     const settings = getSetting('checkout-toolkit_data', {});
-    const { delivery, customField, i18n } = settings;
 
-    // Store for our field values
-    let checkoutToolkitData = {
-        delivery_date: '',
-        custom_field: ''
-    };
+    if (!settings || Object.keys(settings).length === 0) {
+        console.warn('Checkout Toolkit: No settings found');
+        return;
+    }
+
+    const { delivery, customField, i18n } = settings;
 
     /**
      * Delivery Date Field Component
      */
-    const DeliveryDateField = ({ checkoutExtensionData }) => {
-        const { setExtensionData } = checkoutExtensionData;
+    const DeliveryDateField = ({ cart, extensions, setExtensionData }) => {
         const [selectedDate, setSelectedDate] = useState('');
-        const [displayDate, setDisplayDate] = useState('');
         const inputRef = useRef(null);
         const flatpickrRef = useRef(null);
 
         useEffect(() => {
-            if (!inputRef.current || !window.flatpickr) {
-                // Load flatpickr if not available
-                loadFlatpickr().then(() => initFlatpickr());
-                return;
-            }
-            initFlatpickr();
-        }, []);
-
-        const loadFlatpickr = () => {
-            return new Promise((resolve) => {
-                if (window.flatpickr) {
-                    resolve();
+            // Wait for flatpickr to be available
+            const initPicker = () => {
+                if (!inputRef.current || !window.flatpickr || flatpickrRef.current) {
                     return;
                 }
 
-                // Flatpickr should already be loaded via wp_enqueue_script
-                // This is a fallback
+                // Calculate min/max dates
+                const today = new Date();
+                const minDate = new Date(today);
+                minDate.setDate(minDate.getDate() + (delivery.minLeadDays || 0));
+
+                const maxDate = new Date(today);
+                maxDate.setDate(maxDate.getDate() + (delivery.maxFutureDays || 30));
+
+                // Disable weekdays function
+                const disableWeekdays = (date) => {
+                    if (delivery.disabledWeekdays && delivery.disabledWeekdays.length > 0) {
+                        return delivery.disabledWeekdays.includes(date.getDay());
+                    }
+                    return false;
+                };
+
+                // Build disabled dates
+                const disabledDates = [];
+                if (delivery.blockedDates && delivery.blockedDates.length > 0) {
+                    disabledDates.push(...delivery.blockedDates);
+                }
+
+                flatpickrRef.current = flatpickr(inputRef.current, {
+                    dateFormat: 'Y-m-d',
+                    altInput: true,
+                    altFormat: delivery.dateFormat || 'F j, Y',
+                    minDate: minDate,
+                    maxDate: maxDate,
+                    disable: [disableWeekdays, ...disabledDates],
+                    locale: {
+                        firstDayOfWeek: delivery.firstDayOfWeek || 0
+                    },
+                    onChange: (selectedDates, dateStr) => {
+                        setSelectedDate(dateStr);
+                        if (typeof setExtensionData === 'function') {
+                            setExtensionData('checkout-toolkit', 'delivery_date', dateStr);
+                        }
+                    }
+                });
+            };
+
+            // Try to init immediately or wait for flatpickr
+            if (window.flatpickr) {
+                initPicker();
+            } else {
                 const checkInterval = setInterval(() => {
                     if (window.flatpickr) {
                         clearInterval(checkInterval);
-                        resolve();
+                        initPicker();
                     }
                 }, 100);
 
-                // Timeout after 5 seconds
-                setTimeout(() => {
-                    clearInterval(checkInterval);
-                    resolve();
-                }, 5000);
-            });
-        };
-
-        const initFlatpickr = () => {
-            if (!inputRef.current || !window.flatpickr || flatpickrRef.current) {
-                return;
+                // Cleanup interval after 10 seconds
+                setTimeout(() => clearInterval(checkInterval), 10000);
             }
 
-            // Calculate min/max dates
-            const today = new Date();
-            const minDate = new Date(today);
-            minDate.setDate(minDate.getDate() + (delivery.minLeadDays || 0));
-
-            const maxDate = new Date(today);
-            maxDate.setDate(maxDate.getDate() + (delivery.maxFutureDays || 30));
-
-            // Build disabled dates array
-            const disabledDates = [];
-
-            // Add blocked specific dates
-            if (delivery.blockedDates && delivery.blockedDates.length > 0) {
-                disabledDates.push(...delivery.blockedDates);
-            }
-
-            // Disable weekdays function
-            const disableWeekdays = (date) => {
-                if (delivery.disabledWeekdays && delivery.disabledWeekdays.length > 0) {
-                    return delivery.disabledWeekdays.includes(date.getDay());
-                }
-                return false;
-            };
-
-            flatpickrRef.current = flatpickr(inputRef.current, {
-                dateFormat: 'Y-m-d',
-                altInput: true,
-                altFormat: delivery.dateFormat || 'F j, Y',
-                minDate: minDate,
-                maxDate: maxDate,
-                disable: [
-                    disableWeekdays,
-                    ...disabledDates
-                ],
-                locale: {
-                    firstDayOfWeek: delivery.firstDayOfWeek || 0
-                },
-                onChange: (selectedDates, dateStr) => {
-                    setSelectedDate(dateStr);
-                    checkoutToolkitData.delivery_date = dateStr;
-                    setExtensionData('checkout-toolkit', 'delivery_date', dateStr);
-                }
-            });
-        };
-
-        useEffect(() => {
             return () => {
                 if (flatpickrRef.current) {
                     flatpickrRef.current.destroy();
+                    flatpickrRef.current = null;
                 }
             };
         }, []);
 
-        if (!delivery.enabled) {
+        if (!delivery || !delivery.enabled) {
             return null;
         }
 
-        return el('div', { className: 'checkout-toolkit-delivery-date-block' },
-            el('label', {
-                htmlFor: 'checkout-toolkit-delivery-date',
-                className: 'wc-block-components-text-input__label'
-            },
-                delivery.label || 'Preferred Delivery Date',
-                delivery.required && el('span', { className: 'required' }, ' *')
+        return el('div', { className: 'checkout-toolkit-delivery-date-block wc-block-components-checkout-step' },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    delivery.label || 'Preferred Delivery Date',
+                    delivery.required && el('span', { className: 'required', style: { color: '#cc0000' } }, ' *')
+                )
             ),
-            el('div', { className: 'checkout-toolkit-date-wrapper' },
-                el('input', {
-                    ref: inputRef,
-                    type: 'text',
-                    id: 'checkout-toolkit-delivery-date',
-                    name: 'checkout_toolkit_delivery_date',
-                    className: 'wc-block-components-text-input__input checkout-toolkit-datepicker',
-                    placeholder: i18n.selectDate || 'Select a date',
-                    required: delivery.required,
-                    readOnly: true
-                })
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    el('input', {
+                        ref: inputRef,
+                        type: 'text',
+                        id: 'checkout-toolkit-delivery-date',
+                        name: 'checkout_toolkit_delivery_date',
+                        className: 'wc-block-components-text-input__input checkout-toolkit-datepicker',
+                        placeholder: i18n?.selectDate || 'Select a date',
+                        required: delivery.required,
+                        readOnly: true,
+                        style: {
+                            width: '100%',
+                            padding: '12px 16px',
+                            border: '1px solid #8c8f94',
+                            borderRadius: '4px',
+                            fontSize: '16px',
+                            cursor: 'pointer'
+                        }
+                    })
+                )
             )
         );
     };
@@ -153,8 +142,7 @@
     /**
      * Custom Field Component
      */
-    const CustomFieldComponent = ({ checkoutExtensionData }) => {
-        const { setExtensionData } = checkoutExtensionData;
+    const CustomFieldComponent = ({ cart, extensions, setExtensionData }) => {
         const [value, setValue] = useState('');
         const [charCount, setCharCount] = useState(0);
 
@@ -168,100 +156,119 @@
 
             setValue(newValue);
             setCharCount(newValue.length);
-            checkoutToolkitData.custom_field = newValue;
-            setExtensionData('checkout-toolkit', 'custom_field', newValue);
+
+            if (typeof setExtensionData === 'function') {
+                setExtensionData('checkout-toolkit', 'custom_field', newValue);
+            }
         };
 
-        if (!customField.enabled) {
+        if (!customField || !customField.enabled) {
             return null;
         }
 
-        const InputComponent = customField.type === 'textarea' ? 'textarea' : 'input';
-        const inputProps = {
-            id: 'checkout-toolkit-custom-field',
-            name: 'checkout_toolkit_custom_field',
-            className: 'wc-block-components-text-input__input checkout-toolkit-custom-field',
-            placeholder: customField.placeholder || '',
-            value: value,
-            onChange: handleChange,
-            required: customField.required
+        const isTextarea = customField.type === 'textarea';
+
+        const inputStyles = {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #8c8f94',
+            borderRadius: '4px',
+            fontSize: '16px',
+            fontFamily: 'inherit',
+            resize: 'vertical'
         };
 
-        if (customField.type === 'textarea') {
-            inputProps.rows = 4;
-        } else {
-            inputProps.type = 'text';
-        }
-
-        if (customField.maxLength > 0) {
-            inputProps.maxLength = customField.maxLength;
-        }
-
-        return el('div', { className: 'checkout-toolkit-custom-field-block' },
-            el('label', {
-                htmlFor: 'checkout-toolkit-custom-field',
-                className: 'wc-block-components-text-input__label'
-            },
-                customField.label || 'Special Instructions',
-                customField.required && el('span', { className: 'required' }, ' *')
+        return el('div', { className: 'checkout-toolkit-custom-field-block wc-block-components-checkout-step' },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    customField.label || 'Special Instructions',
+                    customField.required && el('span', { className: 'required', style: { color: '#cc0000' } }, ' *')
+                )
             ),
-            el(InputComponent, inputProps),
-            customField.maxLength > 0 && el('div', { className: 'checkout-toolkit-char-count' },
-                (customField.maxLength - charCount) + ' ' + (i18n.charactersRemaining || 'characters remaining')
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    isTextarea
+                        ? el('textarea', {
+                            id: 'checkout-toolkit-custom-field',
+                            name: 'checkout_toolkit_custom_field',
+                            className: 'checkout-toolkit-custom-field',
+                            placeholder: customField.placeholder || '',
+                            value: value,
+                            onChange: handleChange,
+                            required: customField.required,
+                            rows: 4,
+                            maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
+                            style: inputStyles
+                        })
+                        : el('input', {
+                            type: 'text',
+                            id: 'checkout-toolkit-custom-field',
+                            name: 'checkout_toolkit_custom_field',
+                            className: 'checkout-toolkit-custom-field',
+                            placeholder: customField.placeholder || '',
+                            value: value,
+                            onChange: handleChange,
+                            required: customField.required,
+                            maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
+                            style: inputStyles
+                        }),
+                    customField.maxLength > 0 && el('div', {
+                        className: 'checkout-toolkit-char-count',
+                        style: { marginTop: '8px', fontSize: '14px', color: '#757575', textAlign: 'right' }
+                    },
+                        (customField.maxLength - charCount) + ' ' + (i18n?.charactersRemaining || 'characters remaining')
+                    )
+                )
             )
         );
     };
 
     /**
-     * Main Checkout Block Component
+     * Main Render Component for ExperimentalOrderMeta slot
      */
-    const CheckoutToolkitBlock = ({ checkoutExtensionData }) => {
-        if (!delivery.enabled && !customField.enabled) {
+    const CheckoutToolkitFields = ({ cart, extensions }) => {
+        const [extensionData, setExtensionDataState] = useState({});
+
+        // Function to update extension data and dispatch to store
+        const setExtensionData = (namespace, key, value) => {
+            setExtensionDataState(prev => ({
+                ...prev,
+                [key]: value
+            }));
+
+            // Dispatch to WooCommerce store
+            const { dispatch } = wp.data;
+            if (dispatch('wc/store/checkout')) {
+                dispatch('wc/store/checkout').__internalSetExtensionData(namespace, { [key]: value });
+            }
+        };
+
+        const hasDelivery = delivery && delivery.enabled;
+        const hasCustomField = customField && customField.enabled;
+
+        if (!hasDelivery && !hasCustomField) {
             return null;
         }
 
-        return el('div', { className: 'checkout-toolkit-blocks-wrapper' },
-            delivery.enabled && el(DeliveryDateField, { checkoutExtensionData }),
-            customField.enabled && el(CustomFieldComponent, { checkoutExtensionData })
+        return el('div', { className: 'checkout-toolkit-blocks-wrapper', style: { marginTop: '24px' } },
+            hasDelivery && el(DeliveryDateField, { cart, extensions, setExtensionData }),
+            hasCustomField && el(CustomFieldComponent, { cart, extensions, setExtensionData })
         );
     };
 
     /**
-     * Block configuration
+     * Register the plugin with ExperimentalOrderMeta slot
      */
-    const blockConfig = {
-        name: 'checkout-toolkit',
-        metadata: {
-            name: 'checkout-toolkit',
-            parent: ['woocommerce/checkout-order-notes-block'],
-        },
-        component: ({ checkoutExtensionData, extensions }) => {
-            return el(CheckoutToolkitBlock, { checkoutExtensionData, extensions });
-        }
+    const render = () => {
+        return el(ExperimentalOrderMeta, null,
+            el(CheckoutToolkitFields, null)
+        );
     };
 
-    // Register the checkout block
-    if (typeof registerCheckoutBlock === 'function') {
-        registerCheckoutBlock(blockConfig);
-    }
-
-    // Load Flatpickr styles
-    const loadStyles = () => {
-        const styleId = 'checkout-toolkit-blocks-style';
-        if (!document.getElementById(styleId)) {
-            const link = document.createElement('link');
-            link.id = styleId;
-            link.rel = 'stylesheet';
-            link.href = settings.cssUrl || '';
-            document.head.appendChild(link);
-        }
-    };
-
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadStyles);
-    } else {
-        loadStyles();
-    }
+    // Register the plugin
+    registerPlugin('checkout-toolkit-blocks', {
+        render,
+        scope: 'woocommerce-checkout'
+    });
 
 })();
