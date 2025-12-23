@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WooCheckoutToolkit\Delivery;
 
 use WooCheckoutToolkit\Logger;
+use WooCheckoutToolkit\CheckoutDetector;
 
 defined('ABSPATH') || exit;
 
@@ -60,6 +61,11 @@ class DeliveryDate
      */
     public function render_delivery_date_field(): void
     {
+        // Skip rendering for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {

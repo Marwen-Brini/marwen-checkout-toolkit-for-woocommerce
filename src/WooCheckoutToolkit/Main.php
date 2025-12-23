@@ -122,39 +122,20 @@ final class Main
     /**
      * Initialize frontend components
      *
-     * Classic checkout hooks are only registered for classic checkout.
-     * Blocks checkout uses the BlocksIntegration class.
+     * Classic checkout hooks are always registered.
+     * They check internally whether to render based on checkout type.
+     * Blocks checkout uses BlocksIntegration for rendering but classic
+     * components still handle validation/saving as fallback.
      */
     private function init_frontend(): void
     {
-        // Classic checkout components - only init if using classic checkout
-        // We check this late (on wp hook) to ensure checkout page is loaded
-        add_action('wp', function () {
-            if (is_checkout() && CheckoutDetector::is_blocks_checkout()) {
-                Logger::debug('Blocks checkout detected - skipping classic checkout hooks');
-                return;
-            }
+        // Always initialize classic components - they handle validation and saving
+        // for both checkout types. The rendering is conditional.
+        $this->delivery_date = new DeliveryDate();
+        $this->delivery_date->init();
 
-            // For non-checkout pages or classic checkout, initialize components
-            if ($this->delivery_date === null) {
-                $this->delivery_date = new DeliveryDate();
-                $this->delivery_date->init();
-            }
-
-            if ($this->order_fields === null) {
-                $this->order_fields = new OrderFields();
-                $this->order_fields->init();
-            }
-        }, 5);
-
-        // Always initialize for admin/AJAX contexts
-        if (is_admin() || wp_doing_ajax()) {
-            $this->delivery_date = new DeliveryDate();
-            $this->delivery_date->init();
-
-            $this->order_fields = new OrderFields();
-            $this->order_fields->init();
-        }
+        $this->order_fields = new OrderFields();
+        $this->order_fields->init();
 
         // Enqueue frontend assets for classic checkout only
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);

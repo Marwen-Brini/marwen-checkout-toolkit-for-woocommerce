@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCheckoutToolkit\Fields;
 
+use WooCheckoutToolkit\CheckoutDetector;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -51,6 +53,11 @@ class OrderFields
      */
     public function render_custom_field(): void
     {
+        // Skip rendering for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {
