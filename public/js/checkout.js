@@ -57,7 +57,7 @@
                 ],
                 onChange: function(selectedDates, dateStr) {
                     // Update hidden field with Y-m-d format
-                    $('#wct_delivery_date_value').val(dateStr);
+                    $('#checkout_toolkit_delivery_date_value').val(dateStr);
 
                     // Trigger WooCommerce update if needed
                     $(document.body).trigger('update_checkout');
@@ -102,7 +102,7 @@
                 return;
             }
 
-            const $field = $('#wct_custom_field');
+            const $field = $('#checkout_toolkit_custom_field');
             const maxLength = wctConfig.field.maxLength;
 
             if (!$field.length || !maxLength || maxLength <= 0) {

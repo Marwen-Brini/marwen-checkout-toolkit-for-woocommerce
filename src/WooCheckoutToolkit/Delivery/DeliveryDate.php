@@ -85,7 +85,7 @@ class DeliveryDate
         );
 
         // Hidden field for actual date value (Y-m-d format)
-        echo '<input type="hidden" name="wct_delivery_date_value" id="wct_delivery_date_value" value="" />';
+        echo '<input type="hidden" name="checkout_toolkit_delivery_date_value" id="checkout_toolkit_delivery_date_value" value="" />';
 
         do_action('checkout_toolkit_after_delivery_date_field');
     }
