@@ -2,40 +2,42 @@
 /**
  * Blocked dates manager template
  *
- * @package WooCheckoutToolkit
+ * @package CheckoutToolkitForWoo
  */
 
 defined('ABSPATH') || exit;
 
-$blocked_dates = $delivery_settings['blocked_dates'] ?? [];
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
+$checkout_toolkit_blocked_dates = $delivery_settings['blocked_dates'] ?? [];
+// phpcs:enable
 ?>
 
 <div class="wct-blocked-dates-manager">
     <div class="wct-add-date-row">
         <input type="text"
-               id="wct_add_blocked_date"
+               id="checkout_toolkit_add_blocked_date"
                class="wct-datepicker-admin"
-               placeholder="<?php esc_attr_e('Select date to block', 'woo-checkout-toolkit'); ?>"
+               placeholder="<?php esc_attr_e('Select date to block', 'checkout-toolkit-for-woo'); ?>"
                readonly>
-        <button type="button" id="wct_add_date_btn" class="button">
-            <?php esc_html_e('Add Date', 'woo-checkout-toolkit'); ?>
+        <button type="button" id="checkout_toolkit_add_date_btn" class="button">
+            <?php esc_html_e('Add Date', 'checkout-toolkit-for-woo'); ?>
         </button>
     </div>
 
-    <div id="wct_blocked_dates_list" class="wct-blocked-dates-list">
-        <?php if (empty($blocked_dates)) : ?>
-            <p class="wct-no-dates"><?php esc_html_e('No dates blocked.', 'woo-checkout-toolkit'); ?></p>
+    <div id="checkout_toolkit_blocked_dates_list" class="wct-blocked-dates-list">
+        <?php if (empty($checkout_toolkit_blocked_dates)) : ?>
+            <p class="wct-no-dates"><?php esc_html_e('No dates blocked.', 'checkout-toolkit-for-woo'); ?></p>
         <?php else : ?>
-            <?php foreach ($blocked_dates as $date) : ?>
-                <div class="wct-blocked-date-item" data-date="<?php echo esc_attr($date); ?>">
+            <?php foreach ($checkout_toolkit_blocked_dates as $checkout_toolkit_date) : ?>
+                <div class="wct-blocked-date-item" data-date="<?php echo esc_attr($checkout_toolkit_date); ?>">
                     <span class="wct-date-display">
-                        <?php echo esc_html(date_i18n(get_option('date_format'), strtotime($date))); ?>
+                        <?php echo esc_html(date_i18n(get_option('date_format'), strtotime($checkout_toolkit_date))); ?>
                     </span>
                     <input type="hidden"
-                           name="wct_delivery_settings[blocked_dates][]"
-                           value="<?php echo esc_attr($date); ?>">
+                           name="checkout_toolkit_delivery_settings[blocked_dates][]"
+                           value="<?php echo esc_attr($checkout_toolkit_date); ?>">
                     <button type="button" class="wct-remove-date button-link button-link-delete">
-                        <?php esc_html_e('Remove', 'woo-checkout-toolkit'); ?>
+                        <?php esc_html_e('Remove', 'checkout-toolkit-for-woo'); ?>
                     </button>
                 </div>
             <?php endforeach; ?>
@@ -43,6 +45,6 @@ $blocked_dates = $delivery_settings['blocked_dates'] ?? [];
     </div>
 
     <p class="description">
-        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'woo-checkout-toolkit'); ?>
+        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'checkout-toolkit-for-woo'); ?>
     </p>
 </div>

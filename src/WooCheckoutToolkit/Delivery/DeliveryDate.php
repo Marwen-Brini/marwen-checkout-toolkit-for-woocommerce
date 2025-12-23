@@ -66,11 +66,11 @@ class DeliveryDate
             return;
         }
 
-        do_action('wct_before_delivery_date_field');
+        do_action('checkout_toolkit_before_delivery_date_field');
 
         woocommerce_form_field(
-            'wct_delivery_date',
-            apply_filters('wct_delivery_date_field_args', [
+            'checkout_toolkit_delivery_date',
+            apply_filters('checkout_toolkit_delivery_date_field_args', [
                 'type' => 'text',
                 'label' => $settings['field_label'],
                 'required' => $settings['required'],
@@ -81,13 +81,13 @@ class DeliveryDate
                     'data-wct-datepicker' => 'true',
                 ],
             ]),
-            WC()->checkout->get_value('wct_delivery_date')
+            WC()->checkout->get_value('checkout_toolkit_delivery_date')
         );
 
         // Hidden field for actual date value (Y-m-d format)
         echo '<input type="hidden" name="wct_delivery_date_value" id="wct_delivery_date_value" value="" />';
 
-        do_action('wct_after_delivery_date_field');
+        do_action('checkout_toolkit_after_delivery_date_field');
     }
 
     /**
@@ -95,14 +95,20 @@ class DeliveryDate
      */
     public function validate_delivery_date(): void
     {
+        // Nonce verification is handled by WooCommerce checkout process.
+        if (!isset($_POST['woocommerce-process-checkout-nonce']) ||
+            !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce'])), 'woocommerce-process_checkout')) {
+            return;
+        }
+
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {
             return;
         }
 
-        $date = isset($_POST['wct_delivery_date_value'])
-            ? sanitize_text_field($_POST['wct_delivery_date_value'])
+        $date = isset($_POST['checkout_toolkit_delivery_date_value'])
+            ? sanitize_text_field(wp_unslash($_POST['checkout_toolkit_delivery_date_value']))
             : '';
 
         Logger::debug('Validating delivery date', ['date' => $date, 'required' => $settings['required']]);
@@ -112,7 +118,8 @@ class DeliveryDate
             Logger::warning('Delivery date required but empty');
             wc_add_notice(
                 sprintf(
-                    __('%s is a required field.', 'woo-checkout-toolkit'),
+                    /* translators: %s: Field label */
+                    __('%s is a required field.', 'checkout-toolkit-for-woo'),
                     '<strong>' . esc_html($settings['field_label']) . '</strong>'
                 ),
                 'error'
@@ -129,19 +136,19 @@ class DeliveryDate
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
             Logger::error('Invalid date format', ['date' => $date]);
             wc_add_notice(
-                __('Invalid date format. Please select a valid date.', 'woo-checkout-toolkit'),
+                __('Invalid date format. Please select a valid date.', 'checkout-toolkit-for-woo'),
                 'error'
             );
             return;
         }
 
         // Availability validation
-        $is_valid = apply_filters('wct_validate_delivery_date', true, $date);
+        $is_valid = apply_filters('checkout_toolkit_validate_delivery_date', true, $date);
 
         if ($is_valid && !$this->availability_checker->is_date_available($date)) {
             Logger::warning('Selected date not available', ['date' => $date]);
             wc_add_notice(
-                __('The selected delivery date is not available. Please choose another date.', 'woo-checkout-toolkit'),
+                __('The selected delivery date is not available. Please choose another date.', 'checkout-toolkit-for-woo'),
                 'error'
             );
         }
@@ -152,14 +159,16 @@ class DeliveryDate
      */
     public function save_delivery_date(\WC_Order $order, array $data): void
     {
+        // Nonce already verified in validate_delivery_date via WooCommerce checkout process.
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {
             return;
         }
 
-        $date = isset($_POST['wct_delivery_date_value'])
-            ? sanitize_text_field($_POST['wct_delivery_date_value'])
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by WooCommerce checkout.
+        $date = isset($_POST['checkout_toolkit_delivery_date_value'])
+            ? sanitize_text_field(wp_unslash($_POST['checkout_toolkit_delivery_date_value'])) // phpcs:ignore WordPress.Security.NonceVerification.Missing
             : '';
 
         if (!empty($date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
@@ -170,7 +179,7 @@ class DeliveryDate
                 'delivery_date' => $date,
             ]);
 
-            do_action('wct_delivery_date_saved', $order->get_id(), $date);
+            do_action('checkout_toolkit_delivery_date_saved', $order->get_id(), $date);
         }
     }
 
@@ -179,6 +188,6 @@ class DeliveryDate
      */
     private function get_settings(): array
     {
-        return get_option('wct_delivery_settings', []);
+        return get_option('checkout_toolkit_delivery_settings', []);
     }
 }

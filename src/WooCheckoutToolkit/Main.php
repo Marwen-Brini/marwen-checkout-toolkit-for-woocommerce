@@ -92,8 +92,8 @@ final class Main
      */
     public function init(): void
     {
-        Logger::info('Initializing WooCommerce Checkout Toolkit', [
-            'version' => WCT_VERSION,
+        Logger::info('Initializing Checkout Toolkit for WooCommerce', [
+            'version' => CHECKOUT_TOOLKIT_VERSION,
             'php_version' => PHP_VERSION,
         ]);
 
@@ -154,8 +154,8 @@ final class Main
             return;
         }
 
-        $delivery_settings = get_option('wct_delivery_settings', []);
-        $field_settings = get_option('wct_field_settings', []);
+        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
+        $field_settings = get_option('checkout_toolkit_field_settings', []);
 
         // Only load if at least one feature is enabled
         if (empty($delivery_settings['enabled']) && empty($field_settings['enabled'])) {
@@ -166,32 +166,32 @@ final class Main
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_style(
                 'flatpickr',
-                WCT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
                 [],
                 '4.6.13'
             );
 
             wp_enqueue_style(
                 'wct-flatpickr-theme',
-                WCT_PLUGIN_URL . 'public/css/flatpickr-theme.css',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/flatpickr-theme.css',
                 ['flatpickr'],
-                WCT_VERSION
+                CHECKOUT_TOOLKIT_VERSION
             );
         }
 
         // Main checkout CSS
         wp_enqueue_style(
             'wct-checkout',
-            WCT_PLUGIN_URL . 'public/css/checkout.css',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/checkout.css',
             [],
-            WCT_VERSION
+            CHECKOUT_TOOLKIT_VERSION
         );
 
         // Flatpickr JS
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
                 'flatpickr',
-                WCT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
                 [],
                 '4.6.13',
                 true
@@ -201,9 +201,9 @@ final class Main
         // Main checkout JS
         wp_enqueue_script(
             'wct-checkout',
-            WCT_PLUGIN_URL . 'public/js/checkout.js',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/checkout.js',
             ['jquery', 'flatpickr'],
-            WCT_VERSION,
+            CHECKOUT_TOOLKIT_VERSION,
             true
         );
 
@@ -216,8 +216,8 @@ final class Main
      */
     private function get_frontend_config(): array
     {
-        $delivery_settings = get_option('wct_delivery_settings', $this->get_default_delivery_settings());
-        $field_settings = get_option('wct_field_settings', $this->get_default_field_settings());
+        $delivery_settings = get_option('checkout_toolkit_delivery_settings', $this->get_default_delivery_settings());
+        $field_settings = get_option('checkout_toolkit_field_settings', $this->get_default_field_settings());
 
         $config = [
             'delivery' => [
@@ -229,10 +229,10 @@ final class Main
                 'showCounter' => true,
             ],
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('wct_checkout'),
+            'nonce' => wp_create_nonce('checkout_toolkit_checkout'),
             'i18n' => [
-                'selectDate' => __('Select a date', 'woo-checkout-toolkit'),
-                'charactersRemaining' => __('characters remaining', 'woo-checkout-toolkit'),
+                'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
+                'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
             ],
         ];
 
@@ -254,7 +254,7 @@ final class Main
             ]);
         }
 
-        return apply_filters('wct_frontend_config', $config);
+        return apply_filters('checkout_toolkit_frontend_config', $config);
     }
 
     /**
@@ -286,7 +286,7 @@ final class Main
         return [
             'enabled' => true,
             'required' => false,
-            'field_label' => __('Preferred Delivery Date', 'woo-checkout-toolkit'),
+            'field_label' => __('Preferred Delivery Date', 'checkout-toolkit-for-woo'),
             'field_position' => 'woocommerce_after_order_notes',
             'min_lead_days' => 2,
             'max_future_days' => 30,
@@ -308,8 +308,8 @@ final class Main
             'enabled' => true,
             'required' => false,
             'field_type' => 'textarea',
-            'field_label' => __('Special Instructions', 'woo-checkout-toolkit'),
-            'field_placeholder' => __('Any special requests for your order?', 'woo-checkout-toolkit'),
+            'field_label' => __('Special Instructions', 'checkout-toolkit-for-woo'),
+            'field_placeholder' => __('Any special requests for your order?', 'checkout-toolkit-for-woo'),
             'field_position' => 'woocommerce_after_order_notes',
             'max_length' => 500,
             'show_in_emails' => true,

@@ -63,7 +63,7 @@ class Logger
                 file_put_contents($log_dir . '/index.php', '<?php // Silence is golden.');
             }
 
-            self::$log_file = $log_dir . '/wct-debug-' . date('Y-m-d') . '.log';
+            self::$log_file = $log_dir . '/wct-debug-' . gmdate('Y-m-d') . '.log';
         }
 
         return self::$log_file;
@@ -78,7 +78,7 @@ class Logger
             return;
         }
 
-        $timestamp = date('Y-m-d H:i:s');
+        $timestamp = gmdate('Y-m-d H:i:s');
         $formatted_message = "[{$timestamp}] [{$level}] {$message}";
 
         if (!empty($context)) {
@@ -88,10 +88,12 @@ class Logger
         $formatted_message .= PHP_EOL;
 
         // Write to plugin log file
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging class.
         error_log($formatted_message, 3, self::get_log_file());
 
         // Also write to WordPress debug.log
         if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging class.
             error_log('[WCT] ' . $formatted_message);
         }
     }
@@ -157,7 +159,7 @@ class Logger
 
         foreach ($files as $file) {
             if (filemtime($file) < $cutoff) {
-                unlink($file);
+                wp_delete_file($file);
             }
         }
     }

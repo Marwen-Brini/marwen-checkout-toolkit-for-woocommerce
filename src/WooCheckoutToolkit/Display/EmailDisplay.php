@@ -31,8 +31,8 @@ class EmailDisplay
      */
     public function add_to_email(\WC_Order $order, bool $sent_to_admin, bool $plain_text, $email): void
     {
-        $delivery_settings = get_option('wct_delivery_settings', []);
-        $field_settings = get_option('wct_field_settings', []);
+        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
+        $field_settings = get_option('checkout_toolkit_field_settings', []);
 
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
@@ -65,12 +65,12 @@ class EmailDisplay
         bool $show_field,
         $email
     ): void {
-        echo '<h2>' . esc_html__('Additional Order Information', 'woo-checkout-toolkit') . '</h2>';
+        echo '<h2>' . esc_html__('Additional Order Information', 'checkout-toolkit-for-woo') . '</h2>';
         echo '<table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #e5e5e5; margin-bottom: 20px;" border="1">';
 
         if ($show_delivery) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
-            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'woo-checkout-toolkit');
+            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo');
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
@@ -79,8 +79,8 @@ class EmailDisplay
         }
 
         if ($show_field) {
-            $label = $field_settings['field_label'] ?? __('Special Instructions', 'woo-checkout-toolkit');
-            $output = apply_filters('wct_email_custom_field', $custom_field, $order, $email);
+            $label = $field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo');
+            $output = apply_filters('checkout_toolkit_email_custom_field', $custom_field, $order, $email);
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
@@ -103,21 +103,22 @@ class EmailDisplay
         bool $show_delivery,
         bool $show_field
     ): void {
-        echo "\n" . str_repeat('=', 50) . "\n";
-        echo strtoupper(__('Additional Order Information', 'woo-checkout-toolkit')) . "\n";
-        echo str_repeat('=', 50) . "\n\n";
+        // Plain text emails - escaping for safety.
+        echo "\n" . esc_html(str_repeat('=', 50)) . "\n";
+        echo esc_html(strtoupper(__('Additional Order Information', 'checkout-toolkit-for-woo'))) . "\n";
+        echo esc_html(str_repeat('=', 50)) . "\n\n";
 
         if ($show_delivery) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
-            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'woo-checkout-toolkit');
+            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo');
 
-            echo $label . ': ' . $formatted_date . "\n";
+            echo esc_html($label) . ': ' . esc_html($formatted_date) . "\n";
         }
 
         if ($show_field) {
-            $label = $field_settings['field_label'] ?? __('Special Instructions', 'woo-checkout-toolkit');
+            $label = $field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo');
 
-            echo $label . ': ' . $custom_field . "\n";
+            echo esc_html($label) . ': ' . esc_html($custom_field) . "\n";
         }
 
         echo "\n";

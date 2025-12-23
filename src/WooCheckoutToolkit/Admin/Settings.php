@@ -36,8 +36,8 @@ class Settings
     {
         add_submenu_page(
             'woocommerce',
-            __('Checkout Toolkit', 'woo-checkout-toolkit'),
-            __('Checkout Toolkit', 'woo-checkout-toolkit'),
+            __('Checkout Toolkit', 'checkout-toolkit-for-woo'),
+            __('Checkout Toolkit', 'checkout-toolkit-for-woo'),
             'manage_woocommerce',
             'wct-settings',
             [$this, 'render_settings_page']
@@ -50,8 +50,8 @@ class Settings
     public function register_settings(): void
     {
         register_setting(
-            'wct_settings',
-            'wct_delivery_settings',
+            'checkout_toolkit_settings',
+            'checkout_toolkit_delivery_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_delivery_settings'],
@@ -60,8 +60,8 @@ class Settings
         );
 
         register_setting(
-            'wct_settings',
-            'wct_field_settings',
+            'checkout_toolkit_settings',
+            'checkout_toolkit_field_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_field_settings'],
@@ -138,12 +138,13 @@ class Settings
     public function render_settings_page(): void
     {
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(__('You do not have permission to access this page.', 'woo-checkout-toolkit'));
+            wp_die(esc_html__('You do not have permission to access this page.', 'checkout-toolkit-for-woo'));
         }
 
-        $active_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'delivery';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation, no data processing.
+        $active_tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'delivery';
 
-        include WCT_PLUGIN_DIR . 'admin/views/settings-page.php';
+        include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-page.php';
     }
 
     /**
@@ -152,18 +153,18 @@ class Settings
     public function get_field_positions(): array
     {
         return [
-            'woocommerce_before_checkout_billing_form' => __('Before billing fields', 'woo-checkout-toolkit'),
-            'woocommerce_after_checkout_billing_form' => __('After billing fields', 'woo-checkout-toolkit'),
-            'woocommerce_before_checkout_shipping_form' => __('Before shipping fields', 'woo-checkout-toolkit'),
-            'woocommerce_after_checkout_shipping_form' => __('After shipping fields', 'woo-checkout-toolkit'),
-            'woocommerce_before_order_notes' => __('Before order notes', 'woo-checkout-toolkit'),
-            'woocommerce_after_order_notes' => __('After order notes', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_before_cart_contents' => __('Before order review', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_after_cart_contents' => __('After order review items', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_before_shipping' => __('Before shipping in review', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_after_shipping' => __('After shipping in review', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_before_order_total' => __('Before order total', 'woo-checkout-toolkit'),
-            'woocommerce_review_order_before_submit' => __('Before Place Order button', 'woo-checkout-toolkit'),
+            'woocommerce_before_checkout_billing_form' => __('Before billing fields', 'checkout-toolkit-for-woo'),
+            'woocommerce_after_checkout_billing_form' => __('After billing fields', 'checkout-toolkit-for-woo'),
+            'woocommerce_before_checkout_shipping_form' => __('Before shipping fields', 'checkout-toolkit-for-woo'),
+            'woocommerce_after_checkout_shipping_form' => __('After shipping fields', 'checkout-toolkit-for-woo'),
+            'woocommerce_before_order_notes' => __('Before order notes', 'checkout-toolkit-for-woo'),
+            'woocommerce_after_order_notes' => __('After order notes', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_before_cart_contents' => __('Before order review', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_after_cart_contents' => __('After order review items', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_before_shipping' => __('Before shipping in review', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_after_shipping' => __('After shipping in review', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_before_order_total' => __('Before order total', 'checkout-toolkit-for-woo'),
+            'woocommerce_review_order_before_submit' => __('Before Place Order button', 'checkout-toolkit-for-woo'),
         ];
     }
 

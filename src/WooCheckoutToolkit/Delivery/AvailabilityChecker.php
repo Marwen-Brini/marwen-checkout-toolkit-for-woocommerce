@@ -47,7 +47,7 @@ class AvailabilityChecker
             $current->modify('+1 day');
         }
 
-        return apply_filters('wct_available_dates', $available);
+        return apply_filters('checkout_toolkit_available_dates', $available);
     }
 
     /**
@@ -91,7 +91,7 @@ class AvailabilityChecker
             return false;
         }
 
-        return apply_filters('wct_is_date_available', true, $date);
+        return apply_filters('checkout_toolkit_is_date_available', true, $date);
     }
 
     /**
@@ -172,6 +172,6 @@ class AvailabilityChecker
      */
     private function get_settings(): array
     {
-        return get_option('wct_delivery_settings', []);
+        return get_option('checkout_toolkit_delivery_settings', []);
     }
 }

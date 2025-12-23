@@ -1,7 +1,7 @@
 /**
- * WooCommerce Checkout Toolkit - Admin JavaScript
+ * Checkout Toolkit for WooCommerce - Admin JavaScript
  *
- * @package WooCheckoutToolkit
+ * @package CheckoutToolkitForWoo
  */
 
 (function($) {
@@ -20,7 +20,7 @@
          * Initialize Flatpickr for admin date picker
          */
         initDatepicker: function() {
-            const $datepicker = $('#wct_add_blocked_date');
+            const $datepicker = $('#checkout_toolkit_add_blocked_date');
 
             if ($datepicker.length && typeof flatpickr !== 'undefined') {
                 flatpickr($datepicker[0], {
@@ -43,8 +43,8 @@
             const self = this;
 
             // Add date button
-            $('#wct_add_date_btn').on('click', function() {
-                const $input = $('#wct_add_blocked_date');
+            $('#checkout_toolkit_add_date_btn').on('click', function() {
+                const $input = $('#checkout_toolkit_add_blocked_date');
                 const date = $input.data('selected-date') || $input.val();
 
                 if (!date) {
@@ -53,7 +53,7 @@
                 }
 
                 // Check if date already exists
-                if ($('#wct_blocked_dates_list').find('[data-date="' + date + '"]').length) {
+                if ($('#checkout_toolkit_blocked_dates_list').find('[data-date="' + date + '"]').length) {
                     alert('This date is already blocked.');
                     return;
                 }
@@ -69,7 +69,7 @@
             });
 
             // Remove date button
-            $('#wct_blocked_dates_list').on('click', '.wct-remove-date', function() {
+            $('#checkout_toolkit_blocked_dates_list').on('click', '.wct-remove-date', function() {
                 if (confirm(wctAdmin.i18n.confirmRemove || 'Are you sure?')) {
                     $(this).closest('.wct-blocked-date-item').fadeOut(200, function() {
                         $(this).remove();
@@ -83,7 +83,7 @@
          * Add a blocked date to the list
          */
         addBlockedDate: function(date) {
-            const $list = $('#wct_blocked_dates_list');
+            const $list = $('#checkout_toolkit_blocked_dates_list');
 
             // Remove "no dates" message if present
             $list.find('.wct-no-dates').remove();
@@ -94,7 +94,7 @@
             const $item = $(`
                 <div class="wct-blocked-date-item" data-date="${date}">
                     <span class="wct-date-display">${displayDate}</span>
-                    <input type="hidden" name="wct_delivery_settings[blocked_dates][]" value="${date}">
+                    <input type="hidden" name="checkout_toolkit_delivery_settings[blocked_dates][]" value="${date}">
                     <button type="button" class="wct-remove-date button-link button-link-delete">
                         Remove
                     </button>
@@ -118,7 +118,7 @@
          * Update "no dates" message visibility
          */
         updateNoDateMessage: function() {
-            const $list = $('#wct_blocked_dates_list');
+            const $list = $('#checkout_toolkit_blocked_dates_list');
 
             if ($list.find('.wct-blocked-date-item').length === 0) {
                 $list.html('<p class="wct-no-dates">No dates blocked.</p>');

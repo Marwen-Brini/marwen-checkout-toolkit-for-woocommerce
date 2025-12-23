@@ -1,8 +1,8 @@
-=== WooCommerce Checkout Toolkit ===
+=== Checkout Toolkit for WooCommerce ===
 Contributors: marwenbrini
-Tags: woocommerce, checkout, delivery date, custom fields, order notes
+Tags: checkout, delivery date, custom fields, order notes, woocommerce
 Requires at least: 5.8
-Tested up to: 6.4
+Tested up to: 6.9
 Requires PHP: 8.1
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -12,7 +12,7 @@ A comprehensive checkout enhancement plugin combining delivery scheduling and cu
 
 == Description ==
 
-WooCommerce Checkout Toolkit brings together the essential checkout customization features that store owners need most:
+Checkout Toolkit for WooCommerce brings together the essential checkout customization features that store owners need most:
 
 1. **Delivery Date Picker** - Let customers choose their preferred delivery date
 2. **Custom Order Fields** - Add special instructions, notes, and custom fields to checkout
@@ -60,7 +60,7 @@ WooCommerce Checkout Toolkit brings together the essential checkout customizatio
 
 = Pro Version =
 
-Need more? Upgrade to WooCommerce Checkout Toolkit Pro for:
+Need more? Upgrade to Checkout Toolkit Pro for WooCommerce for:
 
 * Time slot selection with capacity limits
 * Multiple custom fields with various types
@@ -72,7 +72,7 @@ Need more? Upgrade to WooCommerce Checkout Toolkit Pro for:
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/woo-checkout-toolkit/`
+1. Upload the plugin files to `/wp-content/plugins/checkout-toolkit-for-woo/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Go to WooCommerce > Checkout Toolkit to configure settings
 4. Enable the features you want and customize to your needs
@@ -97,7 +97,7 @@ Yes, the plugin is fully translation-ready with a .pot file included.
 
 = How do I override the templates? =
 
-Copy templates from `woo-checkout-toolkit/templates/` to `your-theme/woocommerce/woo-checkout-toolkit/` and modify as needed.
+Copy templates from `checkout-toolkit-for-woo/templates/` to `your-theme/woocommerce/checkout-toolkit-for-woo/` and modify as needed.
 
 == Screenshots ==
 
@@ -122,4 +122,4 @@ Copy templates from `woo-checkout-toolkit/templates/` to `your-theme/woocommerce
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of WooCommerce Checkout Toolkit.
+Initial release of Checkout Toolkit for WooCommerce.

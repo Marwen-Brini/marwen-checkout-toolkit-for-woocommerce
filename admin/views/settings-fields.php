@@ -2,13 +2,15 @@
 /**
  * Custom field settings template
  *
- * @package WooCheckoutToolkit
+ * @package CheckoutToolkitForWoo
  */
 
 defined('ABSPATH') || exit;
 
-$settings = new \WooCheckoutToolkit\Admin\Settings();
-$positions = $settings->get_field_positions();
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
+$checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
+$checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_positions();
+// phpcs:enable
 ?>
 
 <table class="form-table wct-settings-table">
@@ -16,15 +18,15 @@ $positions = $settings->get_field_positions();
         <!-- Enable Custom Field -->
         <tr>
             <th scope="row">
-                <?php esc_html_e('Enable Custom Field', 'woo-checkout-toolkit'); ?>
+                <?php esc_html_e('Enable Custom Field', 'checkout-toolkit-for-woo'); ?>
             </th>
             <td>
                 <label>
                     <input type="checkbox"
-                           name="wct_field_settings[enabled]"
+                           name="checkout_toolkit_field_settings[enabled]"
                            value="1"
                            <?php checked(!empty($field_settings['enabled'])); ?>>
-                    <?php esc_html_e('Show custom field on checkout', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Show custom field on checkout', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
         </tr>
@@ -32,22 +34,22 @@ $positions = $settings->get_field_positions();
         <!-- Field Type -->
         <tr>
             <th scope="row">
-                <?php esc_html_e('Field Type', 'woo-checkout-toolkit'); ?>
+                <?php esc_html_e('Field Type', 'checkout-toolkit-for-woo'); ?>
             </th>
             <td>
                 <label style="display: block; margin-bottom: 8px;">
                     <input type="radio"
-                           name="wct_field_settings[field_type]"
+                           name="checkout_toolkit_field_settings[field_type]"
                            value="text"
                            <?php checked(($field_settings['field_type'] ?? 'textarea') === 'text'); ?>>
-                    <?php esc_html_e('Single line text', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Single line text', 'checkout-toolkit-for-woo'); ?>
                 </label>
                 <label style="display: block;">
                     <input type="radio"
-                           name="wct_field_settings[field_type]"
+                           name="checkout_toolkit_field_settings[field_type]"
                            value="textarea"
                            <?php checked(($field_settings['field_type'] ?? 'textarea') === 'textarea'); ?>>
-                    <?php esc_html_e('Multi-line textarea', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
         </tr>
@@ -55,14 +57,14 @@ $positions = $settings->get_field_positions();
         <!-- Field Label -->
         <tr>
             <th scope="row">
-                <label for="wct_field_label">
-                    <?php esc_html_e('Field Label', 'woo-checkout-toolkit'); ?>
+                <label for="checkout_toolkit_field_label">
+                    <?php esc_html_e('Field Label', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </th>
             <td>
                 <input type="text"
-                       id="wct_field_label"
-                       name="wct_field_settings[field_label]"
+                       id="checkout_toolkit_field_label"
+                       name="checkout_toolkit_field_settings[field_label]"
                        value="<?php echo esc_attr($field_settings['field_label'] ?? ''); ?>"
                        class="regular-text">
             </td>
@@ -71,14 +73,14 @@ $positions = $settings->get_field_positions();
         <!-- Placeholder Text -->
         <tr>
             <th scope="row">
-                <label for="wct_field_placeholder">
-                    <?php esc_html_e('Placeholder Text', 'woo-checkout-toolkit'); ?>
+                <label for="checkout_toolkit_field_placeholder">
+                    <?php esc_html_e('Placeholder Text', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </th>
             <td>
                 <input type="text"
-                       id="wct_field_placeholder"
-                       name="wct_field_settings[field_placeholder]"
+                       id="checkout_toolkit_field_placeholder"
+                       name="checkout_toolkit_field_settings[field_placeholder]"
                        value="<?php echo esc_attr($field_settings['field_placeholder'] ?? ''); ?>"
                        class="regular-text">
             </td>
@@ -87,15 +89,15 @@ $positions = $settings->get_field_positions();
         <!-- Required -->
         <tr>
             <th scope="row">
-                <?php esc_html_e('Required', 'woo-checkout-toolkit'); ?>
+                <?php esc_html_e('Required', 'checkout-toolkit-for-woo'); ?>
             </th>
             <td>
                 <label>
                     <input type="checkbox"
-                           name="wct_field_settings[required]"
+                           name="checkout_toolkit_field_settings[required]"
                            value="1"
                            <?php checked(!empty($field_settings['required'])); ?>>
-                    <?php esc_html_e('Make field required', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Make field required', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
         </tr>
@@ -103,20 +105,20 @@ $positions = $settings->get_field_positions();
         <!-- Maximum Characters -->
         <tr>
             <th scope="row">
-                <label for="wct_max_length">
-                    <?php esc_html_e('Maximum Characters', 'woo-checkout-toolkit'); ?>
+                <label for="checkout_toolkit_max_length">
+                    <?php esc_html_e('Maximum Characters', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </th>
             <td>
                 <input type="number"
-                       id="wct_max_length"
-                       name="wct_field_settings[max_length]"
+                       id="checkout_toolkit_max_length"
+                       name="checkout_toolkit_field_settings[max_length]"
                        value="<?php echo esc_attr($field_settings['max_length'] ?? 500); ?>"
                        min="0"
                        max="10000"
                        class="small-text">
                 <p class="description">
-                    <?php esc_html_e('Set to 0 for unlimited.', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Set to 0 for unlimited.', 'checkout-toolkit-for-woo'); ?>
                 </p>
             </td>
         </tr>
@@ -124,16 +126,16 @@ $positions = $settings->get_field_positions();
         <!-- Field Position -->
         <tr>
             <th scope="row">
-                <label for="wct_field_position">
-                    <?php esc_html_e('Field Position', 'woo-checkout-toolkit'); ?>
+                <label for="checkout_toolkit_field_position">
+                    <?php esc_html_e('Field Position', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </th>
             <td>
-                <select id="wct_field_position" name="wct_field_settings[field_position]">
-                    <?php foreach ($positions as $hook => $label) : ?>
-                        <option value="<?php echo esc_attr($hook); ?>"
-                                <?php selected($field_settings['field_position'] ?? 'woocommerce_after_order_notes', $hook); ?>>
-                            <?php echo esc_html($label); ?>
+                <select id="checkout_toolkit_field_position" name="checkout_toolkit_field_settings[field_position]">
+                    <?php foreach ($checkout_toolkit_positions as $checkout_toolkit_hook => $checkout_toolkit_label) : ?>
+                        <option value="<?php echo esc_attr($checkout_toolkit_hook); ?>"
+                                <?php selected($field_settings['field_position'] ?? 'woocommerce_after_order_notes', $checkout_toolkit_hook); ?>>
+                            <?php echo esc_html($checkout_toolkit_label); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -143,22 +145,22 @@ $positions = $settings->get_field_positions();
         <!-- Display Options -->
         <tr>
             <th scope="row">
-                <?php esc_html_e('Display Options', 'woo-checkout-toolkit'); ?>
+                <?php esc_html_e('Display Options', 'checkout-toolkit-for-woo'); ?>
             </th>
             <td>
                 <label style="display: block; margin-bottom: 8px;">
                     <input type="checkbox"
-                           name="wct_field_settings[show_in_admin]"
+                           name="checkout_toolkit_field_settings[show_in_admin]"
                            value="1"
                            <?php checked(!empty($field_settings['show_in_admin'])); ?>>
-                    <?php esc_html_e('Show in admin order details', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
                 </label>
                 <label style="display: block;">
                     <input type="checkbox"
-                           name="wct_field_settings[show_in_emails]"
+                           name="checkout_toolkit_field_settings[show_in_emails]"
                            value="1"
                            <?php checked(!empty($field_settings['show_in_emails'])); ?>>
-                    <?php esc_html_e('Include in order emails', 'woo-checkout-toolkit'); ?>
+                    <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
         </tr>

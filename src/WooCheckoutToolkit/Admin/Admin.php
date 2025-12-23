@@ -32,7 +32,7 @@ class Admin
         $this->settings->init();
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
-        add_filter('plugin_action_links_' . WCT_PLUGIN_BASENAME, [$this, 'add_action_links']);
+        add_filter('plugin_action_links_' . CHECKOUT_TOOLKIT_PLUGIN_BASENAME, [$this, 'add_action_links']);
     }
 
     /**
@@ -47,30 +47,30 @@ class Admin
 
         wp_enqueue_style(
             'wct-admin',
-            WCT_PLUGIN_URL . 'admin/css/admin.css',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/css/admin.css',
             [],
-            WCT_VERSION
+            CHECKOUT_TOOLKIT_VERSION
         );
 
         wp_enqueue_script(
             'wct-admin',
-            WCT_PLUGIN_URL . 'admin/js/admin.js',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/js/admin.js',
             ['jquery'],
-            WCT_VERSION,
+            CHECKOUT_TOOLKIT_VERSION,
             true
         );
 
         // Flatpickr for blocked dates manager
         wp_enqueue_style(
             'flatpickr',
-            WCT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
             [],
             '4.6.13'
         );
 
         wp_enqueue_script(
             'flatpickr',
-            WCT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
             [],
             '4.6.13',
             true
@@ -80,9 +80,9 @@ class Admin
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_admin'),
             'i18n' => [
-                'confirmRemove' => __('Are you sure you want to remove this date?', 'woo-checkout-toolkit'),
-                'dateAdded' => __('Date added successfully', 'woo-checkout-toolkit'),
-                'dateRemoved' => __('Date removed', 'woo-checkout-toolkit'),
+                'confirmRemove' => __('Are you sure you want to remove this date?', 'checkout-toolkit-for-woo'),
+                'dateAdded' => __('Date added successfully', 'checkout-toolkit-for-woo'),
+                'dateRemoved' => __('Date removed', 'checkout-toolkit-for-woo'),
             ],
         ]);
     }
@@ -95,7 +95,7 @@ class Admin
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
             admin_url('admin.php?page=wct-settings'),
-            __('Settings', 'woo-checkout-toolkit')
+            __('Settings', 'checkout-toolkit-for-woo')
         );
 
         array_unshift($links, $settings_link);

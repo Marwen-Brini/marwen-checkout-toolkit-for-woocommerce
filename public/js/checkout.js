@@ -1,7 +1,7 @@
 /**
- * WooCommerce Checkout Toolkit - Checkout JavaScript
+ * Checkout Toolkit for WooCommerce - Checkout JavaScript
  *
- * @package WooCheckoutToolkit
+ * @package CheckoutToolkitForWoo
  */
 
 (function($) {
