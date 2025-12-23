@@ -34,7 +34,7 @@ class BlocksIntegration implements IntegrationInterface
      */
     public function initialize(): void
     {
-        $this->register_block_scripts();
+        // Only register Store API data - scripts are enqueued via Main::enqueue_blocks_assets()
         $this->register_store_api_data();
     }
 

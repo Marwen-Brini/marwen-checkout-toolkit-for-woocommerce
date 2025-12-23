@@ -12,10 +12,9 @@
     const { registerPlugin } = wp.plugins;
     const { ExperimentalOrderMeta } = wc.blocksCheckout;
     const { useEffect, useState, useRef, createElement: el } = wp.element;
-    const { getSetting } = wc.wcSettings;
 
-    // Get settings from PHP
-    const settings = getSetting('checkout-toolkit_data', {});
+    // Get settings from PHP (via wp_localize_script)
+    const settings = window.checkoutToolkitData || {};
 
     if (!settings || Object.keys(settings).length === 0) {
         console.warn('Checkout Toolkit: No settings found');

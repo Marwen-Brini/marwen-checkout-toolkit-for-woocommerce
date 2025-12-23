@@ -171,10 +171,11 @@ final class Main
             return;
         }
 
-        // Register blocks integration
-        add_action('woocommerce_blocks_checkout_block_registration', function ($integration_registry) {
-            $integration_registry->register(new BlocksIntegration());
-            Logger::debug('Blocks integration registered');
+        // Register Store API endpoint for saving data
+        add_action('woocommerce_blocks_loaded', function () {
+            $integration = new BlocksIntegration();
+            $integration->initialize();
+            Logger::debug('Blocks integration initialized');
         });
 
         // Enqueue blocks assets
@@ -216,6 +217,24 @@ final class Main
             );
         }
 
+        // Blocks checkout script
+        wp_enqueue_script(
+            'checkout-toolkit-blocks',
+            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/blocks-checkout.js',
+            [
+                'wp-plugins',
+                'wp-element',
+                'wp-data',
+                'wc-blocks-checkout',
+            ],
+            CHECKOUT_TOOLKIT_VERSION,
+            true
+        );
+
+        // Pass settings to JavaScript
+        $script_data = $this->get_blocks_script_data();
+        wp_localize_script('checkout-toolkit-blocks', 'checkoutToolkitData', $script_data);
+
         // Blocks checkout styles
         wp_enqueue_style(
             'checkout-toolkit-blocks-style',
@@ -223,6 +242,41 @@ final class Main
             [],
             CHECKOUT_TOOLKIT_VERSION
         );
+    }
+
+    /**
+     * Get script data for blocks checkout
+     */
+    private function get_blocks_script_data(): array
+    {
+        $delivery_settings = $this->get_delivery_settings();
+        $field_settings = $this->get_field_settings();
+
+        return [
+            'delivery' => [
+                'enabled' => $delivery_settings['enabled'],
+                'required' => $delivery_settings['required'],
+                'label' => $delivery_settings['field_label'],
+                'minLeadDays' => $delivery_settings['min_lead_days'],
+                'maxFutureDays' => $delivery_settings['max_future_days'],
+                'disabledWeekdays' => array_map('intval', $delivery_settings['disabled_weekdays']),
+                'blockedDates' => $delivery_settings['blocked_dates'],
+                'dateFormat' => $this->php_to_flatpickr_format($delivery_settings['date_format']),
+                'firstDayOfWeek' => $delivery_settings['first_day_of_week'],
+            ],
+            'customField' => [
+                'enabled' => $field_settings['enabled'],
+                'required' => $field_settings['required'],
+                'type' => $field_settings['field_type'],
+                'label' => $field_settings['field_label'],
+                'placeholder' => $field_settings['field_placeholder'],
+                'maxLength' => $field_settings['max_length'],
+            ],
+            'i18n' => [
+                'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
+                'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
+            ],
+        ];
     }
 
     /**
