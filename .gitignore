@@ -1,0 +1,35 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Development files
+PROGRESS.md
+.phpcs.xml
+phpcs.xml
+phpunit.xml
+.php-cs-fixer.php
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/logs/
+
+# Build artifacts
+/dist/
+/build/
+
+# Environment
+.env
+.env.local
+
+# Composer
+composer.lock
