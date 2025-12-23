@@ -68,6 +68,110 @@ class Settings
                 'default' => Main::get_instance()->get_default_field_settings(),
             ]
         );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_order_notes_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_order_notes_settings'],
+                'default' => $this->get_default_order_notes_settings(),
+            ]
+        );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_field_2_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_field_2_settings'],
+                'default' => $this->get_default_field_2_settings(),
+            ]
+        );
+    }
+
+    /**
+     * Get default field 2 settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_field_2_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_type' => 'text',
+            'field_label' => __('Additional Information', 'checkout-toolkit-for-woo'),
+            'field_placeholder' => '',
+            'field_position' => 'woocommerce_after_order_notes',
+            'max_length' => 200,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Sanitize field 2 settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_field_2_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_field_2_settings', $this->get_default_field_2_settings());
+        }
+
+        $defaults = $this->get_default_field_2_settings();
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'required' => !empty($input['required']),
+            'field_type' => in_array($input['field_type'] ?? '', ['text', 'textarea'], true)
+                ? $input['field_type']
+                : $defaults['field_type'],
+            'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
+            'field_placeholder' => sanitize_text_field($input['field_placeholder'] ?? $defaults['field_placeholder']),
+            'field_position' => sanitize_key($input['field_position'] ?? $defaults['field_position']),
+            'max_length' => absint($input['max_length'] ?? $defaults['max_length']),
+            'show_in_emails' => !empty($input['show_in_emails']),
+            'show_in_admin' => !empty($input['show_in_admin']),
+        ];
+    }
+
+    /**
+     * Get default order notes settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_order_notes_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'custom_placeholder' => '',
+            'custom_label' => '',
+        ];
+    }
+
+    /**
+     * Sanitize order notes settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_order_notes_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_order_notes_settings', $this->get_default_order_notes_settings());
+        }
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'custom_placeholder' => sanitize_textarea_field($input['custom_placeholder'] ?? ''),
+            'custom_label' => sanitize_text_field($input['custom_label'] ?? ''),
+        ];
     }
 
     /**

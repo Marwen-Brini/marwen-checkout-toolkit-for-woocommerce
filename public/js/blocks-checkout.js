@@ -21,7 +21,7 @@
         return;
     }
 
-    const { delivery, customField, i18n } = settings;
+    const { delivery, customField, customField2, i18n } = settings;
 
     /**
      * Delivery Date Field Component
@@ -223,6 +223,90 @@
     };
 
     /**
+     * Custom Field 2 Component
+     */
+    const CustomField2Component = ({ cart, extensions, setExtensionData }) => {
+        const [value, setValue] = useState('');
+        const [charCount, setCharCount] = useState(0);
+
+        const handleChange = (e) => {
+            let newValue = e.target.value;
+
+            // Enforce max length
+            if (customField2.maxLength > 0 && newValue.length > customField2.maxLength) {
+                newValue = newValue.substring(0, customField2.maxLength);
+            }
+
+            setValue(newValue);
+            setCharCount(newValue.length);
+
+            if (typeof setExtensionData === 'function') {
+                setExtensionData('checkout-toolkit', 'custom_field_2', newValue);
+            }
+        };
+
+        if (!customField2 || !customField2.enabled) {
+            return null;
+        }
+
+        const isTextarea = customField2.type === 'textarea';
+
+        const inputStyles = {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #8c8f94',
+            borderRadius: '4px',
+            fontSize: '16px',
+            fontFamily: 'inherit',
+            resize: 'vertical'
+        };
+
+        return el('div', { className: 'checkout-toolkit-custom-field-2-block wc-block-components-checkout-step' },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    customField2.label || 'Additional Information',
+                    customField2.required && el('span', { className: 'required', style: { color: '#cc0000' } }, ' *')
+                )
+            ),
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    isTextarea
+                        ? el('textarea', {
+                            id: 'checkout-toolkit-custom-field-2',
+                            name: 'checkout_toolkit_custom_field_2',
+                            className: 'checkout-toolkit-custom-field-2',
+                            placeholder: customField2.placeholder || '',
+                            value: value,
+                            onChange: handleChange,
+                            required: customField2.required,
+                            rows: 4,
+                            maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
+                            style: inputStyles
+                        })
+                        : el('input', {
+                            type: 'text',
+                            id: 'checkout-toolkit-custom-field-2',
+                            name: 'checkout_toolkit_custom_field_2',
+                            className: 'checkout-toolkit-custom-field-2',
+                            placeholder: customField2.placeholder || '',
+                            value: value,
+                            onChange: handleChange,
+                            required: customField2.required,
+                            maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
+                            style: inputStyles
+                        }),
+                    customField2.maxLength > 0 && el('div', {
+                        className: 'checkout-toolkit-char-count',
+                        style: { marginTop: '8px', fontSize: '14px', color: '#757575', textAlign: 'right' }
+                    },
+                        (customField2.maxLength - charCount) + ' ' + (i18n?.charactersRemaining || 'characters remaining')
+                    )
+                )
+            )
+        );
+    };
+
+    /**
      * Main Render Component for ExperimentalOrderMeta slot
      */
     const CheckoutToolkitFields = ({ cart, extensions }) => {
@@ -248,6 +332,7 @@
 
         const hasDelivery = delivery && delivery.enabled;
         const hasCustomField = customField && customField.enabled;
+        const hasCustomField2 = customField2 && customField2.enabled;
 
         // Initialize extension data with empty strings on mount
         useEffect(() => {
@@ -263,17 +348,21 @@
                 if (hasCustomField) {
                     initialData.custom_field = '';
                 }
+                if (hasCustomField2) {
+                    initialData.custom_field_2 = '';
+                }
                 dispatch('wc/store/checkout').__internalSetExtensionData('checkout-toolkit', initialData);
             }
-        }, [hasDelivery, hasCustomField]);
+        }, [hasDelivery, hasCustomField, hasCustomField2]);
 
-        if (!hasDelivery && !hasCustomField) {
+        if (!hasDelivery && !hasCustomField && !hasCustomField2) {
             return null;
         }
 
         return el('div', { className: 'checkout-toolkit-blocks-wrapper', style: { marginTop: '24px' } },
             hasDelivery && el(DeliveryDateField, { cart, extensions, setExtensionData }),
-            hasCustomField && el(CustomFieldComponent, { cart, extensions, setExtensionData })
+            hasCustomField && el(CustomFieldComponent, { cart, extensions, setExtensionData }),
+            hasCustomField2 && el(CustomField2Component, { cart, extensions, setExtensionData })
         );
     };
 

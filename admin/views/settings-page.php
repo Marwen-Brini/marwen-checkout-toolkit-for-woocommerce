@@ -10,6 +10,12 @@ defined('ABSPATH') || exit;
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
 $delivery_settings = get_option('checkout_toolkit_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
 $field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
+$field_2_settings = get_option('checkout_toolkit_field_2_settings', (new \WooCheckoutToolkit\Admin\Settings())->get_default_field_2_settings());
+$order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
+    'enabled' => false,
+    'custom_placeholder' => '',
+    'custom_label' => '',
+]);
 // phpcs:enable
 ?>
 
@@ -25,6 +31,10 @@ $field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutTool
            class="nav-tab <?php echo esc_attr($active_tab === 'fields' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Custom Field', 'checkout-toolkit-for-woo'); ?>
         </a>
+        <a href="?page=wct-settings&tab=order-notes"
+           class="nav-tab <?php echo esc_attr($active_tab === 'order-notes' ? 'nav-tab-active' : ''); ?>">
+            <?php esc_html_e('Order Notes', 'checkout-toolkit-for-woo'); ?>
+        </a>
     </nav>
 
     <form method="post" action="options.php" class="wct-settings-form">
@@ -34,6 +44,8 @@ $field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutTool
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery.php'; ?>
         <?php elseif ($active_tab === 'fields') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-fields.php'; ?>
+        <?php elseif ($active_tab === 'order-notes') : ?>
+            <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-order-notes.php'; ?>
         <?php endif; ?>
 
         <?php submit_button(); ?>

@@ -33,15 +33,18 @@ class AccountDisplay
     {
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
+        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
+        $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Check if we have anything to display
         $show_delivery = !empty($delivery_date) && !empty($delivery_settings['show_in_admin']);
         $show_field = !empty($custom_field) && !empty($field_settings['show_in_admin']);
+        $show_field_2 = !empty($custom_field_2) && !empty($field_2_settings['show_in_admin']);
 
-        if (!$show_delivery && !$show_field) {
+        if (!$show_delivery && !$show_field && !$show_field_2) {
             return;
         }
 
@@ -73,6 +76,15 @@ class AccountDisplay
             echo '<tr>';
             echo '<th>' . esc_html($label) . '</th>';
             echo '<td>' . nl2br(esc_html($custom_field)) . '</td>';
+            echo '</tr>';
+        }
+
+        if ($show_field_2) {
+            $label = $field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo');
+
+            echo '<tr>';
+            echo '<th>' . esc_html($label) . '</th>';
+            echo '<td>' . nl2br(esc_html($custom_field_2)) . '</td>';
             echo '</tr>';
         }
 

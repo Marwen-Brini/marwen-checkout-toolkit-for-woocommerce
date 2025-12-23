@@ -28,41 +28,87 @@ class EmailDisplay
 
     /**
      * Add fields to order emails
+     *
+     * @param \WC_Order $order         Order object.
+     * @param bool      $sent_to_admin Whether sent to admin.
+     * @param bool      $plain_text    Whether plain text email.
+     * @param mixed     $email         Email object.
      */
     public function add_to_email(\WC_Order $order, bool $sent_to_admin, bool $plain_text, $email): void
     {
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
+        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
+        $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Check if we should display in emails
         $show_delivery = !empty($delivery_date) && !empty($delivery_settings['show_in_emails']);
         $show_field = !empty($custom_field) && !empty($field_settings['show_in_emails']);
+        $show_field_2 = !empty($custom_field_2) && !empty($field_2_settings['show_in_emails']);
 
-        if (!$show_delivery && !$show_field) {
+        if (!$show_delivery && !$show_field && !$show_field_2) {
             return;
         }
 
         if ($plain_text) {
-            $this->render_plain_text($order, $delivery_date, $custom_field, $delivery_settings, $field_settings, $show_delivery, $show_field);
+            $this->render_plain_text(
+                $order,
+                $delivery_date,
+                $custom_field,
+                $custom_field_2,
+                $delivery_settings,
+                $field_settings,
+                $field_2_settings,
+                $show_delivery,
+                $show_field,
+                $show_field_2
+            );
         } else {
-            $this->render_html($order, $delivery_date, $custom_field, $delivery_settings, $field_settings, $show_delivery, $show_field, $email);
+            $this->render_html(
+                $order,
+                $delivery_date,
+                $custom_field,
+                $custom_field_2,
+                $delivery_settings,
+                $field_settings,
+                $field_2_settings,
+                $show_delivery,
+                $show_field,
+                $show_field_2,
+                $email
+            );
         }
     }
 
     /**
      * Render HTML email content
+     *
+     * @param \WC_Order   $order             Order object.
+     * @param string|null $delivery_date     Delivery date.
+     * @param string|null $custom_field      Custom field value.
+     * @param string|null $custom_field_2    Custom field 2 value.
+     * @param array       $delivery_settings Delivery settings.
+     * @param array       $field_settings    Field settings.
+     * @param array       $field_2_settings  Field 2 settings.
+     * @param bool        $show_delivery     Show delivery date.
+     * @param bool        $show_field        Show custom field.
+     * @param bool        $show_field_2      Show custom field 2.
+     * @param mixed       $email             Email object.
      */
     private function render_html(
         \WC_Order $order,
         ?string $delivery_date,
         ?string $custom_field,
+        ?string $custom_field_2,
         array $delivery_settings,
         array $field_settings,
+        array $field_2_settings,
         bool $show_delivery,
         bool $show_field,
+        bool $show_field_2,
         $email
     ): void {
         echo '<h2>' . esc_html__('Additional Order Information', 'checkout-toolkit-for-woo') . '</h2>';
@@ -88,20 +134,44 @@ class EmailDisplay
             echo '</tr>';
         }
 
+        if ($show_field_2) {
+            $label = $field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo');
+            $output = apply_filters('checkout_toolkit_email_custom_field_2', $custom_field_2, $order, $email);
+
+            echo '<tr>';
+            echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
+            echo '<td style="text-align: left; padding: 12px;">' . nl2br(esc_html($output)) . '</td>';
+            echo '</tr>';
+        }
+
         echo '</table>';
     }
 
     /**
      * Render plain text email content
+     *
+     * @param \WC_Order   $order             Order object.
+     * @param string|null $delivery_date     Delivery date.
+     * @param string|null $custom_field      Custom field value.
+     * @param string|null $custom_field_2    Custom field 2 value.
+     * @param array       $delivery_settings Delivery settings.
+     * @param array       $field_settings    Field settings.
+     * @param array       $field_2_settings  Field 2 settings.
+     * @param bool        $show_delivery     Show delivery date.
+     * @param bool        $show_field        Show custom field.
+     * @param bool        $show_field_2      Show custom field 2.
      */
     private function render_plain_text(
         \WC_Order $order,
         ?string $delivery_date,
         ?string $custom_field,
+        ?string $custom_field_2,
         array $delivery_settings,
         array $field_settings,
+        array $field_2_settings,
         bool $show_delivery,
-        bool $show_field
+        bool $show_field,
+        bool $show_field_2
     ): void {
         // Plain text emails - escaping for safety.
         echo "\n" . esc_html(str_repeat('=', 50)) . "\n";
@@ -121,11 +191,21 @@ class EmailDisplay
             echo esc_html($label) . ': ' . esc_html($custom_field) . "\n";
         }
 
+        if ($show_field_2) {
+            $label = $field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo');
+
+            echo esc_html($label) . ': ' . esc_html($custom_field_2) . "\n";
+        }
+
         echo "\n";
     }
 
     /**
      * Format date for display
+     *
+     * @param string $date   Date string.
+     * @param string $format Date format.
+     * @return string Formatted date.
      */
     private function format_date(string $date, string $format): string
     {

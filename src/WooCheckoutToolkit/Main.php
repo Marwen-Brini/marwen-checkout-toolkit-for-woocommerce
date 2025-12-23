@@ -13,9 +13,11 @@ use WooCheckoutToolkit\Admin\Admin;
 use WooCheckoutToolkit\Admin\DeliveryManager;
 use WooCheckoutToolkit\Delivery\DeliveryDate;
 use WooCheckoutToolkit\Fields\OrderFields;
+use WooCheckoutToolkit\Fields\OrderFields2;
 use WooCheckoutToolkit\Display\OrderDisplay;
 use WooCheckoutToolkit\Display\EmailDisplay;
 use WooCheckoutToolkit\Display\AccountDisplay;
+use WooCheckoutToolkit\Communication\OrderNotesCustomizer;
 use WooCheckoutToolkit\Logger;
 use WooCheckoutToolkit\CheckoutDetector;
 use WooCheckoutToolkit\Blocks\BlocksIntegration;
@@ -50,6 +52,11 @@ final class Main
     private ?OrderFields $order_fields = null;
 
     /**
+     * Order fields 2 instance
+     */
+    private ?OrderFields2 $order_fields_2 = null;
+
+    /**
      * Order display instance
      */
     private ?OrderDisplay $order_display = null;
@@ -68,6 +75,11 @@ final class Main
      * Delivery manager instance
      */
     private ?DeliveryManager $delivery_manager = null;
+
+    /**
+     * Order notes customizer instance
+     */
+    private ?OrderNotesCustomizer $order_notes_customizer = null;
 
     /**
      * Private constructor for singleton
@@ -146,6 +158,13 @@ final class Main
 
         $this->order_fields = new OrderFields();
         $this->order_fields->init();
+
+        $this->order_fields_2 = new OrderFields2();
+        $this->order_fields_2->init();
+
+        // Initialize order notes customizer
+        $this->order_notes_customizer = new OrderNotesCustomizer();
+        $this->order_notes_customizer->init();
 
         // Enqueue frontend assets for classic checkout only
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
@@ -242,6 +261,7 @@ final class Main
     {
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
+        $field_2_settings = $this->get_field_2_settings();
 
         return [
             'delivery' => [
@@ -263,11 +283,47 @@ final class Main
                 'placeholder' => $field_settings['field_placeholder'],
                 'maxLength' => $field_settings['max_length'],
             ],
+            'customField2' => [
+                'enabled' => $field_2_settings['enabled'],
+                'required' => $field_2_settings['required'],
+                'type' => $field_2_settings['field_type'],
+                'label' => $field_2_settings['field_label'],
+                'placeholder' => $field_2_settings['field_placeholder'],
+                'maxLength' => $field_2_settings['max_length'],
+            ],
             'i18n' => [
                 'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
                 'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
             ],
         ];
+    }
+
+    /**
+     * Get default field 2 settings
+     */
+    public function get_default_field_2_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_type' => 'text',
+            'field_label' => __('Additional Information', 'checkout-toolkit-for-woo'),
+            'field_placeholder' => '',
+            'field_position' => 'woocommerce_after_order_notes',
+            'max_length' => 200,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Get field 2 settings (with defaults)
+     */
+    public function get_field_2_settings(): array
+    {
+        $defaults = $this->get_default_field_2_settings();
+        $settings = get_option('checkout_toolkit_field_2_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 
     /**

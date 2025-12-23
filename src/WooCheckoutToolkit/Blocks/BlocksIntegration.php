@@ -11,6 +11,7 @@ namespace WooCheckoutToolkit\Blocks;
 
 use Automattic\WooCommerce\Blocks\Integrations\IntegrationInterface;
 use WooCheckoutToolkit\Main;
+use WooCheckoutToolkit\Admin\Settings;
 
 defined('ABSPATH') || exit;
 
@@ -66,6 +67,7 @@ class BlocksIntegration implements IntegrationInterface
         $main = Main::get_instance();
         $delivery_settings = $main->get_delivery_settings();
         $field_settings = $main->get_field_settings();
+        $field_2_settings = $this->get_field_2_settings();
 
         return [
             'delivery' => [
@@ -87,6 +89,14 @@ class BlocksIntegration implements IntegrationInterface
                 'placeholder' => $field_settings['field_placeholder'],
                 'maxLength' => $field_settings['max_length'],
             ],
+            'customField2' => [
+                'enabled' => $field_2_settings['enabled'],
+                'required' => $field_2_settings['required'],
+                'type' => $field_2_settings['field_type'],
+                'label' => $field_2_settings['field_label'],
+                'placeholder' => $field_2_settings['field_placeholder'],
+                'maxLength' => $field_2_settings['max_length'],
+            ],
             'i18n' => [
                 'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
                 'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
@@ -100,8 +110,25 @@ class BlocksIntegration implements IntegrationInterface
                     __('%s is a required field.', 'checkout-toolkit-for-woo'),
                     $field_settings['field_label']
                 ),
+                'customField2Required' => sprintf(
+                    /* translators: %s: Field label */
+                    __('%s is a required field.', 'checkout-toolkit-for-woo'),
+                    $field_2_settings['field_label']
+                ),
             ],
         ];
+    }
+
+    /**
+     * Get field 2 settings
+     *
+     * @return array Settings array.
+     */
+    private function get_field_2_settings(): array
+    {
+        $defaults = (new Settings())->get_default_field_2_settings();
+        $settings = get_option('checkout_toolkit_field_2_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 
     /**
@@ -196,6 +223,12 @@ class BlocksIntegration implements IntegrationInterface
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
+            'custom_field_2' => [
+                'description' => __('Second custom order field', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
         ];
     }
 
@@ -262,6 +295,38 @@ class BlocksIntegration implements IntegrationInterface
                  * @param string $value The field value.
                  */
                 do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+            }
+        }
+
+        // Save custom field 2
+        if (isset($data['custom_field_2'])) {
+            $field_2_settings = $this->get_field_2_settings();
+
+            $value = sanitize_textarea_field($data['custom_field_2']);
+
+            // Enforce max length
+            if ($field_2_settings['max_length'] > 0 && mb_strlen($value) > $field_2_settings['max_length']) {
+                $value = mb_substr($value, 0, $field_2_settings['max_length']);
+            }
+
+            /**
+             * Filter the sanitized custom field 2 value.
+             *
+             * @param string $value The sanitized value.
+             * @param \WC_Order $order The order object.
+             */
+            $value = apply_filters('checkout_toolkit_sanitize_field_2_value', $value, $order);
+
+            if (!empty($value)) {
+                $order->update_meta_data('_wct_custom_field_2', $value);
+
+                /**
+                 * Action fired after custom field 2 is saved from blocks checkout.
+                 *
+                 * @param int $order_id The order ID.
+                 * @param string $value The field value.
+                 */
+                do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
             }
         }
     }

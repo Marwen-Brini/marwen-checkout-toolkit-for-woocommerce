@@ -44,9 +44,11 @@ class OrderDisplay
 
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
+        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
+        $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Display delivery date
         if (!empty($delivery_date) && !empty($delivery_settings['show_in_admin'])) {
@@ -59,6 +61,13 @@ class OrderDisplay
         if (!empty($custom_field) && !empty($field_settings['show_in_admin'])) {
             $output = apply_filters('checkout_toolkit_display_custom_field', $custom_field, $order);
             echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo nl2br(esc_html($output)) . '</p>';
+        }
+
+        // Display custom field 2
+        if (!empty($custom_field_2) && !empty($field_2_settings['show_in_admin'])) {
+            $output = apply_filters('checkout_toolkit_display_custom_field_2', $custom_field_2, $order);
+            echo '<p><strong>' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
 
@@ -98,14 +107,16 @@ class OrderDisplay
 
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
+        $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
-        if (empty($delivery_date) && empty($custom_field)) {
+        if (empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
             echo '<p>' . esc_html__('No additional checkout data.', 'checkout-toolkit-for-woo') . '</p>';
             return;
         }
 
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
+        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         echo '<div class="wct-order-delivery-meta">';
 
@@ -141,6 +152,14 @@ class OrderDisplay
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
             echo '<span class="delivery-label">' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . '</span>';
             echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($custom_field)) . '</span>';
+            echo '</div>';
+        }
+
+        // Display custom field 2
+        if (!empty($custom_field_2)) {
+            echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
+            echo '<span class="delivery-label">' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($custom_field_2)) . '</span>';
             echo '</div>';
         }
 
