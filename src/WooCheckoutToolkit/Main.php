@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WooCheckoutToolkit;
 
 use WooCheckoutToolkit\Admin\Admin;
+use WooCheckoutToolkit\Admin\DeliveryManager;
 use WooCheckoutToolkit\Delivery\DeliveryDate;
 use WooCheckoutToolkit\Fields\OrderFields;
 use WooCheckoutToolkit\Display\OrderDisplay;
@@ -64,6 +65,11 @@ final class Main
     private ?AccountDisplay $account_display = null;
 
     /**
+     * Delivery manager instance
+     */
+    private ?DeliveryManager $delivery_manager = null;
+
+    /**
      * Private constructor for singleton
      */
     private function __construct()
@@ -116,6 +122,10 @@ final class Main
         if (is_admin()) {
             $this->admin = new Admin();
             $this->admin->init();
+
+            // Initialize delivery manager
+            $this->delivery_manager = new DeliveryManager();
+            $this->delivery_manager->init();
         }
     }
 

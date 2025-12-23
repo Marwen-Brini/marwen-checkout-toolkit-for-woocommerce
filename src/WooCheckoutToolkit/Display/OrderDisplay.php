@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace WooCheckoutToolkit\Display;
 
+use WooCheckoutToolkit\Admin\DeliveryManager;
+use WooCheckoutToolkit\Admin\DeliveryStatus;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -104,16 +107,90 @@ class OrderDisplay
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
 
+        echo '<div class="wct-order-delivery-meta">';
+
+        // Display delivery date
         if (!empty($delivery_date)) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
-            echo '<p><strong>' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo')) . ':</strong><br>';
-            echo esc_html($formatted_date) . '</p>';
+            echo '<div class="delivery-row">';
+            echo '<span class="delivery-label">' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value">' . esc_html($formatted_date) . '</span>';
+            echo '</div>';
+
+            // Display delivery status with dropdown
+            $delivery_status = $order->get_meta(DeliveryManager::META_STATUS) ?: DeliveryStatus::PENDING;
+            echo '<div class="delivery-row">';
+            echo '<span class="delivery-label">' . esc_html__('Status', 'checkout-toolkit-for-woo') . '</span>';
+            echo '<span class="delivery-value">';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Badge HTML is escaped in get_badge_html
+            echo DeliveryStatus::get_badge_html($delivery_status);
+            echo '<select id="wct_delivery_status" class="wct-delivery-status-select" data-order-id="' . esc_attr($order->get_id()) . '">';
+            foreach (DeliveryStatus::get_statuses() as $key => $label) {
+                echo '<option value="' . esc_attr($key) . '"' . selected($key, $delivery_status, false) . '>' . esc_html($label) . '</option>';
+            }
+            echo '</select>';
+            echo '</span>';
+            echo '</div>';
+
+            // Display status history
+            $this->render_status_history($order);
         }
 
+        // Display custom field
         if (!empty($custom_field)) {
-            echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
-            echo nl2br(esc_html($custom_field)) . '</p>';
+            echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
+            echo '<span class="delivery-label">' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($custom_field)) . '</span>';
+            echo '</div>';
         }
+
+        echo '</div>';
+    }
+
+    /**
+     * Render status history
+     */
+    private function render_status_history(\WC_Order $order): void
+    {
+        $history = $order->get_meta(DeliveryManager::META_HISTORY);
+
+        if (empty($history) || !is_array($history)) {
+            return;
+        }
+
+        // Reverse to show newest first
+        $history = array_reverse($history);
+
+        echo '<div class="wct-delivery-history">';
+        echo '<h4>' . esc_html__('Status History', 'checkout-toolkit-for-woo') . '</h4>';
+        echo '<ul>';
+
+        foreach (array_slice($history, 0, 5) as $entry) {
+            $status_label = DeliveryStatus::get_label($entry['status'] ?? '');
+            $timestamp = $entry['timestamp'] ?? 0;
+            $user_id = $entry['user_id'] ?? 0;
+
+            $user_name = '';
+            if ($user_id) {
+                $user = get_user_by('id', $user_id);
+                $user_name = $user ? $user->display_name : '';
+            }
+
+            echo '<li>';
+            echo '<span class="history-status">' . esc_html($status_label) . '</span>';
+            if ($timestamp) {
+                echo '<br><span class="history-date">' . esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), $timestamp));
+                if ($user_name) {
+                    /* translators: %s: User name */
+                    echo ' ' . sprintf(esc_html__('by %s', 'checkout-toolkit-for-woo'), esc_html($user_name));
+                }
+                echo '</span>';
+            }
+            echo '</li>';
+        }
+
+        echo '</ul>';
+        echo '</div>';
     }
 
     /**
