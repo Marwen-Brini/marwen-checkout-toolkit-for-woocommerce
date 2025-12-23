@@ -1,0 +1,133 @@
+/**
+ * WooCommerce Checkout Toolkit - Flatpickr Theme
+ *
+ * @package WooCheckoutToolkit
+ */
+
+/* Calendar Container */
+.flatpickr-calendar.wct-calendar {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+/* Month Navigation */
+.flatpickr-calendar .flatpickr-months {
+    padding: 10px 0;
+}
+
+.flatpickr-calendar .flatpickr-month {
+    color: #1e1e1e;
+    fill: #1e1e1e;
+}
+
+.flatpickr-calendar .flatpickr-current-month {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.flatpickr-calendar .flatpickr-prev-month,
+.flatpickr-calendar .flatpickr-next-month {
+    padding: 10px;
+}
+
+.flatpickr-calendar .flatpickr-prev-month:hover svg,
+.flatpickr-calendar .flatpickr-next-month:hover svg {
+    fill: #007cba;
+}
+
+/* Weekday Headers */
+.flatpickr-calendar .flatpickr-weekdays {
+    background: transparent;
+}
+
+.flatpickr-calendar .flatpickr-weekday {
+    color: #666;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+
+/* Days */
+.flatpickr-calendar .flatpickr-day {
+    border-radius: 50%;
+    color: #1e1e1e;
+    font-weight: 500;
+    max-width: 38px;
+    height: 38px;
+    line-height: 38px;
+}
+
+.flatpickr-calendar .flatpickr-day:hover {
+    background: #f0f0f0;
+    border-color: #f0f0f0;
+}
+
+/* Today */
+.flatpickr-calendar .flatpickr-day.today {
+    border-color: #007cba;
+}
+
+.flatpickr-calendar .flatpickr-day.today:hover {
+    background: #007cba;
+    border-color: #007cba;
+    color: #fff;
+}
+
+/* Selected Day */
+.flatpickr-calendar .flatpickr-day.selected,
+.flatpickr-calendar .flatpickr-day.selected:hover {
+    background: #007cba;
+    border-color: #007cba;
+    color: #fff;
+}
+
+/* Disabled Days */
+.flatpickr-calendar .flatpickr-day.flatpickr-disabled,
+.flatpickr-calendar .flatpickr-day.flatpickr-disabled:hover {
+    color: #ccc;
+    background: transparent;
+    cursor: not-allowed;
+}
+
+/* Previous/Next Month Days */
+.flatpickr-calendar .flatpickr-day.prevMonthDay,
+.flatpickr-calendar .flatpickr-day.nextMonthDay {
+    color: #bbb;
+}
+
+.flatpickr-calendar .flatpickr-day.prevMonthDay:hover,
+.flatpickr-calendar .flatpickr-day.nextMonthDay:hover {
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+}
+
+/* Mobile Optimizations */
+@media screen and (max-width: 768px) {
+    .flatpickr-calendar {
+        width: 100% !important;
+        max-width: 320px;
+    }
+
+    .flatpickr-calendar .flatpickr-day {
+        max-width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+/* Animation */
+.flatpickr-calendar.open {
+    animation: wct-fadeIn 0.2s ease-out;
+}
+
+@keyframes wct-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

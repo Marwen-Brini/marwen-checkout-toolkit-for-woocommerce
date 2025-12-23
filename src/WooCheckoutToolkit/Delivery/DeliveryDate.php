@@ -1,0 +1,172 @@
+<?php
+/**
+ * Delivery date handler
+ *
+ * @package WooCheckoutToolkit
+ */
+
+declare(strict_types=1);
+
+namespace WooCheckoutToolkit\Delivery;
+
+defined('ABSPATH') || exit;
+
+/**
+ * Class DeliveryDate
+ *
+ * Handles delivery date picker on checkout.
+ */
+class DeliveryDate
+{
+    /**
+     * Availability checker instance
+     */
+    private ?AvailabilityChecker $availability_checker = null;
+
+    /**
+     * Initialize delivery date functionality
+     */
+    public function init(): void
+    {
+        $this->availability_checker = new AvailabilityChecker();
+
+        // Add field to checkout
+        $this->register_field_position();
+
+        // Validate and save
+        add_action('woocommerce_checkout_process', [$this, 'validate_delivery_date']);
+        add_action('woocommerce_checkout_create_order', [$this, 'save_delivery_date'], 10, 2);
+    }
+
+    /**
+     * Register field at configured position
+     */
+    private function register_field_position(): void
+    {
+        $settings = $this->get_settings();
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        $position = $settings['field_position'] ?? 'woocommerce_after_order_notes';
+        add_action($position, [$this, 'render_delivery_date_field']);
+    }
+
+    /**
+     * Render delivery date field
+     */
+    public function render_delivery_date_field(): void
+    {
+        $settings = $this->get_settings();
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        do_action('wct_before_delivery_date_field');
+
+        woocommerce_form_field(
+            'wct_delivery_date',
+            apply_filters('wct_delivery_date_field_args', [
+                'type' => 'text',
+                'label' => $settings['field_label'],
+                'required' => $settings['required'],
+                'class' => ['form-row-wide', 'wct-delivery-date-field'],
+                'input_class' => ['wct-datepicker'],
+                'custom_attributes' => [
+                    'readonly' => 'readonly',
+                    'data-wct-datepicker' => 'true',
+                ],
+            ]),
+            WC()->checkout->get_value('wct_delivery_date')
+        );
+
+        // Hidden field for actual date value (Y-m-d format)
+        echo '<input type="hidden" name="wct_delivery_date_value" id="wct_delivery_date_value" value="" />';
+
+        do_action('wct_after_delivery_date_field');
+    }
+
+    /**
+     * Validate delivery date
+     */
+    public function validate_delivery_date(): void
+    {
+        $settings = $this->get_settings();
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        $date = isset($_POST['wct_delivery_date_value'])
+            ? sanitize_text_field($_POST['wct_delivery_date_value'])
+            : '';
+
+        // Required validation
+        if ($settings['required'] && empty($date)) {
+            wc_add_notice(
+                sprintf(
+                    __('%s is a required field.', 'woo-checkout-toolkit'),
+                    '<strong>' . esc_html($settings['field_label']) . '</strong>'
+                ),
+                'error'
+            );
+            return;
+        }
+
+        // Skip further validation if empty and not required
+        if (empty($date)) {
+            return;
+        }
+
+        // Format validation
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            wc_add_notice(
+                __('Invalid date format. Please select a valid date.', 'woo-checkout-toolkit'),
+                'error'
+            );
+            return;
+        }
+
+        // Availability validation
+        $is_valid = apply_filters('wct_validate_delivery_date', true, $date);
+
+        if ($is_valid && !$this->availability_checker->is_date_available($date)) {
+            wc_add_notice(
+                __('The selected delivery date is not available. Please choose another date.', 'woo-checkout-toolkit'),
+                'error'
+            );
+        }
+    }
+
+    /**
+     * Save delivery date to order
+     */
+    public function save_delivery_date(\WC_Order $order, array $data): void
+    {
+        $settings = $this->get_settings();
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        $date = isset($_POST['wct_delivery_date_value'])
+            ? sanitize_text_field($_POST['wct_delivery_date_value'])
+            : '';
+
+        if (!empty($date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            $order->update_meta_data('_wct_delivery_date', $date);
+
+            do_action('wct_delivery_date_saved', $order->get_id(), $date);
+        }
+    }
+
+    /**
+     * Get delivery settings
+     */
+    private function get_settings(): array
+    {
+        return get_option('wct_delivery_settings', []);
+    }
+}

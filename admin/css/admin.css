@@ -1,0 +1,139 @@
+/**
+ * WooCommerce Checkout Toolkit - Admin Styles
+ *
+ * @package WooCheckoutToolkit
+ */
+
+/* Settings Page */
+.wct-settings-wrap {
+    max-width: 900px;
+}
+
+.wct-settings-wrap h1 {
+    margin-bottom: 20px;
+}
+
+.wct-nav-tabs {
+    margin-bottom: 20px;
+}
+
+.wct-settings-table th {
+    width: 200px;
+    padding: 20px 10px 20px 0;
+}
+
+.wct-settings-table td {
+    padding: 15px 10px;
+}
+
+.wct-settings-table .description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Blocked Dates Manager */
+.wct-blocked-dates-manager {
+    max-width: 400px;
+}
+
+.wct-add-date-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.wct-add-date-row input {
+    flex: 1;
+}
+
+.wct-blocked-dates-list {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.wct-blocked-date-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+
+.wct-blocked-date-item:last-child {
+    margin-bottom: 0;
+}
+
+.wct-date-display {
+    font-weight: 500;
+}
+
+.wct-remove-date {
+    color: #a00 !important;
+    text-decoration: none;
+}
+
+.wct-remove-date:hover {
+    color: #dc3232 !important;
+}
+
+.wct-no-dates {
+    color: #666;
+    font-style: italic;
+    margin: 0;
+    padding: 5px;
+}
+
+/* Flatpickr in admin */
+.wct-datepicker-admin {
+    width: 200px;
+}
+
+/* Order Meta Box */
+#wct_order_details .inside p {
+    margin: 10px 0;
+}
+
+#wct_order_details .inside p:first-child {
+    margin-top: 0;
+}
+
+#wct_order_details .inside p:last-child {
+    margin-bottom: 0;
+}
+
+#wct_order_details strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #23282d;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .wct-settings-table th {
+        width: 100%;
+        display: block;
+        padding-bottom: 5px;
+    }
+
+    .wct-settings-table td {
+        display: block;
+        padding-top: 5px;
+    }
+
+    .wct-add-date-row {
+        flex-direction: column;
+    }
+
+    .wct-add-date-row input {
+        width: 100%;
+    }
+}
