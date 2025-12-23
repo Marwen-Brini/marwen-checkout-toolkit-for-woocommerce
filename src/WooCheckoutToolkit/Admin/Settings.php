@@ -72,9 +72,17 @@ class Settings
 
     /**
      * Sanitize delivery settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
      */
-    public function sanitize_delivery_settings(array $input): array
+    public function sanitize_delivery_settings(?array $input): array
     {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_delivery_settings', Main::get_instance()->get_default_delivery_settings());
+        }
+
         $defaults = Main::get_instance()->get_default_delivery_settings();
 
         return [
@@ -95,9 +103,17 @@ class Settings
 
     /**
      * Sanitize field settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
      */
-    public function sanitize_field_settings(array $input): array
+    public function sanitize_field_settings(?array $input): array
     {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_field_settings', Main::get_instance()->get_default_field_settings());
+        }
+
         $defaults = Main::get_instance()->get_default_field_settings();
 
         return [
