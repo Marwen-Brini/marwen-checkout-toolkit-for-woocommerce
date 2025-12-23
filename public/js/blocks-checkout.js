@@ -227,23 +227,45 @@
      */
     const CheckoutToolkitFields = ({ cart, extensions }) => {
         const [extensionData, setExtensionDataState] = useState({});
+        const initializedRef = useRef(false);
 
         // Function to update extension data and dispatch to store
         const setExtensionData = (namespace, key, value) => {
+            // Ensure value is always a string (never null/undefined)
+            const stringValue = value === null || value === undefined ? '' : String(value);
+
             setExtensionDataState(prev => ({
                 ...prev,
-                [key]: value
+                [key]: stringValue
             }));
 
             // Dispatch to WooCommerce store
             const { dispatch } = wp.data;
             if (dispatch('wc/store/checkout')) {
-                dispatch('wc/store/checkout').__internalSetExtensionData(namespace, { [key]: value });
+                dispatch('wc/store/checkout').__internalSetExtensionData(namespace, { [key]: stringValue });
             }
         };
 
         const hasDelivery = delivery && delivery.enabled;
         const hasCustomField = customField && customField.enabled;
+
+        // Initialize extension data with empty strings on mount
+        useEffect(() => {
+            if (initializedRef.current) return;
+            initializedRef.current = true;
+
+            const { dispatch } = wp.data;
+            if (dispatch('wc/store/checkout')) {
+                const initialData = {};
+                if (hasDelivery) {
+                    initialData.delivery_date = '';
+                }
+                if (hasCustomField) {
+                    initialData.custom_field = '';
+                }
+                dispatch('wc/store/checkout').__internalSetExtensionData('checkout-toolkit', initialData);
+            }
+        }, [hasDelivery, hasCustomField]);
 
         if (!hasDelivery && !hasCustomField) {
             return null;

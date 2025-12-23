@@ -186,13 +186,15 @@ class BlocksIntegration implements IntegrationInterface
         return [
             'delivery_date' => [
                 'description' => __('Preferred delivery date', 'checkout-toolkit-for-woo'),
-                'type' => 'string',
+                'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
+                'default' => '',
             ],
             'custom_field' => [
                 'description' => __('Custom order field', 'checkout-toolkit-for-woo'),
-                'type' => 'string',
+                'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
+                'default' => '',
             ],
         ];
     }
