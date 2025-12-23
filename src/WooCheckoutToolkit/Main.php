@@ -15,6 +15,7 @@ use WooCheckoutToolkit\Fields\OrderFields;
 use WooCheckoutToolkit\Display\OrderDisplay;
 use WooCheckoutToolkit\Display\EmailDisplay;
 use WooCheckoutToolkit\Display\AccountDisplay;
+use WooCheckoutToolkit\Logger;
 
 defined('ABSPATH') || exit;
 
@@ -91,9 +92,16 @@ final class Main
      */
     public function init(): void
     {
+        Logger::info('Initializing WooCommerce Checkout Toolkit', [
+            'version' => WCT_VERSION,
+            'php_version' => PHP_VERSION,
+        ]);
+
         $this->init_admin();
         $this->init_frontend();
         $this->init_display();
+
+        Logger::debug('Plugin initialization complete');
     }
 
     /**

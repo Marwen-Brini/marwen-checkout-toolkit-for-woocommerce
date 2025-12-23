@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace WooCheckoutToolkit\Delivery;
 
+use WooCheckoutToolkit\Logger;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -103,8 +105,11 @@ class DeliveryDate
             ? sanitize_text_field($_POST['wct_delivery_date_value'])
             : '';
 
+        Logger::debug('Validating delivery date', ['date' => $date, 'required' => $settings['required']]);
+
         // Required validation
         if ($settings['required'] && empty($date)) {
+            Logger::warning('Delivery date required but empty');
             wc_add_notice(
                 sprintf(
                     __('%s is a required field.', 'woo-checkout-toolkit'),
@@ -122,6 +127,7 @@ class DeliveryDate
 
         // Format validation
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            Logger::error('Invalid date format', ['date' => $date]);
             wc_add_notice(
                 __('Invalid date format. Please select a valid date.', 'woo-checkout-toolkit'),
                 'error'
@@ -133,6 +139,7 @@ class DeliveryDate
         $is_valid = apply_filters('wct_validate_delivery_date', true, $date);
 
         if ($is_valid && !$this->availability_checker->is_date_available($date)) {
+            Logger::warning('Selected date not available', ['date' => $date]);
             wc_add_notice(
                 __('The selected delivery date is not available. Please choose another date.', 'woo-checkout-toolkit'),
                 'error'
@@ -157,6 +164,11 @@ class DeliveryDate
 
         if (!empty($date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
             $order->update_meta_data('_wct_delivery_date', $date);
+
+            Logger::info('Delivery date saved to order', [
+                'order_id' => $order->get_id(),
+                'delivery_date' => $date,
+            ]);
 
             do_action('wct_delivery_date_saved', $order->get_id(), $date);
         }
