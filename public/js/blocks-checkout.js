@@ -21,7 +21,85 @@
         return;
     }
 
-    const { deliveryMethod, delivery, customField, customField2, i18n } = settings;
+    const { orderNotes, deliveryMethod, delivery, customField, customField2, i18n } = settings;
+
+    /**
+     * Customize Order Notes field for blocks checkout
+     */
+    const customizeOrderNotes = () => {
+        if (!orderNotes || !orderNotes.enabled) {
+            return;
+        }
+
+        const customizeElements = () => {
+            // Target the order notes section using the actual WooCommerce Blocks classes
+            const orderNotesSection = document.querySelector('#order-notes, .wc-block-checkout__order-notes, .wp-block-woocommerce-checkout-order-note-block');
+
+            if (!orderNotesSection) {
+                return;
+            }
+
+            // Customize the label
+            if (orderNotes.customLabel) {
+                const labels = orderNotesSection.querySelectorAll('label, .wc-block-components-checkbox__label');
+                labels.forEach(label => {
+                    if (!label.dataset.wctCustomized) {
+                        // Find the text node or span inside the label
+                        const span = label.querySelector('span');
+                        if (span && !span.querySelector('input')) {
+                            span.textContent = orderNotes.customLabel;
+                        } else if (label.childNodes.length > 0) {
+                            // Find text node after checkbox input
+                            label.childNodes.forEach(node => {
+                                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                    node.textContent = orderNotes.customLabel;
+                                }
+                            });
+                        }
+                        label.dataset.wctCustomized = 'true';
+                    }
+                });
+            }
+
+            // Customize the textarea placeholder
+            if (orderNotes.customPlaceholder) {
+                const textareas = orderNotesSection.querySelectorAll('textarea');
+                textareas.forEach(textarea => {
+                    if (!textarea.dataset.wctCustomized) {
+                        textarea.placeholder = orderNotes.customPlaceholder;
+                        textarea.dataset.wctCustomized = 'true';
+                    }
+                });
+            }
+        };
+
+        // Run immediately
+        customizeElements();
+
+        // Use MutationObserver to handle dynamic rendering (textarea appears when checkbox is clicked)
+        const observer = new MutationObserver(() => {
+            customizeElements();
+        });
+
+        // Start observing the entire body for checkout changes
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true
+        });
+
+        // Also run after delays to catch late renders
+        setTimeout(customizeElements, 100);
+        setTimeout(customizeElements, 500);
+        setTimeout(customizeElements, 1000);
+    };
+
+    // Initialize order notes customization when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', customizeOrderNotes);
+    } else {
+        customizeOrderNotes();
+    }
 
     /**
      * Delivery Method Toggle Component

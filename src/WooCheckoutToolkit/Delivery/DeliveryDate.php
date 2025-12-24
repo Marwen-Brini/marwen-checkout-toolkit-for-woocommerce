@@ -165,6 +165,11 @@ class DeliveryDate
      */
     public function save_delivery_date(\WC_Order $order, array $data): void
     {
+        // Skip for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
         // Nonce already verified in validate_delivery_date via WooCommerce checkout process.
         $settings = $this->get_settings();
 

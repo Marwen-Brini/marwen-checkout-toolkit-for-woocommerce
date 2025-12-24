@@ -229,6 +229,11 @@ class OrderFields2
      */
     public function save_field(\WC_Order $order, array $data): void
     {
+        // Skip for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {

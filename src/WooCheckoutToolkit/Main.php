@@ -210,13 +210,15 @@ final class Main
             return;
         }
 
+        $order_notes_settings = $this->get_order_notes_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
 
         // Only load if at least one feature is enabled
-        $has_enabled_feature = !empty($delivery_method_settings['enabled'])
+        $has_enabled_feature = !empty($order_notes_settings['enabled'])
+            || !empty($delivery_method_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
             || !empty($field_2_settings['enabled']);
@@ -226,7 +228,7 @@ final class Main
         }
 
         // Flatpickr for date picker
-        if ($delivery_settings['enabled']) {
+        if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
                 'checkout-toolkit-flatpickr',
                 CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
@@ -279,8 +281,14 @@ final class Main
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
+        $order_notes_settings = $this->get_order_notes_settings();
 
         return [
+            'orderNotes' => [
+                'enabled' => $order_notes_settings['enabled'],
+                'customLabel' => $order_notes_settings['custom_label'],
+                'customPlaceholder' => $order_notes_settings['custom_placeholder'],
+            ],
             'deliveryMethod' => [
                 'enabled' => $delivery_method_settings['enabled'],
                 'defaultMethod' => $delivery_method_settings['default_method'],
@@ -416,7 +424,7 @@ final class Main
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
 
-        // Only load if at least one feature is enabled
+        // Only load if at least one feature is enabled (order notes uses PHP filter, no JS needed for classic)
         $has_enabled_feature = !empty($delivery_method_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
@@ -600,6 +608,28 @@ final class Main
     {
         $defaults = $this->get_default_field_settings();
         $settings = get_option('checkout_toolkit_field_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get default order notes settings
+     */
+    public function get_default_order_notes_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'custom_label' => '',
+            'custom_placeholder' => '',
+        ];
+    }
+
+    /**
+     * Get order notes settings (with defaults)
+     */
+    public function get_order_notes_settings(): array
+    {
+        $defaults = $this->get_default_order_notes_settings();
+        $settings = get_option('checkout_toolkit_order_notes_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 }
