@@ -210,11 +210,18 @@ final class Main
             return;
         }
 
+        $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
+        $field_2_settings = $this->get_field_2_settings();
 
         // Only load if at least one feature is enabled
-        if (!$delivery_settings['enabled'] && !$field_settings['enabled']) {
+        $has_enabled_feature = !empty($delivery_method_settings['enabled'])
+            || !empty($delivery_settings['enabled'])
+            || !empty($field_settings['enabled'])
+            || !empty($field_2_settings['enabled']);
+
+        if (!$has_enabled_feature) {
             return;
         }
 
@@ -300,6 +307,8 @@ final class Main
                 'label' => $field_settings['field_label'],
                 'placeholder' => $field_settings['field_placeholder'],
                 'maxLength' => $field_settings['max_length'],
+                'checkboxLabel' => $field_settings['checkbox_label'] ?? '',
+                'selectOptions' => $field_settings['select_options'] ?? [],
             ],
             'customField2' => [
                 'enabled' => $field_2_settings['enabled'],
@@ -308,6 +317,8 @@ final class Main
                 'label' => $field_2_settings['field_label'],
                 'placeholder' => $field_2_settings['field_placeholder'],
                 'maxLength' => $field_2_settings['max_length'],
+                'checkboxLabel' => $field_2_settings['checkbox_label'] ?? '',
+                'selectOptions' => $field_2_settings['select_options'] ?? [],
             ],
             'i18n' => [
                 'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
@@ -400,11 +411,18 @@ final class Main
             return;
         }
 
+        $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
+        $field_2_settings = $this->get_field_2_settings();
 
         // Only load if at least one feature is enabled
-        if (empty($delivery_settings['enabled']) && empty($field_settings['enabled'])) {
+        $has_enabled_feature = !empty($delivery_method_settings['enabled'])
+            || !empty($delivery_settings['enabled'])
+            || !empty($field_settings['enabled'])
+            || !empty($field_2_settings['enabled']);
+
+        if (!$has_enabled_feature) {
             return;
         }
 
