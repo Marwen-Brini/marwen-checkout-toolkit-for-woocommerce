@@ -101,7 +101,7 @@ class Settings
             'enabled' => false,
             'required' => false,
             'field_type' => 'text',
-            'field_label' => __('Additional Information', 'checkout-toolkit-for-woo'),
+            'field_label' => 'Additional Information',
             'field_placeholder' => '',
             'field_position' => 'woocommerce_after_order_notes',
             'max_length' => 200,
