@@ -254,6 +254,8 @@ class OrderFields
      */
     private function get_settings(): array
     {
-        return get_option('checkout_toolkit_field_settings', []);
+        $defaults = \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings();
+        $settings = get_option('checkout_toolkit_field_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 }
