@@ -126,7 +126,8 @@ class EmailDisplay
 
         if ($show_field) {
             $label = $field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo');
-            $output = apply_filters('checkout_toolkit_email_custom_field', $custom_field, $order, $email);
+            $output = $this->format_field_value($custom_field, $field_settings);
+            $output = apply_filters('checkout_toolkit_email_custom_field', $output, $order, $email);
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
@@ -136,7 +137,8 @@ class EmailDisplay
 
         if ($show_field_2) {
             $label = $field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo');
-            $output = apply_filters('checkout_toolkit_email_custom_field_2', $custom_field_2, $order, $email);
+            $output = $this->format_field_value($custom_field_2, $field_2_settings);
+            $output = apply_filters('checkout_toolkit_email_custom_field_2', $output, $order, $email);
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
@@ -187,14 +189,16 @@ class EmailDisplay
 
         if ($show_field) {
             $label = $field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo');
+            $output = $this->format_field_value($custom_field, $field_settings);
 
-            echo esc_html($label) . ': ' . esc_html($custom_field) . "\n";
+            echo esc_html($label) . ': ' . esc_html($output) . "\n";
         }
 
         if ($show_field_2) {
             $label = $field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo');
+            $output = $this->format_field_value($custom_field_2, $field_2_settings);
 
-            echo esc_html($label) . ': ' . esc_html($custom_field_2) . "\n";
+            echo esc_html($label) . ': ' . esc_html($output) . "\n";
         }
 
         echo "\n";
@@ -214,6 +218,37 @@ class EmailDisplay
             return date_i18n($format, $date_obj->getTimestamp());
         } catch (\Exception $e) {
             return $date;
+        }
+    }
+
+    /**
+     * Format field value based on field type
+     *
+     * @param string $value    The raw value.
+     * @param array  $settings The field settings.
+     * @return string Formatted value.
+     */
+    private function format_field_value(string $value, array $settings): string
+    {
+        $field_type = $settings['field_type'] ?? 'text';
+
+        switch ($field_type) {
+            case 'checkbox':
+                return $value === '1'
+                    ? __('Yes', 'checkout-toolkit-for-woo')
+                    : __('No', 'checkout-toolkit-for-woo');
+
+            case 'select':
+                $options = $settings['select_options'] ?? [];
+                foreach ($options as $option) {
+                    if (($option['value'] ?? '') === $value) {
+                        return $option['label'] ?? $value;
+                    }
+                }
+                return $value;
+
+            default:
+                return $value;
         }
     }
 }

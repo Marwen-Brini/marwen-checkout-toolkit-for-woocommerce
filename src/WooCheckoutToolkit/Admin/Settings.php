@@ -107,6 +107,8 @@ class Settings
             'max_length' => 200,
             'show_in_emails' => true,
             'show_in_admin' => true,
+            'checkbox_label' => '',
+            'select_options' => [],
         ];
     }
 
@@ -128,7 +130,7 @@ class Settings
         return [
             'enabled' => !empty($input['enabled']),
             'required' => !empty($input['required']),
-            'field_type' => in_array($input['field_type'] ?? '', ['text', 'textarea'], true)
+            'field_type' => in_array($input['field_type'] ?? '', ['text', 'textarea', 'checkbox', 'select'], true)
                 ? $input['field_type']
                 : $defaults['field_type'],
             'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
@@ -137,6 +139,8 @@ class Settings
             'max_length' => absint($input['max_length'] ?? $defaults['max_length']),
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
+            'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? $defaults['checkbox_label']),
+            'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
         ];
     }
 
@@ -223,7 +227,7 @@ class Settings
         return [
             'enabled' => !empty($input['enabled']),
             'required' => !empty($input['required']),
-            'field_type' => in_array($input['field_type'] ?? '', ['text', 'textarea'], true)
+            'field_type' => in_array($input['field_type'] ?? '', ['text', 'textarea', 'checkbox', 'select'], true)
                 ? $input['field_type']
                 : $defaults['field_type'],
             'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
@@ -232,6 +236,8 @@ class Settings
             'max_length' => absint($input['max_length'] ?? $defaults['max_length']),
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
+            'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? ($defaults['checkbox_label'] ?? '')),
+            'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
         ];
     }
 
@@ -250,6 +256,43 @@ class Settings
         }
 
         return array_unique($sanitized);
+    }
+
+    /**
+     * Sanitize select options array
+     *
+     * @param array $options Raw options array.
+     * @return array Sanitized options.
+     */
+    private function sanitize_select_options(array $options): array
+    {
+        $sanitized = [];
+
+        foreach ($options as $option) {
+            if (!is_array($option)) {
+                continue;
+            }
+
+            $value = sanitize_key($option['value'] ?? '');
+            $label = sanitize_text_field($option['label'] ?? '');
+
+            // Skip empty options.
+            if (empty($value) && empty($label)) {
+                continue;
+            }
+
+            // Use label as value if value is empty.
+            if (empty($value) && !empty($label)) {
+                $value = sanitize_key($label);
+            }
+
+            $sanitized[] = [
+                'value' => $value,
+                'label' => $label ?: $value,
+            ];
+        }
+
+        return $sanitized;
     }
 
     /**

@@ -146,10 +146,10 @@
         const [charCount, setCharCount] = useState(0);
 
         const handleChange = (e) => {
-            let newValue = e.target.value;
+            let newValue = customField.type === 'checkbox' ? (e.target.checked ? '1' : '') : e.target.value;
 
-            // Enforce max length
-            if (customField.maxLength > 0 && newValue.length > customField.maxLength) {
+            // Enforce max length for text fields
+            if (['text', 'textarea'].includes(customField.type) && customField.maxLength > 0 && newValue.length > customField.maxLength) {
                 newValue = newValue.substring(0, customField.maxLength);
             }
 
@@ -165,8 +165,6 @@
             return null;
         }
 
-        const isTextarea = customField.type === 'textarea';
-
         const inputStyles = {
             width: '100%',
             padding: '12px 16px',
@@ -175,6 +173,69 @@
             fontSize: '16px',
             fontFamily: 'inherit',
             resize: 'vertical'
+        };
+
+        const renderField = () => {
+            switch (customField.type) {
+                case 'checkbox':
+                    return el('label', { style: { display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' } },
+                        el('input', {
+                            type: 'checkbox',
+                            id: 'checkout-toolkit-custom-field',
+                            name: 'checkout_toolkit_custom_field',
+                            className: 'checkout-toolkit-custom-field',
+                            checked: value === '1',
+                            onChange: handleChange,
+                            required: customField.required,
+                            style: { width: '20px', height: '20px' }
+                        }),
+                        el('span', null, customField.checkboxLabel || customField.label)
+                    );
+
+                case 'select':
+                    return el('select', {
+                        id: 'checkout-toolkit-custom-field',
+                        name: 'checkout_toolkit_custom_field',
+                        className: 'checkout-toolkit-custom-field',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField.required,
+                        style: inputStyles
+                    },
+                        el('option', { value: '' }, customField.placeholder || i18n?.selectOption || 'Select an option...'),
+                        (customField.selectOptions || []).map(opt =>
+                            el('option', { key: opt.value, value: opt.value }, opt.label)
+                        )
+                    );
+
+                case 'textarea':
+                    return el('textarea', {
+                        id: 'checkout-toolkit-custom-field',
+                        name: 'checkout_toolkit_custom_field',
+                        className: 'checkout-toolkit-custom-field',
+                        placeholder: customField.placeholder || '',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField.required,
+                        rows: 4,
+                        maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
+                        style: inputStyles
+                    });
+
+                default: // text
+                    return el('input', {
+                        type: 'text',
+                        id: 'checkout-toolkit-custom-field',
+                        name: 'checkout_toolkit_custom_field',
+                        className: 'checkout-toolkit-custom-field',
+                        placeholder: customField.placeholder || '',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField.required,
+                        maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
+                        style: inputStyles
+                    });
+            }
         };
 
         return el('div', { className: 'checkout-toolkit-custom-field-block wc-block-components-checkout-step' },
@@ -186,32 +247,8 @@
             ),
             el('div', { className: 'wc-block-components-checkout-step__container' },
                 el('div', { className: 'wc-block-components-checkout-step__content' },
-                    isTextarea
-                        ? el('textarea', {
-                            id: 'checkout-toolkit-custom-field',
-                            name: 'checkout_toolkit_custom_field',
-                            className: 'checkout-toolkit-custom-field',
-                            placeholder: customField.placeholder || '',
-                            value: value,
-                            onChange: handleChange,
-                            required: customField.required,
-                            rows: 4,
-                            maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
-                            style: inputStyles
-                        })
-                        : el('input', {
-                            type: 'text',
-                            id: 'checkout-toolkit-custom-field',
-                            name: 'checkout_toolkit_custom_field',
-                            className: 'checkout-toolkit-custom-field',
-                            placeholder: customField.placeholder || '',
-                            value: value,
-                            onChange: handleChange,
-                            required: customField.required,
-                            maxLength: customField.maxLength > 0 ? customField.maxLength : undefined,
-                            style: inputStyles
-                        }),
-                    customField.maxLength > 0 && el('div', {
+                    renderField(),
+                    ['text', 'textarea'].includes(customField.type) && customField.maxLength > 0 && el('div', {
                         className: 'checkout-toolkit-char-count',
                         style: { marginTop: '8px', fontSize: '14px', color: '#757575', textAlign: 'right' }
                     },
@@ -230,10 +267,10 @@
         const [charCount, setCharCount] = useState(0);
 
         const handleChange = (e) => {
-            let newValue = e.target.value;
+            let newValue = customField2.type === 'checkbox' ? (e.target.checked ? '1' : '') : e.target.value;
 
-            // Enforce max length
-            if (customField2.maxLength > 0 && newValue.length > customField2.maxLength) {
+            // Enforce max length for text fields
+            if (['text', 'textarea'].includes(customField2.type) && customField2.maxLength > 0 && newValue.length > customField2.maxLength) {
                 newValue = newValue.substring(0, customField2.maxLength);
             }
 
@@ -249,8 +286,6 @@
             return null;
         }
 
-        const isTextarea = customField2.type === 'textarea';
-
         const inputStyles = {
             width: '100%',
             padding: '12px 16px',
@@ -259,6 +294,69 @@
             fontSize: '16px',
             fontFamily: 'inherit',
             resize: 'vertical'
+        };
+
+        const renderField = () => {
+            switch (customField2.type) {
+                case 'checkbox':
+                    return el('label', { style: { display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' } },
+                        el('input', {
+                            type: 'checkbox',
+                            id: 'checkout-toolkit-custom-field-2',
+                            name: 'checkout_toolkit_custom_field_2',
+                            className: 'checkout-toolkit-custom-field-2',
+                            checked: value === '1',
+                            onChange: handleChange,
+                            required: customField2.required,
+                            style: { width: '20px', height: '20px' }
+                        }),
+                        el('span', null, customField2.checkboxLabel || customField2.label)
+                    );
+
+                case 'select':
+                    return el('select', {
+                        id: 'checkout-toolkit-custom-field-2',
+                        name: 'checkout_toolkit_custom_field_2',
+                        className: 'checkout-toolkit-custom-field-2',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField2.required,
+                        style: inputStyles
+                    },
+                        el('option', { value: '' }, customField2.placeholder || i18n?.selectOption || 'Select an option...'),
+                        (customField2.selectOptions || []).map(opt =>
+                            el('option', { key: opt.value, value: opt.value }, opt.label)
+                        )
+                    );
+
+                case 'textarea':
+                    return el('textarea', {
+                        id: 'checkout-toolkit-custom-field-2',
+                        name: 'checkout_toolkit_custom_field_2',
+                        className: 'checkout-toolkit-custom-field-2',
+                        placeholder: customField2.placeholder || '',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField2.required,
+                        rows: 4,
+                        maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
+                        style: inputStyles
+                    });
+
+                default: // text
+                    return el('input', {
+                        type: 'text',
+                        id: 'checkout-toolkit-custom-field-2',
+                        name: 'checkout_toolkit_custom_field_2',
+                        className: 'checkout-toolkit-custom-field-2',
+                        placeholder: customField2.placeholder || '',
+                        value: value,
+                        onChange: handleChange,
+                        required: customField2.required,
+                        maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
+                        style: inputStyles
+                    });
+            }
         };
 
         return el('div', { className: 'checkout-toolkit-custom-field-2-block wc-block-components-checkout-step' },
@@ -270,32 +368,8 @@
             ),
             el('div', { className: 'wc-block-components-checkout-step__container' },
                 el('div', { className: 'wc-block-components-checkout-step__content' },
-                    isTextarea
-                        ? el('textarea', {
-                            id: 'checkout-toolkit-custom-field-2',
-                            name: 'checkout_toolkit_custom_field_2',
-                            className: 'checkout-toolkit-custom-field-2',
-                            placeholder: customField2.placeholder || '',
-                            value: value,
-                            onChange: handleChange,
-                            required: customField2.required,
-                            rows: 4,
-                            maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
-                            style: inputStyles
-                        })
-                        : el('input', {
-                            type: 'text',
-                            id: 'checkout-toolkit-custom-field-2',
-                            name: 'checkout_toolkit_custom_field_2',
-                            className: 'checkout-toolkit-custom-field-2',
-                            placeholder: customField2.placeholder || '',
-                            value: value,
-                            onChange: handleChange,
-                            required: customField2.required,
-                            maxLength: customField2.maxLength > 0 ? customField2.maxLength : undefined,
-                            style: inputStyles
-                        }),
-                    customField2.maxLength > 0 && el('div', {
+                    renderField(),
+                    ['text', 'textarea'].includes(customField2.type) && customField2.maxLength > 0 && el('div', {
                         className: 'checkout-toolkit-char-count',
                         style: { marginTop: '8px', fontSize: '14px', color: '#757575', textAlign: 'right' }
                     },

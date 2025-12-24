@@ -88,6 +88,8 @@ class BlocksIntegration implements IntegrationInterface
                 'label' => $field_settings['field_label'],
                 'placeholder' => $field_settings['field_placeholder'],
                 'maxLength' => $field_settings['max_length'],
+                'checkboxLabel' => $field_settings['checkbox_label'] ?? '',
+                'selectOptions' => $field_settings['select_options'] ?? [],
             ],
             'customField2' => [
                 'enabled' => $field_2_settings['enabled'],
@@ -96,9 +98,12 @@ class BlocksIntegration implements IntegrationInterface
                 'label' => $field_2_settings['field_label'],
                 'placeholder' => $field_2_settings['field_placeholder'],
                 'maxLength' => $field_2_settings['max_length'],
+                'checkboxLabel' => $field_2_settings['checkbox_label'] ?? '',
+                'selectOptions' => $field_2_settings['select_options'] ?? [],
             ],
             'i18n' => [
                 'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
+                'selectOption' => __('Select an option...', 'checkout-toolkit-for-woo'),
                 'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
                 'deliveryDateRequired' => sprintf(
                     /* translators: %s: Field label */
@@ -269,64 +274,58 @@ class BlocksIntegration implements IntegrationInterface
         if (isset($data['custom_field'])) {
             $main = Main::get_instance();
             $settings = $main->get_field_settings();
+            $field_type = $settings['field_type'] ?? 'textarea';
 
-            $value = sanitize_textarea_field($data['custom_field']);
-
-            // Enforce max length
-            if ($settings['max_length'] > 0 && mb_strlen($value) > $settings['max_length']) {
-                $value = mb_substr($value, 0, $settings['max_length']);
-            }
-
-            /**
-             * Filter the sanitized custom field value.
-             *
-             * @param string $value The sanitized value.
-             * @param \WC_Order $order The order object.
-             */
-            $value = apply_filters('checkout_toolkit_sanitize_field_value', $value, $order);
-
-            if (!empty($value)) {
+            // Handle checkbox type
+            if ($field_type === 'checkbox') {
+                $value = !empty($data['custom_field']) ? '1' : '0';
                 $order->update_meta_data('_wct_custom_field', $value);
-
-                /**
-                 * Action fired after custom field is saved from blocks checkout.
-                 *
-                 * @param int $order_id The order ID.
-                 * @param string $value The field value.
-                 */
                 do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+            } else {
+                $value = sanitize_textarea_field($data['custom_field']);
+
+                // Enforce max length for text fields
+                if (in_array($field_type, ['text', 'textarea'], true) &&
+                    $settings['max_length'] > 0 &&
+                    mb_strlen($value) > $settings['max_length']) {
+                    $value = mb_substr($value, 0, $settings['max_length']);
+                }
+
+                $value = apply_filters('checkout_toolkit_sanitize_field_value', $value, $order);
+
+                if (!empty($value)) {
+                    $order->update_meta_data('_wct_custom_field', $value);
+                    do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+                }
             }
         }
 
         // Save custom field 2
         if (isset($data['custom_field_2'])) {
             $field_2_settings = $this->get_field_2_settings();
+            $field_type = $field_2_settings['field_type'] ?? 'text';
 
-            $value = sanitize_textarea_field($data['custom_field_2']);
-
-            // Enforce max length
-            if ($field_2_settings['max_length'] > 0 && mb_strlen($value) > $field_2_settings['max_length']) {
-                $value = mb_substr($value, 0, $field_2_settings['max_length']);
-            }
-
-            /**
-             * Filter the sanitized custom field 2 value.
-             *
-             * @param string $value The sanitized value.
-             * @param \WC_Order $order The order object.
-             */
-            $value = apply_filters('checkout_toolkit_sanitize_field_2_value', $value, $order);
-
-            if (!empty($value)) {
+            // Handle checkbox type
+            if ($field_type === 'checkbox') {
+                $value = !empty($data['custom_field_2']) ? '1' : '0';
                 $order->update_meta_data('_wct_custom_field_2', $value);
-
-                /**
-                 * Action fired after custom field 2 is saved from blocks checkout.
-                 *
-                 * @param int $order_id The order ID.
-                 * @param string $value The field value.
-                 */
                 do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
+            } else {
+                $value = sanitize_textarea_field($data['custom_field_2']);
+
+                // Enforce max length for text fields
+                if (in_array($field_type, ['text', 'textarea'], true) &&
+                    $field_2_settings['max_length'] > 0 &&
+                    mb_strlen($value) > $field_2_settings['max_length']) {
+                    $value = mb_substr($value, 0, $field_2_settings['max_length']);
+                }
+
+                $value = apply_filters('checkout_toolkit_sanitize_field_2_value', $value, $order);
+
+                if (!empty($value)) {
+                    $order->update_meta_data('_wct_custom_field_2', $value);
+                    do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
+                }
             }
         }
     }

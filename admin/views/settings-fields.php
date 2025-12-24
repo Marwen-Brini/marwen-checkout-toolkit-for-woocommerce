@@ -16,6 +16,38 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
 // phpcs:enable
 ?>
 
+<style>
+.wct-select-options-wrapper {
+    border: 1px solid #c3c4c7;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+.wct-select-option-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.wct-select-option-row input {
+    flex: 1;
+}
+.wct-select-option-row .button-link-delete {
+    color: #b32d2e;
+    text-decoration: none;
+}
+.wct-select-option-row .button-link-delete:hover {
+    color: #a00;
+}
+.wct-conditional-field {
+    display: none;
+}
+.wct-conditional-field.active {
+    display: table-row;
+}
+</style>
+
 <!-- Custom Field 1 -->
 <div class="wct-settings-section">
     <h2><?php esc_html_e('Custom Field 1', 'checkout-toolkit-for-woo'); ?></h2>
@@ -48,15 +80,37 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                         <input type="radio"
                                name="checkout_toolkit_field_settings[field_type]"
                                value="text"
+                               class="wct-field-type-radio"
+                               data-field="1"
                                <?php checked(($field_settings['field_type'] ?? 'textarea') === 'text'); ?>>
                         <?php esc_html_e('Single line text', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                    <label style="display: block; margin-bottom: 8px;">
+                        <input type="radio"
+                               name="checkout_toolkit_field_settings[field_type]"
+                               value="textarea"
+                               class="wct-field-type-radio"
+                               data-field="1"
+                               <?php checked(($field_settings['field_type'] ?? 'textarea') === 'textarea'); ?>>
+                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                    <label style="display: block; margin-bottom: 8px;">
+                        <input type="radio"
+                               name="checkout_toolkit_field_settings[field_type]"
+                               value="checkbox"
+                               class="wct-field-type-radio"
+                               data-field="1"
+                               <?php checked(($field_settings['field_type'] ?? 'textarea') === 'checkbox'); ?>>
+                        <?php esc_html_e('Checkbox', 'checkout-toolkit-for-woo'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
                                name="checkout_toolkit_field_settings[field_type]"
-                               value="textarea"
-                               <?php checked(($field_settings['field_type'] ?? 'textarea') === 'textarea'); ?>>
-                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                               value="select"
+                               class="wct-field-type-radio"
+                               data-field="1"
+                               <?php checked(($field_settings['field_type'] ?? 'textarea') === 'select'); ?>>
+                        <?php esc_html_e('Dropdown select', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
             </tr>
@@ -77,8 +131,64 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                 </td>
             </tr>
 
-            <!-- Placeholder Text -->
-            <tr>
+            <!-- Checkbox Label (conditional) -->
+            <tr class="wct-conditional-field wct-field-1-checkbox <?php echo ($field_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
+                <th scope="row">
+                    <label for="checkout_toolkit_checkbox_label">
+                        <?php esc_html_e('Checkbox Text', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text"
+                           id="checkout_toolkit_checkbox_label"
+                           name="checkout_toolkit_field_settings[checkbox_label]"
+                           value="<?php echo esc_attr($field_settings['checkbox_label'] ?? ''); ?>"
+                           class="regular-text">
+                    <p class="description">
+                        <?php esc_html_e('Text displayed next to the checkbox.', 'checkout-toolkit-for-woo'); ?>
+                    </p>
+                </td>
+            </tr>
+
+            <!-- Select Options (conditional) -->
+            <tr class="wct-conditional-field wct-field-1-select <?php echo ($field_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
+                <th scope="row">
+                    <?php esc_html_e('Dropdown Options', 'checkout-toolkit-for-woo'); ?>
+                </th>
+                <td>
+                    <div class="wct-select-options-wrapper" id="wct-field-1-options">
+                        <div class="wct-select-options-list">
+                            <?php
+                            $checkout_toolkit_options_1 = $field_settings['select_options'] ?? [];
+                            if (empty($checkout_toolkit_options_1)) {
+                                $checkout_toolkit_options_1 = [['value' => '', 'label' => '']];
+                            }
+                            foreach ($checkout_toolkit_options_1 as $checkout_toolkit_index => $checkout_toolkit_option) :
+                            ?>
+                            <div class="wct-select-option-row">
+                                <input type="text"
+                                       name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <input type="text"
+                                       name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <button type="button" class="button wct-add-option" data-field="1">
+                            <?php esc_html_e('Add Option', 'checkout-toolkit-for-woo'); ?>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Placeholder Text (conditional - not for checkbox) -->
+            <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea wct-field-1-select <?php echo in_array($field_settings['field_type'] ?? 'textarea', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_placeholder">
                         <?php esc_html_e('Placeholder Text', 'checkout-toolkit-for-woo'); ?>
@@ -109,8 +219,8 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                 </td>
             </tr>
 
-            <!-- Maximum Characters -->
-            <tr>
+            <!-- Maximum Characters (conditional - for text/textarea only) -->
+            <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea <?php echo in_array($field_settings['field_type'] ?? 'textarea', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_max_length">
                         <?php esc_html_e('Maximum Characters', 'checkout-toolkit-for-woo'); ?>
@@ -207,15 +317,37 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                         <input type="radio"
                                name="checkout_toolkit_field_2_settings[field_type]"
                                value="text"
+                               class="wct-field-type-radio"
+                               data-field="2"
                                <?php checked(($field_2_settings['field_type'] ?? 'text') === 'text'); ?>>
                         <?php esc_html_e('Single line text', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                    <label style="display: block; margin-bottom: 8px;">
+                        <input type="radio"
+                               name="checkout_toolkit_field_2_settings[field_type]"
+                               value="textarea"
+                               class="wct-field-type-radio"
+                               data-field="2"
+                               <?php checked(($field_2_settings['field_type'] ?? 'text') === 'textarea'); ?>>
+                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                    <label style="display: block; margin-bottom: 8px;">
+                        <input type="radio"
+                               name="checkout_toolkit_field_2_settings[field_type]"
+                               value="checkbox"
+                               class="wct-field-type-radio"
+                               data-field="2"
+                               <?php checked(($field_2_settings['field_type'] ?? 'text') === 'checkbox'); ?>>
+                        <?php esc_html_e('Checkbox', 'checkout-toolkit-for-woo'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
                                name="checkout_toolkit_field_2_settings[field_type]"
-                               value="textarea"
-                               <?php checked(($field_2_settings['field_type'] ?? 'text') === 'textarea'); ?>>
-                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                               value="select"
+                               class="wct-field-type-radio"
+                               data-field="2"
+                               <?php checked(($field_2_settings['field_type'] ?? 'text') === 'select'); ?>>
+                        <?php esc_html_e('Dropdown select', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
             </tr>
@@ -236,8 +368,64 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                 </td>
             </tr>
 
-            <!-- Placeholder Text 2 -->
-            <tr>
+            <!-- Checkbox Label 2 (conditional) -->
+            <tr class="wct-conditional-field wct-field-2-checkbox <?php echo ($field_2_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
+                <th scope="row">
+                    <label for="checkout_toolkit_field_2_checkbox_label">
+                        <?php esc_html_e('Checkbox Text', 'checkout-toolkit-for-woo'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text"
+                           id="checkout_toolkit_field_2_checkbox_label"
+                           name="checkout_toolkit_field_2_settings[checkbox_label]"
+                           value="<?php echo esc_attr($field_2_settings['checkbox_label'] ?? ''); ?>"
+                           class="regular-text">
+                    <p class="description">
+                        <?php esc_html_e('Text displayed next to the checkbox.', 'checkout-toolkit-for-woo'); ?>
+                    </p>
+                </td>
+            </tr>
+
+            <!-- Select Options 2 (conditional) -->
+            <tr class="wct-conditional-field wct-field-2-select <?php echo ($field_2_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
+                <th scope="row">
+                    <?php esc_html_e('Dropdown Options', 'checkout-toolkit-for-woo'); ?>
+                </th>
+                <td>
+                    <div class="wct-select-options-wrapper" id="wct-field-2-options">
+                        <div class="wct-select-options-list">
+                            <?php
+                            $checkout_toolkit_options_2 = $field_2_settings['select_options'] ?? [];
+                            if (empty($checkout_toolkit_options_2)) {
+                                $checkout_toolkit_options_2 = [['value' => '', 'label' => '']];
+                            }
+                            foreach ($checkout_toolkit_options_2 as $checkout_toolkit_index => $checkout_toolkit_option) :
+                            ?>
+                            <div class="wct-select-option-row">
+                                <input type="text"
+                                       name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <input type="text"
+                                       name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <button type="button" class="button wct-add-option" data-field="2">
+                            <?php esc_html_e('Add Option', 'checkout-toolkit-for-woo'); ?>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- Placeholder Text 2 (conditional - not for checkbox) -->
+            <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea wct-field-2-select <?php echo in_array($field_2_settings['field_type'] ?? 'text', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_placeholder">
                         <?php esc_html_e('Placeholder Text', 'checkout-toolkit-for-woo'); ?>
@@ -268,8 +456,8 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                 </td>
             </tr>
 
-            <!-- Maximum Characters 2 -->
-            <tr>
+            <!-- Maximum Characters 2 (conditional - for text/textarea only) -->
+            <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea <?php echo in_array($field_2_settings['field_type'] ?? 'text', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_max_length">
                         <?php esc_html_e('Maximum Characters', 'checkout-toolkit-for-woo'); ?>
@@ -333,3 +521,47 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
         </tbody>
     </table>
 </div>
+
+<script>
+jQuery(document).ready(function($) {
+    // Field type change handler
+    $('.wct-field-type-radio').on('change', function() {
+        var fieldNum = $(this).data('field');
+        var fieldType = $(this).val();
+
+        // Hide all conditional fields for this field number
+        $('.wct-field-' + fieldNum + '-text, .wct-field-' + fieldNum + '-textarea, .wct-field-' + fieldNum + '-checkbox, .wct-field-' + fieldNum + '-select').removeClass('active');
+
+        // Show relevant conditional fields
+        $('.wct-field-' + fieldNum + '-' + fieldType).addClass('active');
+    });
+
+    // Add option button handler
+    $('.wct-add-option').on('click', function(e) {
+        e.preventDefault();
+        var fieldNum = $(this).data('field');
+        var wrapper = $('#wct-field-' + fieldNum + '-options .wct-select-options-list');
+        var optionName = fieldNum === 1 ? 'checkout_toolkit_field_settings' : 'checkout_toolkit_field_2_settings';
+        var index = wrapper.find('.wct-select-option-row').length;
+
+        var newRow = '<div class="wct-select-option-row">' +
+            '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="<?php echo esc_js(__('Value', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
+            '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="<?php echo esc_js(__('Label', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
+            '<a href="#" class="button-link-delete wct-remove-option" title="<?php echo esc_js(__('Remove', 'checkout-toolkit-for-woo')); ?>">&times;</a>' +
+            '</div>';
+
+        wrapper.append(newRow);
+    });
+
+    // Remove option button handler
+    $(document).on('click', '.wct-remove-option', function(e) {
+        e.preventDefault();
+        var wrapper = $(this).closest('.wct-select-options-list');
+
+        // Keep at least one option row
+        if (wrapper.find('.wct-select-option-row').length > 1) {
+            $(this).closest('.wct-select-option-row').remove();
+        }
+    });
+});
+</script>

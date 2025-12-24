@@ -515,6 +515,8 @@ final class Main
             'max_length' => 500,
             'show_in_emails' => true,
             'show_in_admin' => true,
+            'checkbox_label' => '',
+            'select_options' => [],
         ];
     }
 

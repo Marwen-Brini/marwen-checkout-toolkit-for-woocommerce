@@ -58,15 +58,17 @@ class OrderDisplay
         }
 
         // Display custom field
-        if (!empty($custom_field) && !empty($field_settings['show_in_admin'])) {
-            $output = apply_filters('checkout_toolkit_display_custom_field', $custom_field, $order);
+        if ($custom_field !== '' && !empty($field_settings['show_in_admin'])) {
+            $output = $this->format_field_value($custom_field, $field_settings);
+            $output = apply_filters('checkout_toolkit_display_custom_field', $output, $order);
             echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
 
         // Display custom field 2
-        if (!empty($custom_field_2) && !empty($field_2_settings['show_in_admin'])) {
-            $output = apply_filters('checkout_toolkit_display_custom_field_2', $custom_field_2, $order);
+        if ($custom_field_2 !== '' && !empty($field_2_settings['show_in_admin'])) {
+            $output = $this->format_field_value($custom_field_2, $field_2_settings);
+            $output = apply_filters('checkout_toolkit_display_custom_field_2', $output, $order);
             echo '<p><strong>' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
@@ -148,18 +150,20 @@ class OrderDisplay
         }
 
         // Display custom field
-        if (!empty($custom_field)) {
+        if ($custom_field !== '') {
+            $formatted_value = $this->format_field_value($custom_field, $field_settings);
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
             echo '<span class="delivery-label">' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . '</span>';
-            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($custom_field)) . '</span>';
+            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($formatted_value)) . '</span>';
             echo '</div>';
         }
 
         // Display custom field 2
-        if (!empty($custom_field_2)) {
+        if ($custom_field_2 !== '') {
+            $formatted_value = $this->format_field_value($custom_field_2, $field_2_settings);
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
             echo '<span class="delivery-label">' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . '</span>';
-            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($custom_field_2)) . '</span>';
+            echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($formatted_value)) . '</span>';
             echo '</div>';
         }
 
@@ -222,6 +226,37 @@ class OrderDisplay
             return date_i18n($format, $date_obj->getTimestamp());
         } catch (\Exception $e) {
             return $date;
+        }
+    }
+
+    /**
+     * Format field value based on field type
+     *
+     * @param string $value    The raw value.
+     * @param array  $settings The field settings.
+     * @return string Formatted value.
+     */
+    private function format_field_value(string $value, array $settings): string
+    {
+        $field_type = $settings['field_type'] ?? 'text';
+
+        switch ($field_type) {
+            case 'checkbox':
+                return $value === '1'
+                    ? __('Yes', 'checkout-toolkit-for-woo')
+                    : __('No', 'checkout-toolkit-for-woo');
+
+            case 'select':
+                $options = $settings['select_options'] ?? [];
+                foreach ($options as $option) {
+                    if (($option['value'] ?? '') === $value) {
+                        return $option['label'] ?? $value;
+                    }
+                }
+                return $value;
+
+            default:
+                return $value;
         }
     }
 }
