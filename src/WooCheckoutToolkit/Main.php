@@ -12,6 +12,7 @@ namespace WooCheckoutToolkit;
 use WooCheckoutToolkit\Admin\Admin;
 use WooCheckoutToolkit\Admin\DeliveryManager;
 use WooCheckoutToolkit\Delivery\DeliveryDate;
+use WooCheckoutToolkit\Delivery\DeliveryMethod;
 use WooCheckoutToolkit\Fields\OrderFields;
 use WooCheckoutToolkit\Fields\OrderFields2;
 use WooCheckoutToolkit\Display\OrderDisplay;
@@ -45,6 +46,11 @@ final class Main
      * Delivery date instance
      */
     private ?DeliveryDate $delivery_date = null;
+
+    /**
+     * Delivery method instance
+     */
+    private ?DeliveryMethod $delivery_method = null;
 
     /**
      * Order fields instance
@@ -153,6 +159,9 @@ final class Main
     {
         // Always initialize classic components - they handle validation and saving
         // for both checkout types. The rendering is conditional.
+        $this->delivery_method = new DeliveryMethod();
+        $this->delivery_method->init();
+
         $this->delivery_date = new DeliveryDate();
         $this->delivery_date->init();
 
@@ -259,11 +268,20 @@ final class Main
      */
     private function get_blocks_script_data(): array
     {
+        $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
 
         return [
+            'deliveryMethod' => [
+                'enabled' => $delivery_method_settings['enabled'],
+                'defaultMethod' => $delivery_method_settings['default_method'],
+                'fieldLabel' => $delivery_method_settings['field_label'],
+                'deliveryLabel' => $delivery_method_settings['delivery_label'],
+                'pickupLabel' => $delivery_method_settings['pickup_label'],
+                'showAs' => $delivery_method_settings['show_as'],
+            ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
                 'required' => $delivery_settings['required'],
@@ -296,6 +314,33 @@ final class Main
                 'charactersRemaining' => __('characters remaining', 'checkout-toolkit-for-woo'),
             ],
         ];
+    }
+
+    /**
+     * Get default delivery method settings
+     */
+    public function get_default_delivery_method_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'default_method' => 'delivery',
+            'field_label' => 'Fulfillment Method',
+            'delivery_label' => 'Delivery',
+            'pickup_label' => 'Pickup',
+            'show_as' => 'toggle',
+            'show_in_admin' => true,
+            'show_in_emails' => true,
+        ];
+    }
+
+    /**
+     * Get delivery method settings (with defaults)
+     */
+    public function get_delivery_method_settings(): array
+    {
+        $defaults = $this->get_default_delivery_method_settings();
+        $settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 
     /**

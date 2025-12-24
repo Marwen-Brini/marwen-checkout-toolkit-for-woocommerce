@@ -68,8 +68,17 @@ class BlocksIntegration implements IntegrationInterface
         $delivery_settings = $main->get_delivery_settings();
         $field_settings = $main->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
+        $delivery_method_settings = $this->get_delivery_method_settings();
 
         return [
+            'deliveryMethod' => [
+                'enabled' => $delivery_method_settings['enabled'],
+                'defaultMethod' => $delivery_method_settings['default_method'],
+                'fieldLabel' => $delivery_method_settings['field_label'],
+                'deliveryLabel' => $delivery_method_settings['delivery_label'],
+                'pickupLabel' => $delivery_method_settings['pickup_label'],
+                'showAs' => $delivery_method_settings['show_as'],
+            ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
                 'required' => $delivery_settings['required'],
@@ -133,6 +142,18 @@ class BlocksIntegration implements IntegrationInterface
     {
         $defaults = (new Settings())->get_default_field_2_settings();
         $settings = get_option('checkout_toolkit_field_2_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get delivery method settings
+     *
+     * @return array Settings array.
+     */
+    private function get_delivery_method_settings(): array
+    {
+        $defaults = (new Settings())->get_default_delivery_method_settings();
+        $settings = get_option('checkout_toolkit_delivery_method_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -216,6 +237,12 @@ class BlocksIntegration implements IntegrationInterface
     public function get_store_api_schema(): array
     {
         return [
+            'delivery_method' => [
+                'description' => __('Delivery method (delivery or pickup)', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
             'delivery_date' => [
                 'description' => __('Preferred delivery date', 'checkout-toolkit-for-woo'),
                 'type' => ['string', 'null'],
@@ -252,6 +279,22 @@ class BlocksIntegration implements IntegrationInterface
         }
 
         $data = $extensions['checkout-toolkit'];
+
+        // Save delivery method
+        if (!empty($data['delivery_method'])) {
+            $delivery_method = sanitize_key($data['delivery_method']);
+            if (in_array($delivery_method, ['delivery', 'pickup'], true)) {
+                $order->update_meta_data('_wct_delivery_method', $delivery_method);
+
+                /**
+                 * Action fired after delivery method is saved from blocks checkout.
+                 *
+                 * @param int $order_id The order ID.
+                 * @param string $delivery_method The delivery method.
+                 */
+                do_action('checkout_toolkit_delivery_method_saved', $order->get_id(), $delivery_method);
+            }
+        }
 
         // Save delivery date
         if (!empty($data['delivery_date'])) {

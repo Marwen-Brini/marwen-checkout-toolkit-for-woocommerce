@@ -88,6 +88,16 @@ class Settings
                 'default' => $this->get_default_field_2_settings(),
             ]
         );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_delivery_method_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_delivery_method_settings'],
+                'default' => $this->get_default_delivery_method_settings(),
+            ]
+        );
     }
 
     /**
@@ -175,6 +185,56 @@ class Settings
             'enabled' => !empty($input['enabled']),
             'custom_placeholder' => sanitize_textarea_field($input['custom_placeholder'] ?? ''),
             'custom_label' => sanitize_text_field($input['custom_label'] ?? ''),
+        ];
+    }
+
+    /**
+     * Get default delivery method settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_delivery_method_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'default_method' => 'delivery',
+            'field_label' => 'Fulfillment Method',
+            'delivery_label' => 'Delivery',
+            'pickup_label' => 'Pickup',
+            'show_as' => 'toggle',
+            'show_in_admin' => true,
+            'show_in_emails' => true,
+        ];
+    }
+
+    /**
+     * Sanitize delivery method settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_delivery_method_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_delivery_method_settings', $this->get_default_delivery_method_settings());
+        }
+
+        $defaults = $this->get_default_delivery_method_settings();
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'default_method' => in_array($input['default_method'] ?? '', ['delivery', 'pickup'], true)
+                ? $input['default_method']
+                : $defaults['default_method'],
+            'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
+            'delivery_label' => sanitize_text_field($input['delivery_label'] ?? $defaults['delivery_label']),
+            'pickup_label' => sanitize_text_field($input['pickup_label'] ?? $defaults['pickup_label']),
+            'show_as' => in_array($input['show_as'] ?? '', ['toggle', 'radio'], true)
+                ? $input['show_as']
+                : $defaults['show_as'],
+            'show_in_admin' => !empty($input['show_in_admin']),
+            'show_in_emails' => !empty($input['show_in_emails']),
         ];
     }
 
@@ -305,7 +365,7 @@ class Settings
         }
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation, no data processing.
-        $active_tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'delivery';
+        $active_tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'delivery-method';
 
         include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-page.php';
     }

@@ -36,32 +36,38 @@ class EmailDisplay
      */
     public function add_to_email(\WC_Order $order, bool $sent_to_admin, bool $plain_text, $email): void
     {
+        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
+        $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Check if we should display in emails
+        $show_delivery_method = !empty($delivery_method) && !empty($delivery_method_settings['show_in_emails']);
         $show_delivery = !empty($delivery_date) && !empty($delivery_settings['show_in_emails']);
         $show_field = !empty($custom_field) && !empty($field_settings['show_in_emails']);
         $show_field_2 = !empty($custom_field_2) && !empty($field_2_settings['show_in_emails']);
 
-        if (!$show_delivery && !$show_field && !$show_field_2) {
+        if (!$show_delivery_method && !$show_delivery && !$show_field && !$show_field_2) {
             return;
         }
 
         if ($plain_text) {
             $this->render_plain_text(
                 $order,
+                $delivery_method,
                 $delivery_date,
                 $custom_field,
                 $custom_field_2,
+                $delivery_method_settings,
                 $delivery_settings,
                 $field_settings,
                 $field_2_settings,
+                $show_delivery_method,
                 $show_delivery,
                 $show_field,
                 $show_field_2
@@ -69,12 +75,15 @@ class EmailDisplay
         } else {
             $this->render_html(
                 $order,
+                $delivery_method,
                 $delivery_date,
                 $custom_field,
                 $custom_field_2,
+                $delivery_method_settings,
                 $delivery_settings,
                 $field_settings,
                 $field_2_settings,
+                $show_delivery_method,
                 $show_delivery,
                 $show_field,
                 $show_field_2,
@@ -86,26 +95,32 @@ class EmailDisplay
     /**
      * Render HTML email content
      *
-     * @param \WC_Order   $order             Order object.
-     * @param string|null $delivery_date     Delivery date.
-     * @param string|null $custom_field      Custom field value.
-     * @param string|null $custom_field_2    Custom field 2 value.
-     * @param array       $delivery_settings Delivery settings.
-     * @param array       $field_settings    Field settings.
-     * @param array       $field_2_settings  Field 2 settings.
-     * @param bool        $show_delivery     Show delivery date.
-     * @param bool        $show_field        Show custom field.
-     * @param bool        $show_field_2      Show custom field 2.
-     * @param mixed       $email             Email object.
+     * @param \WC_Order   $order                   Order object.
+     * @param string|null $delivery_method         Delivery method value.
+     * @param string|null $delivery_date           Delivery date.
+     * @param string|null $custom_field            Custom field value.
+     * @param string|null $custom_field_2          Custom field 2 value.
+     * @param array       $delivery_method_settings Delivery method settings.
+     * @param array       $delivery_settings       Delivery settings.
+     * @param array       $field_settings          Field settings.
+     * @param array       $field_2_settings        Field 2 settings.
+     * @param bool        $show_delivery_method    Show delivery method.
+     * @param bool        $show_delivery           Show delivery date.
+     * @param bool        $show_field              Show custom field.
+     * @param bool        $show_field_2            Show custom field 2.
+     * @param mixed       $email                   Email object.
      */
     private function render_html(
         \WC_Order $order,
+        ?string $delivery_method,
         ?string $delivery_date,
         ?string $custom_field,
         ?string $custom_field_2,
+        array $delivery_method_settings,
         array $delivery_settings,
         array $field_settings,
         array $field_2_settings,
+        bool $show_delivery_method,
         bool $show_delivery,
         bool $show_field,
         bool $show_field_2,
@@ -113,6 +128,18 @@ class EmailDisplay
     ): void {
         echo '<h2>' . esc_html__('Additional Order Information', 'checkout-toolkit-for-woo') . '</h2>';
         echo '<table cellspacing="0" cellpadding="6" style="width: 100%; border: 1px solid #e5e5e5; margin-bottom: 20px;" border="1">';
+
+        if ($show_delivery_method) {
+            $label = $delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo');
+            $method_label = $delivery_method === 'pickup'
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
+
+            echo '<tr>';
+            echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
+            echo '<td style="text-align: left; padding: 12px;">' . esc_html($method_label) . '</td>';
+            echo '</tr>';
+        }
 
         if ($show_delivery) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
@@ -152,25 +179,31 @@ class EmailDisplay
     /**
      * Render plain text email content
      *
-     * @param \WC_Order   $order             Order object.
-     * @param string|null $delivery_date     Delivery date.
-     * @param string|null $custom_field      Custom field value.
-     * @param string|null $custom_field_2    Custom field 2 value.
-     * @param array       $delivery_settings Delivery settings.
-     * @param array       $field_settings    Field settings.
-     * @param array       $field_2_settings  Field 2 settings.
-     * @param bool        $show_delivery     Show delivery date.
-     * @param bool        $show_field        Show custom field.
-     * @param bool        $show_field_2      Show custom field 2.
+     * @param \WC_Order   $order                   Order object.
+     * @param string|null $delivery_method         Delivery method value.
+     * @param string|null $delivery_date           Delivery date.
+     * @param string|null $custom_field            Custom field value.
+     * @param string|null $custom_field_2          Custom field 2 value.
+     * @param array       $delivery_method_settings Delivery method settings.
+     * @param array       $delivery_settings       Delivery settings.
+     * @param array       $field_settings          Field settings.
+     * @param array       $field_2_settings        Field 2 settings.
+     * @param bool        $show_delivery_method    Show delivery method.
+     * @param bool        $show_delivery           Show delivery date.
+     * @param bool        $show_field              Show custom field.
+     * @param bool        $show_field_2            Show custom field 2.
      */
     private function render_plain_text(
         \WC_Order $order,
+        ?string $delivery_method,
         ?string $delivery_date,
         ?string $custom_field,
         ?string $custom_field_2,
+        array $delivery_method_settings,
         array $delivery_settings,
         array $field_settings,
         array $field_2_settings,
+        bool $show_delivery_method,
         bool $show_delivery,
         bool $show_field,
         bool $show_field_2
@@ -179,6 +212,15 @@ class EmailDisplay
         echo "\n" . esc_html(str_repeat('=', 50)) . "\n";
         echo esc_html(strtoupper(__('Additional Order Information', 'checkout-toolkit-for-woo'))) . "\n";
         echo esc_html(str_repeat('=', 50)) . "\n\n";
+
+        if ($show_delivery_method) {
+            $label = $delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo');
+            $method_label = $delivery_method === 'pickup'
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
+
+            echo esc_html($label) . ': ' . esc_html($method_label) . "\n";
+        }
 
         if ($show_delivery) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');

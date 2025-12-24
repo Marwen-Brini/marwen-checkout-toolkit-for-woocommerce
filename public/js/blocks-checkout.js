@@ -21,7 +21,116 @@
         return;
     }
 
-    const { delivery, customField, customField2, i18n } = settings;
+    const { deliveryMethod, delivery, customField, customField2, i18n } = settings;
+
+    /**
+     * Delivery Method Toggle Component
+     */
+    const DeliveryMethodComponent = ({ cart, extensions, setExtensionData }) => {
+        const [selectedMethod, setSelectedMethod] = useState(deliveryMethod?.defaultMethod || 'delivery');
+
+        useEffect(() => {
+            // Set initial value
+            if (typeof setExtensionData === 'function') {
+                setExtensionData('checkout-toolkit', 'delivery_method', selectedMethod);
+            }
+        }, []);
+
+        const handleChange = (method) => {
+            setSelectedMethod(method);
+            if (typeof setExtensionData === 'function') {
+                setExtensionData('checkout-toolkit', 'delivery_method', method);
+            }
+        };
+
+        if (!deliveryMethod || !deliveryMethod.enabled) {
+            return null;
+        }
+
+        const toggleStyles = {
+            display: 'flex',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            overflow: 'hidden'
+        };
+
+        const optionStyles = (isActive) => ({
+            flex: 1,
+            textAlign: 'center',
+            padding: '12px 20px',
+            cursor: 'pointer',
+            background: isActive ? '#2271b1' : '#f9f9f9',
+            color: isActive ? '#fff' : 'inherit',
+            fontWeight: '500',
+            border: 'none',
+            borderRight: '1px solid #ddd',
+            transition: 'all 0.2s ease'
+        });
+
+        const radioStyles = {
+            marginBottom: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            cursor: 'pointer'
+        };
+
+        const renderToggle = () => {
+            if (deliveryMethod.showAs === 'radio') {
+                return el('div', { className: 'wct-delivery-method-radio' },
+                    el('label', { style: radioStyles },
+                        el('input', {
+                            type: 'radio',
+                            name: 'checkout_toolkit_delivery_method',
+                            value: 'delivery',
+                            checked: selectedMethod === 'delivery',
+                            onChange: () => handleChange('delivery')
+                        }),
+                        deliveryMethod.deliveryLabel || 'Delivery'
+                    ),
+                    el('label', { style: radioStyles },
+                        el('input', {
+                            type: 'radio',
+                            name: 'checkout_toolkit_delivery_method',
+                            value: 'pickup',
+                            checked: selectedMethod === 'pickup',
+                            onChange: () => handleChange('pickup')
+                        }),
+                        deliveryMethod.pickupLabel || 'Pickup'
+                    )
+                );
+            }
+
+            // Toggle buttons (default)
+            return el('div', { className: 'wct-delivery-method-toggle', style: toggleStyles },
+                el('button', {
+                    type: 'button',
+                    className: 'wct-toggle-option' + (selectedMethod === 'delivery' ? ' active' : ''),
+                    style: optionStyles(selectedMethod === 'delivery'),
+                    onClick: () => handleChange('delivery')
+                }, deliveryMethod.deliveryLabel || 'Delivery'),
+                el('button', {
+                    type: 'button',
+                    className: 'wct-toggle-option' + (selectedMethod === 'pickup' ? ' active' : ''),
+                    style: { ...optionStyles(selectedMethod === 'pickup'), borderRight: 'none' },
+                    onClick: () => handleChange('pickup')
+                }, deliveryMethod.pickupLabel || 'Pickup')
+            );
+        };
+
+        return el('div', { className: 'checkout-toolkit-delivery-method-block wc-block-components-checkout-step' },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    deliveryMethod.fieldLabel || 'Fulfillment Method'
+                )
+            ),
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    renderToggle()
+                )
+            )
+        );
+    };
 
     /**
      * Delivery Date Field Component
@@ -404,6 +513,7 @@
             }
         };
 
+        const hasDeliveryMethod = deliveryMethod && deliveryMethod.enabled;
         const hasDelivery = delivery && delivery.enabled;
         const hasCustomField = customField && customField.enabled;
         const hasCustomField2 = customField2 && customField2.enabled;
@@ -416,6 +526,9 @@
             const { dispatch } = wp.data;
             if (dispatch('wc/store/checkout')) {
                 const initialData = {};
+                if (hasDeliveryMethod) {
+                    initialData.delivery_method = deliveryMethod.defaultMethod || 'delivery';
+                }
                 if (hasDelivery) {
                     initialData.delivery_date = '';
                 }
@@ -427,13 +540,14 @@
                 }
                 dispatch('wc/store/checkout').__internalSetExtensionData('checkout-toolkit', initialData);
             }
-        }, [hasDelivery, hasCustomField, hasCustomField2]);
+        }, [hasDeliveryMethod, hasDelivery, hasCustomField, hasCustomField2]);
 
-        if (!hasDelivery && !hasCustomField && !hasCustomField2) {
+        if (!hasDeliveryMethod && !hasDelivery && !hasCustomField && !hasCustomField2) {
             return null;
         }
 
         return el('div', { className: 'checkout-toolkit-blocks-wrapper', style: { marginTop: '24px' } },
+            hasDeliveryMethod && el(DeliveryMethodComponent, { cart, extensions, setExtensionData }),
             hasDelivery && el(DeliveryDateField, { cart, extensions, setExtensionData }),
             hasCustomField && el(CustomFieldComponent, { cart, extensions, setExtensionData }),
             hasCustomField2 && el(CustomField2Component, { cart, extensions, setExtensionData })

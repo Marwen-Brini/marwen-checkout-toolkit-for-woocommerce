@@ -42,13 +42,24 @@ class OrderDisplay
             return;
         }
 
+        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
+        $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
+
+        // Display delivery method
+        if (!empty($delivery_method) && !empty($delivery_method_settings['show_in_admin'])) {
+            $method_label = $delivery_method === 'pickup'
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
+            echo '<p><strong>' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo esc_html($method_label) . '</p>';
+        }
 
         // Display delivery date
         if (!empty($delivery_date) && !empty($delivery_settings['show_in_admin'])) {
@@ -107,20 +118,33 @@ class OrderDisplay
             return;
         }
 
+        $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
-        if (empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
+        if (empty($delivery_method) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
             echo '<p>' . esc_html__('No additional checkout data.', 'checkout-toolkit-for-woo') . '</p>';
             return;
         }
 
+        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         echo '<div class="wct-order-delivery-meta">';
+
+        // Display delivery method
+        if (!empty($delivery_method)) {
+            $method_label = $delivery_method === 'pickup'
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
+            echo '<div class="delivery-row">';
+            echo '<span class="delivery-label">' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value">' . esc_html($method_label) . '</span>';
+            echo '</div>';
+        }
 
         // Display delivery date
         if (!empty($delivery_date)) {

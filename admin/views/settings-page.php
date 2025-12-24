@@ -8,14 +8,16 @@
 defined('ABSPATH') || exit;
 
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
+$checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
 $delivery_settings = get_option('checkout_toolkit_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
 $field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
-$field_2_settings = get_option('checkout_toolkit_field_2_settings', (new \WooCheckoutToolkit\Admin\Settings())->get_default_field_2_settings());
+$field_2_settings = get_option('checkout_toolkit_field_2_settings', $checkout_toolkit_settings_obj->get_default_field_2_settings());
 $order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
     'enabled' => false,
     'custom_placeholder' => '',
     'custom_label' => '',
 ]);
+$delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', $checkout_toolkit_settings_obj->get_default_delivery_method_settings());
 // phpcs:enable
 ?>
 
@@ -23,13 +25,17 @@ $order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
     <h1><?php esc_html_e('Checkout Toolkit for WooCommerce', 'checkout-toolkit-for-woo'); ?></h1>
 
     <nav class="nav-tab-wrapper wct-nav-tabs">
+        <a href="?page=wct-settings&tab=delivery-method"
+           class="nav-tab <?php echo esc_attr($active_tab === 'delivery-method' ? 'nav-tab-active' : ''); ?>">
+            <?php esc_html_e('Pickup/Delivery', 'checkout-toolkit-for-woo'); ?>
+        </a>
         <a href="?page=wct-settings&tab=delivery"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Delivery Date', 'checkout-toolkit-for-woo'); ?>
         </a>
         <a href="?page=wct-settings&tab=fields"
            class="nav-tab <?php echo esc_attr($active_tab === 'fields' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Custom Field', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Custom Fields', 'checkout-toolkit-for-woo'); ?>
         </a>
         <a href="?page=wct-settings&tab=order-notes"
            class="nav-tab <?php echo esc_attr($active_tab === 'order-notes' ? 'nav-tab-active' : ''); ?>">
@@ -40,7 +46,9 @@ $order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
     <form method="post" action="options.php" class="wct-settings-form">
         <?php settings_fields('checkout_toolkit_settings'); ?>
 
-        <?php if ($active_tab === 'delivery') : ?>
+        <?php if ($active_tab === 'delivery-method') : ?>
+            <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery-method.php'; ?>
+        <?php elseif ($active_tab === 'delivery') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery.php'; ?>
         <?php elseif ($active_tab === 'fields') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-fields.php'; ?>
