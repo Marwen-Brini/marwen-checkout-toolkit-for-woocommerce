@@ -5,6 +5,7 @@
 # Development files
 PROGRESS.md
 FEATURE-PROGRESS.md
+DEVELOPER.md
 .phpcs.xml
 phpcs.xml
 phpunit.xml
