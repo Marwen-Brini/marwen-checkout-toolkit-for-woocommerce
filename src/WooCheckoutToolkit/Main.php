@@ -375,6 +375,7 @@ final class Main
                 'dateFormat' => $this->php_to_flatpickr_format($delivery_settings['date_format']),
                 'firstDayOfWeek' => $delivery_settings['first_day_of_week'],
             ],
+            'estimatedDelivery' => $this->get_estimated_delivery_data($delivery_settings),
             'customField' => [
                 'enabled' => $field_settings['enabled'],
                 'required' => $field_settings['required'],
@@ -719,6 +720,32 @@ final class Main
     }
 
     /**
+     * Get estimated delivery data for blocks checkout
+     *
+     * @param array $delivery_settings The delivery settings.
+     * @return array Estimated delivery data.
+     */
+    private function get_estimated_delivery_data(array $delivery_settings): array
+    {
+        $enabled = !empty($delivery_settings['show_estimated_delivery']);
+
+        if (!$enabled) {
+            return ['enabled' => false];
+        }
+
+        $checker = new Delivery\AvailabilityChecker();
+
+        return [
+            'enabled' => true,
+            'message' => $delivery_settings['estimated_delivery_message'] ?? 'Order now for delivery as early as {date}',
+            'cutoffTime' => $delivery_settings['cutoff_time'] ?? '14:00',
+            'cutoffMessage' => $delivery_settings['cutoff_message'] ?? 'Order by {time} for delivery as early as {date}',
+            'earliestDate' => $checker->get_earliest_available_date(false),
+            'earliestDateAfterCutoff' => $checker->get_earliest_available_date(true),
+        ];
+    }
+
+    /**
      * Get default delivery settings
      */
     public function get_default_delivery_settings(): array
@@ -736,6 +763,11 @@ final class Main
             'first_day_of_week' => 1,
             'show_in_emails' => true,
             'show_in_admin' => true,
+            // Estimated delivery settings
+            'show_estimated_delivery' => false,
+            'estimated_delivery_message' => 'Order now for delivery as early as {date}',
+            'cutoff_time' => '14:00',
+            'cutoff_message' => 'Order by {time} for delivery as early as {date}',
         ];
     }
 

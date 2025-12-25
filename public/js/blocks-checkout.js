@@ -45,7 +45,7 @@
         return;
     }
 
-    const { orderNotes, deliveryMethod, deliveryInstructions, timeWindow, storeLocations, delivery, customField, customField2, i18n } = settings;
+    const { orderNotes, deliveryMethod, deliveryInstructions, timeWindow, storeLocations, delivery, estimatedDelivery, customField, customField2, i18n } = settings;
 
     /**
      * Position mapping: PHP hooks to DOM selectors
@@ -605,6 +605,77 @@
     };
 
     /**
+     * Estimated Delivery Message Component
+     * Shows earliest available delivery date based on cutoff time
+     */
+    const EstimatedDeliveryMessage = () => {
+        const [message, setMessage] = useState('');
+
+        useEffect(() => {
+            if (!estimatedDelivery || !estimatedDelivery.enabled || !delivery?.enabled) {
+                return;
+            }
+
+            const now = new Date();
+            const cutoffParts = (estimatedDelivery.cutoffTime || '14:00').split(':');
+            const cutoffDate = new Date();
+            cutoffDate.setHours(parseInt(cutoffParts[0], 10), parseInt(cutoffParts[1], 10), 0, 0);
+
+            const isPastCutoff = now >= cutoffDate;
+            const earliestDate = isPastCutoff
+                ? estimatedDelivery.earliestDateAfterCutoff
+                : estimatedDelivery.earliestDate;
+
+            if (!earliestDate) {
+                setMessage('');
+                return;
+            }
+
+            // Format the date for display
+            const dateObj = new Date(earliestDate + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            let msg = isPastCutoff
+                ? (estimatedDelivery.message || 'Order now for delivery as early as {date}')
+                : (estimatedDelivery.cutoffMessage || 'Order by {time} for delivery as early as {date}');
+
+            msg = msg.replace('{date}', formattedDate);
+
+            if (!isPastCutoff) {
+                const formattedTime = cutoffDate.toLocaleTimeString(undefined, {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+                msg = msg.replace('{time}', formattedTime);
+            }
+
+            setMessage(msg);
+        }, []);
+
+        if (!estimatedDelivery || !estimatedDelivery.enabled || !delivery?.enabled || !message) {
+            return null;
+        }
+
+        return el('p', {
+            className: 'wct-estimated-delivery-message',
+            style: {
+                margin: '0 0 16px 0',
+                padding: '12px 16px',
+                background: '#f0f7ff',
+                border: '1px solid #c3d9f0',
+                borderRadius: '4px',
+                color: '#1e4a7f',
+                fontSize: '14px',
+                lineHeight: '1.4'
+            }
+        }, message);
+    };
+
+    /**
      * Delivery Date Field Component
      * Only visible when delivery is selected (hidden for pickup)
      */
@@ -692,6 +763,8 @@
             ),
             el('div', { className: 'wc-block-components-checkout-step__container' },
                 el('div', { className: 'wc-block-components-checkout-step__content' },
+                    // Estimated delivery message above the date picker
+                    el(EstimatedDeliveryMessage, null),
                     el('input', {
                         ref: inputRef,
                         type: 'text',

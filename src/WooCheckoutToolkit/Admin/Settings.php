@@ -481,6 +481,11 @@ class Settings
             'first_day_of_week' => absint($input['first_day_of_week'] ?? $defaults['first_day_of_week']),
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
+            // Estimated delivery settings
+            'show_estimated_delivery' => !empty($input['show_estimated_delivery']),
+            'estimated_delivery_message' => sanitize_text_field($input['estimated_delivery_message'] ?? $defaults['estimated_delivery_message']),
+            'cutoff_time' => $this->sanitize_time($input['cutoff_time'] ?? $defaults['cutoff_time']),
+            'cutoff_message' => sanitize_text_field($input['cutoff_message'] ?? $defaults['cutoff_message']),
         ];
     }
 
@@ -531,6 +536,27 @@ class Settings
         }
 
         return array_unique($sanitized);
+    }
+
+    /**
+     * Sanitize time in HH:MM format
+     *
+     * @param string $time Time string to sanitize.
+     * @return string Sanitized time in HH:MM format.
+     */
+    private function sanitize_time(string $time): string
+    {
+        $time = sanitize_text_field($time);
+
+        // Validate HH:MM format
+        if (preg_match('/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])$/', $time)) {
+            // Normalize to HH:MM (with leading zero)
+            $parts = explode(':', $time);
+            return sprintf('%02d:%02d', (int) $parts[0], (int) $parts[1]);
+        }
+
+        // Return default if invalid
+        return '14:00';
     }
 
     /**

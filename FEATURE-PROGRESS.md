@@ -5,8 +5,8 @@
 Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
-**Completed:** 7
-**Progress:** 70%
+**Completed:** 8
+**Progress:** 80%
 
 ---
 
@@ -1113,26 +1113,108 @@ add_action('checkout_toolkit_store_location_saved', function($order_id, $locatio
 
 ### Feature 8: Estimated Delivery Display
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
-Calculate and display estimated delivery date on checkout based on lead time, disabled days, and selected delivery date.
+Calculate and display estimated delivery date message on the checkout page based on lead time, disabled days, cutoff time, and order timing. Shows a dynamic message like "Order by 2pm for delivery as early as Thursday, December 26".
 
-**Planned Settings:**
+**Settings (Added to existing `checkout_toolkit_delivery_settings`):**
 | Setting | Type | Default |
 |---------|------|---------|
-| `enabled` | boolean | `false` |
-| `display_format` | string | `'Estimated delivery: {date}'` |
-| `calculation_method` | string | `'from_order'` or `'from_selected'` |
-| `additional_days` | integer | `0` |
+| `show_estimated_delivery` | boolean | `false` |
+| `estimated_delivery_message` | string | `'Order now for delivery as early as {date}'` |
+| `cutoff_time` | string | `'14:00'` |
+| `cutoff_message` | string | `'Order by {time} for delivery as early as {date}'` |
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **AvailabilityChecker Enhancement:** `src/WooCheckoutToolkit/Delivery/AvailabilityChecker.php`
+   - Added `get_earliest_available_date(bool $after_cutoff = false)` method
+   - Uses existing date availability logic (disabled weekdays, blocked dates)
+   - If `$after_cutoff` is true or current time >= cutoff, adds +1 to lead days
+   - Returns earliest available date in Y-m-d format
+
+2. **DeliveryDate Update:** `src/WooCheckoutToolkit/Delivery/DeliveryDate.php`
+   - Added `render_estimated_delivery_message()` method
+   - Compares current time to cutoff time
+   - Shows appropriate message template with `{date}` and `{time}` replaced
+   - Rendered above the date picker field
+
+3. **Admin UI:** `admin/views/settings-delivery.php`
+   - New "Estimated Delivery Message" section added
+   - Enable/disable toggle
+   - Cutoff time input (time picker)
+   - Before cutoff message template with `{time}` and `{date}` placeholders
+   - After cutoff message template with `{date}` placeholder
+
+4. **Settings:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Added sanitization for new delivery settings
+   - Added `sanitize_time()` helper for HH:MM format validation
+
+5. **Main Class:** `src/WooCheckoutToolkit/Main.php`
+   - Added defaults for new estimated delivery settings
+   - Added `get_estimated_delivery_data()` helper method
+   - Updated `get_blocks_script_data()` to include estimatedDelivery
+
+6. **Blocks Integration:** `public/js/blocks-checkout.js`
+   - Added `EstimatedDeliveryMessage` React component
+   - Calculates if current time is past cutoff
+   - Displays appropriate message with formatted date
+   - Rendered inside DeliveryDateField component above the date picker
+
+**Files Modified:**
 ```
-src/WooCheckoutToolkit/Delivery/EstimatedDelivery.php
-admin/views/settings-estimated-delivery.php
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: sanitize_time() helper method
+  - Updated: sanitize_delivery_settings() with new fields
+
+src/WooCheckoutToolkit/Main.php
+  - Updated: get_default_delivery_settings() with new settings
+  - Added: get_estimated_delivery_data() method
+  - Updated: get_blocks_script_data() with estimatedDelivery
+
+src/WooCheckoutToolkit/Delivery/AvailabilityChecker.php
+  - Added: get_earliest_available_date() method
+  - Added: find_next_available_date() helper method
+
+src/WooCheckoutToolkit/Delivery/DeliveryDate.php
+  - Added: render_estimated_delivery_message() method
+  - Updated: render_delivery_date_field() to call message renderer
+
+admin/views/settings-delivery.php
+  - Added: Estimated Delivery Message settings section
+
+public/js/blocks-checkout.js
+  - Added: estimatedDelivery to destructured settings
+  - Added: EstimatedDeliveryMessage component
+  - Updated: DeliveryDateField to render EstimatedDeliveryMessage
 ```
 
-**Display Location:** Checkout page only (per user requirement)
+**Cutoff Time Logic:**
+```
+Before Cutoff (e.g., 10am when cutoff is 2pm):
+- Uses min_lead_days as-is
+- Shows: "Order by 2:00pm for delivery as early as Thursday, December 26"
+
+After Cutoff (e.g., 3pm when cutoff is 2pm):
+- Adds +1 to min_lead_days
+- Shows: "Order now for delivery as early as Friday, December 27"
+```
+
+**Display Location:** Checkout page only, above the delivery date picker
+
+**Usage Example:**
+```php
+// Get earliest available date
+$checker = new AvailabilityChecker();
+$earliest = $checker->get_earliest_available_date(); // Uses current time
+$earliest_tomorrow = $checker->get_earliest_available_date(true); // Forces after-cutoff
+
+// Settings include:
+$settings = Main::get_instance()->get_delivery_settings();
+$cutoff = $settings['cutoff_time']; // e.g., '14:00'
+$message = $settings['cutoff_message']; // e.g., 'Order by {time} for delivery as early as {date}'
+```
 
 ---
 
@@ -1219,7 +1301,7 @@ templates/checkout/gift-options.php
 | 5 | 2 | Delivery instructions | ✅ Completed | Medium |
 | 6 | 2 | Time window selection | ✅ Completed | Medium |
 | 7 | 3 | Store location selector | ✅ Completed | High |
-| 8 | 3 | Estimated delivery display | ⏳ Pending | Low |
+| 8 | 3 | Estimated delivery display | ✅ Completed | Low |
 | 9 | 4 | Product/category visibility | ⏳ Pending | Medium |
 | 10 | 4 | Gift message option | ⏳ Pending | Low |
 
@@ -1306,6 +1388,15 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2025-12-25 (Session 5)
+- Completed Feature 8: Estimated Delivery Display
+  - Shows estimated delivery date message on checkout (above date picker)
+  - Cutoff time logic: orders before cutoff get earlier delivery date
+  - Customizable message templates with {date} and {time} placeholders
+  - Added `get_earliest_available_date()` method to AvailabilityChecker
+  - Works in both Classic and Blocks checkout
+- Progress: 80% (8/10 features complete)
 
 ### 2025-12-25 (Session 4)
 - Completed Feature 7: Store Location Selector

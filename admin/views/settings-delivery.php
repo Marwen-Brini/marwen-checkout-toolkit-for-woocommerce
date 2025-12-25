@@ -233,3 +233,86 @@ $checkout_toolkit_weekdays = [
         </tr>
     </tbody>
 </table>
+
+<h3 style="margin-top: 30px;"><?php esc_html_e('Estimated Delivery Message', 'checkout-toolkit-for-woo'); ?></h3>
+<p class="description" style="margin-bottom: 15px;">
+    <?php esc_html_e('Display a message showing the earliest available delivery date based on your lead time settings.', 'checkout-toolkit-for-woo'); ?>
+</p>
+
+<table class="form-table wct-settings-table">
+    <tbody>
+        <!-- Enable Estimated Delivery -->
+        <tr>
+            <th scope="row">
+                <?php esc_html_e('Show Estimated Delivery', 'checkout-toolkit-for-woo'); ?>
+            </th>
+            <td>
+                <label>
+                    <input type="checkbox"
+                           name="checkout_toolkit_delivery_settings[show_estimated_delivery]"
+                           value="1"
+                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_estimated_delivery'])); ?>>
+                    <?php esc_html_e('Display estimated delivery date message on checkout', 'checkout-toolkit-for-woo'); ?>
+                </label>
+            </td>
+        </tr>
+
+        <!-- Cutoff Time -->
+        <tr>
+            <th scope="row">
+                <label for="checkout_toolkit_cutoff_time">
+                    <?php esc_html_e('Order Cutoff Time', 'checkout-toolkit-for-woo'); ?>
+                </label>
+            </th>
+            <td>
+                <input type="time"
+                       id="checkout_toolkit_cutoff_time"
+                       name="checkout_toolkit_delivery_settings[cutoff_time]"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['cutoff_time'] ?? '14:00'); ?>"
+                       class="regular-text"
+                       style="width: 120px;">
+                <p class="description">
+                    <?php esc_html_e('Orders placed after this time will have +1 day added to their estimated delivery.', 'checkout-toolkit-for-woo'); ?>
+                </p>
+            </td>
+        </tr>
+
+        <!-- Before Cutoff Message -->
+        <tr>
+            <th scope="row">
+                <label for="checkout_toolkit_cutoff_message">
+                    <?php esc_html_e('Before Cutoff Message', 'checkout-toolkit-for-woo'); ?>
+                </label>
+            </th>
+            <td>
+                <input type="text"
+                       id="checkout_toolkit_cutoff_message"
+                       name="checkout_toolkit_delivery_settings[cutoff_message]"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['cutoff_message'] ?? 'Order by {time} for delivery as early as {date}'); ?>"
+                       class="large-text">
+                <p class="description">
+                    <?php esc_html_e('Message shown before cutoff time. Use {time} for cutoff time and {date} for earliest delivery date.', 'checkout-toolkit-for-woo'); ?>
+                </p>
+            </td>
+        </tr>
+
+        <!-- After Cutoff Message -->
+        <tr>
+            <th scope="row">
+                <label for="checkout_toolkit_estimated_message">
+                    <?php esc_html_e('After Cutoff Message', 'checkout-toolkit-for-woo'); ?>
+                </label>
+            </th>
+            <td>
+                <input type="text"
+                       id="checkout_toolkit_estimated_message"
+                       name="checkout_toolkit_delivery_settings[estimated_delivery_message]"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['estimated_delivery_message'] ?? 'Order now for delivery as early as {date}'); ?>"
+                       class="large-text">
+                <p class="description">
+                    <?php esc_html_e('Message shown after cutoff time. Use {date} for earliest delivery date.', 'checkout-toolkit-for-woo'); ?>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>

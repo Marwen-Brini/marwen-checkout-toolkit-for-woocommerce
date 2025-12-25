@@ -84,6 +84,9 @@ class DeliveryDate
         $style = $initial_hidden ? 'display: none;' : '';
         echo '<div class="checkout-toolkit-delivery-date-wrapper" style="' . esc_attr($style) . '">';
 
+        // Render estimated delivery message above the date picker
+        $this->render_estimated_delivery_message();
+
         woocommerce_form_field(
             'checkout_toolkit_delivery_date',
             apply_filters('checkout_toolkit_delivery_date_field_args', [
@@ -221,6 +224,47 @@ class DeliveryDate
 
             do_action('checkout_toolkit_delivery_date_saved', $order->get_id(), $date);
         }
+    }
+
+    /**
+     * Render estimated delivery message
+     *
+     * Displays a message showing the earliest available delivery date
+     * based on cutoff time and lead time settings.
+     */
+    public function render_estimated_delivery_message(): void
+    {
+        $settings = $this->get_settings();
+
+        if (empty($settings['show_estimated_delivery'])) {
+            return;
+        }
+
+        $cutoff_time = $settings['cutoff_time'] ?? '14:00';
+        $now = current_time('H:i');
+        $is_past_cutoff = ($now >= $cutoff_time);
+
+        $earliest_date = $this->availability_checker->get_earliest_available_date($is_past_cutoff);
+
+        if (empty($earliest_date)) {
+            return;
+        }
+
+        // Format the date for display
+        $formatted_date = date_i18n('l, F j', strtotime($earliest_date));
+
+        if ($is_past_cutoff) {
+            $message = $settings['estimated_delivery_message'] ?? 'Order now for delivery as early as {date}';
+        } else {
+            $message = $settings['cutoff_message'] ?? 'Order by {time} for delivery as early as {date}';
+            // Format cutoff time for display
+            $formatted_time = date_i18n('g:ia', strtotime("today $cutoff_time"));
+            $message = str_replace('{time}', $formatted_time, $message);
+        }
+
+        $message = str_replace('{date}', $formatted_date, $message);
+
+        echo '<p class="wct-estimated-delivery-message">' . esc_html($message) . '</p>';
     }
 
     /**

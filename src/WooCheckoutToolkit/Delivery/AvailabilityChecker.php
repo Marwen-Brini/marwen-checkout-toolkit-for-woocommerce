@@ -117,6 +117,65 @@ class AvailabilityChecker
     }
 
     /**
+     * Get the earliest available delivery date
+     *
+     * @param bool $after_cutoff If true, calculates as if past cutoff time (adds +1 day).
+     * @return string|null Date in Y-m-d format or null if no dates available.
+     */
+    public function get_earliest_available_date(bool $after_cutoff = false): ?string
+    {
+        $settings = $this->get_settings();
+        $min_lead_days = (int) ($settings['min_lead_days'] ?? 2);
+        $cutoff_time = $settings['cutoff_time'] ?? '14:00';
+
+        // Check if we're past cutoff time
+        $now = current_time('H:i');
+        $is_past_cutoff = $after_cutoff || ($now >= $cutoff_time);
+
+        // If past cutoff, add 1 to minimum lead days
+        $effective_lead_days = $is_past_cutoff ? $min_lead_days + 1 : $min_lead_days;
+
+        // Start from today + effective lead days
+        $start_date = new \DateTime('now', wp_timezone());
+        $start_date->modify("+{$effective_lead_days} days");
+
+        return $this->find_next_available_date($start_date);
+    }
+
+    /**
+     * Find the next available date starting from a given date
+     *
+     * @param \DateTime $start The starting date to check from.
+     * @return string|null Date in Y-m-d format or null if no dates available.
+     */
+    private function find_next_available_date(\DateTime $start): ?string
+    {
+        $settings = $this->get_settings();
+        $disabled_weekdays = array_map('intval', $settings['disabled_weekdays'] ?? []);
+        $blocked_dates = $settings['blocked_dates'] ?? [];
+        $max_attempts = 60; // Prevent infinite loop
+
+        $date = clone $start;
+
+        for ($i = 0; $i < $max_attempts; $i++) {
+            $weekday = (int) $date->format('w');
+            $date_str = $date->format('Y-m-d');
+
+            if (
+                !in_array($weekday, $disabled_weekdays, true) &&
+                !in_array($date_str, $blocked_dates, true)
+            ) {
+                return $date_str;
+            }
+
+            $date->modify('+1 day');
+        }
+
+        // Fallback if no available date found within max attempts
+        return null;
+    }
+
+    /**
      * Check minimum lead time requirement
      *
      * @param string $date Date in Y-m-d format
