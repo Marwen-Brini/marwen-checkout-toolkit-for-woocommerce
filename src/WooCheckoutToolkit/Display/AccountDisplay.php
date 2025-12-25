@@ -33,6 +33,8 @@ class AccountDisplay
     {
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
+        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
@@ -40,18 +42,22 @@ class AccountDisplay
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
         $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
+        $time_window = $order->get_meta('_wct_time_window');
+        $store_location = $order->get_meta('_wct_store_location');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Check if we have anything to display
         $show_delivery_method = !empty($delivery_method) && !empty($delivery_method_settings['show_in_emails']);
+        $show_store_location = !empty($store_location) && !empty($store_locations_settings['show_in_emails']);
         $show_delivery_instructions = (!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) && !empty($delivery_instructions_settings['show_in_emails']);
+        $show_time_window = !empty($time_window) && !empty($time_window_settings['show_in_emails']);
         $show_delivery = !empty($delivery_date) && !empty($delivery_settings['show_in_admin']);
         $show_field = $custom_field !== '' && !empty($field_settings['show_in_admin']);
         $show_field_2 = $custom_field_2 !== '' && !empty($field_2_settings['show_in_admin']);
 
-        if (!$show_delivery_method && !$show_delivery_instructions && !$show_delivery && !$show_field && !$show_field_2) {
+        if (!$show_delivery_method && !$show_store_location && !$show_delivery_instructions && !$show_time_window && !$show_delivery && !$show_field && !$show_field_2) {
             return;
         }
 
@@ -79,6 +85,29 @@ class AccountDisplay
             echo '</tr>';
         }
 
+        if ($show_store_location) {
+            $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
+            if ($location) {
+                $label = $store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo');
+                $output = '<strong>' . esc_html($location['name']) . '</strong>';
+                if (!empty($location['address'])) {
+                    $output .= '<br>' . esc_html($location['address']);
+                }
+                if (!empty($location['phone'])) {
+                    $output .= '<br>' . esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['phone']);
+                }
+                if (!empty($location['hours'])) {
+                    $output .= '<br>' . esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['hours']);
+                }
+
+                echo '<tr>';
+                echo '<th>' . esc_html($label) . '</th>';
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output is already escaped above.
+                echo '<td>' . $output . '</td>';
+                echo '</tr>';
+            }
+        }
+
         if ($show_delivery_instructions) {
             $label = $delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'checkout-toolkit-for-woo');
             $output = '';
@@ -99,6 +128,16 @@ class AccountDisplay
             echo '<th>' . esc_html($label) . '</th>';
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output is already escaped above.
             echo '<td>' . $output . '</td>';
+            echo '</tr>';
+        }
+
+        if ($show_time_window) {
+            $label = $time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo');
+            $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
+
+            echo '<tr>';
+            echo '<th>' . esc_html($label) . '</th>';
+            echo '<td>' . esc_html($time_label) . '</td>';
             echo '</tr>';
         }
 
@@ -199,5 +238,45 @@ class AccountDisplay
         }
 
         return $value;
+    }
+
+    /**
+     * Get time slot label by value
+     *
+     * @param string $value    Time slot value.
+     * @param array  $settings Time window settings.
+     * @return string Time slot label or value if not found.
+     */
+    private function get_time_slot_label(string $value, array $settings): string
+    {
+        $time_slots = $settings['time_slots'] ?? [];
+
+        foreach ($time_slots as $slot) {
+            if (($slot['value'] ?? '') === $value) {
+                return $slot['label'] ?? $value;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get store location by ID
+     *
+     * @param string $location_id Location ID.
+     * @param array  $settings    Store locations settings.
+     * @return array|null Location data or null if not found.
+     */
+    private function get_store_location_by_id(string $location_id, array $settings): ?array
+    {
+        $locations = $settings['locations'] ?? [];
+
+        foreach ($locations as $location) {
+            if (($location['id'] ?? '') === $location_id) {
+                return $location;
+            }
+        }
+
+        return null;
     }
 }

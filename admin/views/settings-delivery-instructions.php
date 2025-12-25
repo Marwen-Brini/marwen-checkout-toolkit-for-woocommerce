@@ -4,7 +4,7 @@
  *
  * @package CheckoutToolkitForWoo
  *
- * @var array $delivery_instructions_settings Delivery instructions settings array.
+ * @var array $checkout_toolkit_delivery_instructions_settings Delivery instructions settings array.
  */
 
 defined('ABSPATH') || exit;
@@ -59,7 +59,7 @@ defined('ABSPATH') || exit;
                                name="checkout_toolkit_delivery_instructions_settings[enabled]"
                                id="wct-di-enabled"
                                value="1"
-                               <?php checked(!empty($delivery_instructions_settings['enabled'])); ?>>
+                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['enabled'])); ?>>
                         <?php esc_html_e('Show delivery instructions field on checkout', 'checkout-toolkit-for-woo'); ?>
                     </label>
                     <p class="description">
@@ -69,7 +69,7 @@ defined('ABSPATH') || exit;
             </tr>
         </tbody>
 
-        <tbody id="wct-di-options" class="<?php echo empty($delivery_instructions_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
+        <tbody id="wct-di-options" class="<?php echo empty($checkout_toolkit_delivery_instructions_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
             <!-- Required -->
             <tr>
                 <th scope="row">
@@ -80,7 +80,7 @@ defined('ABSPATH') || exit;
                         <input type="checkbox"
                                name="checkout_toolkit_delivery_instructions_settings[required]"
                                value="1"
-                               <?php checked(!empty($delivery_instructions_settings['required'])); ?>>
+                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['required'])); ?>>
                         <?php esc_html_e('Require customers to select or enter delivery instructions', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
@@ -97,7 +97,7 @@ defined('ABSPATH') || exit;
                     <input type="text"
                            id="wct_di_field_label"
                            name="checkout_toolkit_delivery_instructions_settings[field_label]"
-                           value="<?php echo esc_attr($delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?>"
+                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?>"
                            class="regular-text">
                     <p class="description">
                         <?php esc_html_e('Main heading for the delivery instructions section.', 'checkout-toolkit-for-woo'); ?>
@@ -116,7 +116,7 @@ defined('ABSPATH') || exit;
                     <input type="text"
                            id="wct_di_preset_label"
                            name="checkout_toolkit_delivery_instructions_settings[preset_label]"
-                           value="<?php echo esc_attr($delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>"
+                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -133,7 +133,7 @@ defined('ABSPATH') || exit;
                     <div class="wct-preset-options-wrapper">
                         <div class="wct-preset-options-list">
                             <?php
-                            $checkout_toolkit_preset_options = $delivery_instructions_settings['preset_options'] ?? [];
+                            $checkout_toolkit_preset_options = $checkout_toolkit_delivery_instructions_settings['preset_options'] ?? [];
                             if (empty($checkout_toolkit_preset_options)) {
                                 $checkout_toolkit_preset_options = [['value' => '', 'label' => '']];
                             }
@@ -172,7 +172,7 @@ defined('ABSPATH') || exit;
                     <input type="text"
                            id="wct_di_custom_label"
                            name="checkout_toolkit_delivery_instructions_settings[custom_label]"
-                           value="<?php echo esc_attr($delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>"
+                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>"
                            class="regular-text">
                     <p class="description">
                         <?php esc_html_e('Label for the optional custom text area.', 'checkout-toolkit-for-woo'); ?>
@@ -191,7 +191,7 @@ defined('ABSPATH') || exit;
                     <input type="text"
                            id="wct_di_custom_placeholder"
                            name="checkout_toolkit_delivery_instructions_settings[custom_placeholder]"
-                           value="<?php echo esc_attr($delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"
+                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -207,7 +207,7 @@ defined('ABSPATH') || exit;
                     <input type="number"
                            id="wct_di_max_length"
                            name="checkout_toolkit_delivery_instructions_settings[max_length]"
-                           value="<?php echo esc_attr($delivery_instructions_settings['max_length'] ?? 500); ?>"
+                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['max_length'] ?? 500); ?>"
                            min="0"
                            max="10000"
                            class="small-text">
@@ -227,14 +227,14 @@ defined('ABSPATH') || exit;
                         <input type="checkbox"
                                name="checkout_toolkit_delivery_instructions_settings[show_in_admin]"
                                value="1"
-                               <?php checked(!empty($delivery_instructions_settings['show_in_admin'])); ?>>
+                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['show_in_admin'])); ?>>
                         <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="checkbox"
                                name="checkout_toolkit_delivery_instructions_settings[show_in_emails]"
                                value="1"
-                               <?php checked(!empty($delivery_instructions_settings['show_in_emails'])); ?>>
+                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['show_in_emails'])); ?>>
                         <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
@@ -248,16 +248,16 @@ defined('ABSPATH') || exit;
         <p class="description"><?php esc_html_e('This is how the delivery instructions will appear on checkout (when Delivery is selected).', 'checkout-toolkit-for-woo'); ?></p>
 
         <div class="wct-preview-content" style="margin-top: 15px; max-width: 400px;">
-            <h4 id="wct-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
+            <h4 id="wct-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($checkout_toolkit_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
 
             <div style="margin-bottom: 15px;">
                 <label id="wct-preview-preset-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
-                    <?php echo esc_html($delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>
+                    <?php echo esc_html($checkout_toolkit_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>
                 </label>
                 <select style="width: 100%; padding: 8px;" id="wct-preview-preset-select">
                     <option value=""><?php esc_html_e('Select an option...', 'checkout-toolkit-for-woo'); ?></option>
                     <?php
-                    $checkout_toolkit_preview_options = $delivery_instructions_settings['preset_options'] ?? [];
+                    $checkout_toolkit_preview_options = $checkout_toolkit_delivery_instructions_settings['preset_options'] ?? [];
                     foreach ($checkout_toolkit_preview_options as $checkout_toolkit_option) :
                         if (!empty($checkout_toolkit_option['label'])) :
                     ?>
@@ -273,11 +273,11 @@ defined('ABSPATH') || exit;
 
             <div>
                 <label id="wct-preview-custom-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
-                    <?php echo esc_html($delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>
+                    <?php echo esc_html($checkout_toolkit_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>
                 </label>
                 <textarea id="wct-preview-custom-textarea"
                           style="width: 100%; padding: 8px; min-height: 80px;"
-                          placeholder="<?php echo esc_attr($delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"></textarea>
+                          placeholder="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"></textarea>
             </div>
         </div>
     </div>

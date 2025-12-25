@@ -45,7 +45,7 @@
         return;
     }
 
-    const { orderNotes, deliveryMethod, deliveryInstructions, delivery, customField, customField2, i18n } = settings;
+    const { orderNotes, deliveryMethod, deliveryInstructions, timeWindow, storeLocations, delivery, customField, customField2, i18n } = settings;
 
     /**
      * Position mapping: PHP hooks to DOM selectors
@@ -426,6 +426,185 @@
     };
 
     /**
+     * Time Window Selection Component
+     * Shows a dropdown for selecting preferred delivery time
+     * Only visible when delivery is selected (hidden for pickup) if showOnlyWithDelivery is true
+     */
+    const TimeWindowComponent = () => {
+        const [selectedTime, setSelectedTime] = useState('');
+        const initialMethod = extensionDataState.delivery_method || (deliveryMethod?.defaultMethod || 'delivery');
+        const showOnlyDelivery = timeWindow?.showOnlyWithDelivery ?? true;
+        const [isVisible, setIsVisible] = useState(!showOnlyDelivery || initialMethod !== 'pickup');
+
+        // Listen for delivery method changes
+        useEffect(() => {
+            if (!showOnlyDelivery) return;
+
+            const handleMethodChange = (e) => {
+                const method = e.detail?.method || 'delivery';
+                setIsVisible(method !== 'pickup');
+            };
+
+            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+        }, [showOnlyDelivery]);
+
+        const handleChange = (e) => {
+            const val = e.target.value;
+            setSelectedTime(val);
+            setExtensionData('checkout-toolkit', 'time_window', val);
+        };
+
+        if (!timeWindow || !timeWindow.enabled) return null;
+        if (!isVisible) return null;
+
+        const timeSlots = timeWindow.timeSlots || [];
+        if (timeSlots.length === 0) return null;
+
+        const selectStyles = {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #8c8f94',
+            borderRadius: '4px',
+            fontSize: '16px',
+            backgroundColor: '#fff',
+            cursor: 'pointer',
+            appearance: 'none',
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%23333\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'right 16px center',
+            paddingRight: '40px'
+        };
+
+        return el('div', {
+            className: 'checkout-toolkit-time-window-block wc-block-components-checkout-step',
+            style: { marginTop: '16px', marginBottom: '16px' }
+        },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    timeWindow.fieldLabel || 'Preferred Time',
+                    timeWindow.required && el('span', { style: { color: '#cc0000' } }, ' *')
+                )
+            ),
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    el('select', {
+                        value: selectedTime,
+                        onChange: handleChange,
+                        required: timeWindow.required,
+                        style: selectStyles
+                    },
+                        el('option', { value: '' }, i18n?.selectTime || 'Select a time...'),
+                        timeSlots.map(slot =>
+                            el('option', { key: slot.value, value: slot.value }, slot.label)
+                        )
+                    )
+                )
+            )
+        );
+    };
+
+    /**
+     * Store Location Selector Component
+     * OPPOSITE visibility: Only visible when PICKUP is selected (hidden for delivery)
+     */
+    const StoreLocationComponent = () => {
+        const [selectedLocation, setSelectedLocation] = useState('');
+        const initialMethod = extensionDataState.delivery_method || (deliveryMethod?.defaultMethod || 'delivery');
+        // OPPOSITE visibility: Show when pickup, hide when delivery
+        const [isVisible, setIsVisible] = useState(initialMethod === 'pickup');
+
+        // Listen for delivery method changes
+        useEffect(() => {
+            const handleMethodChange = (e) => {
+                const method = e.detail?.method || 'delivery';
+                setIsVisible(method === 'pickup'); // Show ONLY for pickup
+            };
+
+            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+        }, []);
+
+        const handleChange = (e) => {
+            const val = e.target.value;
+            setSelectedLocation(val);
+            setExtensionData('checkout-toolkit', 'store_location', val);
+        };
+
+        if (!storeLocations || !storeLocations.enabled) return null;
+        if (!isVisible) return null;
+
+        const locations = storeLocations.locations || [];
+        if (locations.length === 0) return null;
+
+        const selectStyles = {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #8c8f94',
+            borderRadius: '4px',
+            fontSize: '16px',
+            backgroundColor: '#fff',
+            cursor: 'pointer',
+            appearance: 'none',
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%23333\' d=\'M6 8L1 3h10z\'/%3E%3C/svg%3E")',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'right 16px center',
+            paddingRight: '40px'
+        };
+
+        // Find selected location details
+        const selectedLocationData = locations.find(loc => loc.id === selectedLocation);
+
+        return el('div', {
+            className: 'checkout-toolkit-store-location-block wc-block-components-checkout-step',
+            style: { marginTop: '16px', marginBottom: '16px' }
+        },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    storeLocations.fieldLabel || 'Pickup Location',
+                    storeLocations.required && el('span', { style: { color: '#cc0000' } }, ' *')
+                )
+            ),
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    el('select', {
+                        value: selectedLocation,
+                        onChange: handleChange,
+                        required: storeLocations.required,
+                        style: selectStyles
+                    },
+                        el('option', { value: '' }, i18n?.selectLocation || 'Select a location...'),
+                        locations.map(loc =>
+                            el('option', { key: loc.id, value: loc.id }, loc.name)
+                        )
+                    ),
+                    // Show location details when selected
+                    selectedLocationData && (selectedLocationData.address || selectedLocationData.phone || selectedLocationData.hours) &&
+                    el('div', {
+                        style: {
+                            marginTop: '15px',
+                            padding: '15px',
+                            background: '#f9f9f9',
+                            border: '1px solid #e0e0e0',
+                            borderRadius: '4px'
+                        }
+                    },
+                        selectedLocationData.address && el('div', { style: { marginBottom: '8px' } },
+                            el('strong', null, i18n?.address || 'Address:'), ' ', selectedLocationData.address
+                        ),
+                        selectedLocationData.phone && el('div', { style: { marginBottom: '8px' } },
+                            el('strong', null, i18n?.phone || 'Phone:'), ' ', selectedLocationData.phone
+                        ),
+                        selectedLocationData.hours && el('div', null,
+                            el('strong', null, i18n?.hours || 'Hours:'), ' ', selectedLocationData.hours
+                        )
+                    )
+                )
+            )
+        );
+    };
+
+    /**
      * Delivery Date Field Component
      * Only visible when delivery is selected (hidden for pickup)
      */
@@ -693,6 +872,16 @@
             renderFieldAtPosition(DeliveryInstructionsComponent, 'wct-delivery-instructions-container', 'woocommerce_before_order_notes');
         }
 
+        // Render time window (after delivery instructions, before order notes)
+        if (timeWindow && timeWindow.enabled) {
+            renderFieldAtPosition(TimeWindowComponent, 'wct-time-window-container', 'woocommerce_before_order_notes');
+        }
+
+        // Render store location selector (after delivery method, only shows when pickup is selected)
+        if (storeLocations && storeLocations.enabled) {
+            renderFieldAtPosition(StoreLocationComponent, 'wct-store-location-container', 'woocommerce_before_order_notes');
+        }
+
         // Render delivery date at its position
         if (delivery && delivery.enabled) {
             renderFieldAtPosition(DeliveryDateField, 'wct-delivery-date-container', delivery.position || 'woocommerce_after_order_notes');
@@ -766,6 +955,14 @@
             pendingExtensionData.delivery_instructions_preset = '';
             extensionDataState.delivery_instructions_custom = '';
             pendingExtensionData.delivery_instructions_custom = '';
+        }
+        if (timeWindow && timeWindow.enabled) {
+            extensionDataState.time_window = '';
+            pendingExtensionData.time_window = '';
+        }
+        if (storeLocations && storeLocations.enabled) {
+            extensionDataState.store_location = '';
+            pendingExtensionData.store_location = '';
         }
         if (delivery && delivery.enabled) {
             extensionDataState.delivery_date = '';

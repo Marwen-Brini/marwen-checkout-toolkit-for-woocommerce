@@ -38,6 +38,8 @@ class EmailDisplay
     {
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
+        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
@@ -45,19 +47,29 @@ class EmailDisplay
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
         $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
+        $time_window = $order->get_meta('_wct_time_window');
+        $store_location = $order->get_meta('_wct_store_location');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         // Check if we should display in emails
         $show_delivery_method = !empty($delivery_method) && !empty($delivery_method_settings['show_in_emails']);
+        $show_store_location = !empty($store_location) && !empty($store_locations_settings['show_in_emails']);
         $show_delivery_instructions = (!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) && !empty($delivery_instructions_settings['show_in_emails']);
+        $show_time_window = !empty($time_window) && !empty($time_window_settings['show_in_emails']);
         $show_delivery = !empty($delivery_date) && !empty($delivery_settings['show_in_emails']);
         $show_field = !empty($custom_field) && !empty($field_settings['show_in_emails']);
         $show_field_2 = !empty($custom_field_2) && !empty($field_2_settings['show_in_emails']);
 
-        if (!$show_delivery_method && !$show_delivery_instructions && !$show_delivery && !$show_field && !$show_field_2) {
+        if (!$show_delivery_method && !$show_store_location && !$show_delivery_instructions && !$show_time_window && !$show_delivery && !$show_field && !$show_field_2) {
             return;
+        }
+
+        // Get store location details
+        $store_location_data = null;
+        if ($show_store_location) {
+            $store_location_data = $this->get_store_location_by_id($store_location, $store_locations_settings);
         }
 
         if ($plain_text) {
@@ -66,16 +78,22 @@ class EmailDisplay
                 $delivery_method,
                 $delivery_instructions_preset,
                 $delivery_instructions_custom,
+                $time_window,
+                $store_location_data,
                 $delivery_date,
                 $custom_field,
                 $custom_field_2,
                 $delivery_method_settings,
                 $delivery_instructions_settings,
+                $time_window_settings,
+                $store_locations_settings,
                 $delivery_settings,
                 $field_settings,
                 $field_2_settings,
                 $show_delivery_method,
+                $show_store_location,
                 $show_delivery_instructions,
+                $show_time_window,
                 $show_delivery,
                 $show_field,
                 $show_field_2
@@ -86,16 +104,22 @@ class EmailDisplay
                 $delivery_method,
                 $delivery_instructions_preset,
                 $delivery_instructions_custom,
+                $time_window,
+                $store_location_data,
                 $delivery_date,
                 $custom_field,
                 $custom_field_2,
                 $delivery_method_settings,
                 $delivery_instructions_settings,
+                $time_window_settings,
+                $store_locations_settings,
                 $delivery_settings,
                 $field_settings,
                 $field_2_settings,
                 $show_delivery_method,
+                $show_store_location,
                 $show_delivery_instructions,
+                $show_time_window,
                 $show_delivery,
                 $show_field,
                 $show_field_2,
@@ -111,16 +135,22 @@ class EmailDisplay
      * @param string|null $delivery_method               Delivery method value.
      * @param string|null $delivery_instructions_preset  Delivery instructions preset.
      * @param string|null $delivery_instructions_custom  Delivery instructions custom.
+     * @param string|null $time_window                   Time window value.
+     * @param array|null  $store_location_data           Store location data.
      * @param string|null $delivery_date                 Delivery date.
      * @param string|null $custom_field                  Custom field value.
      * @param string|null $custom_field_2                Custom field 2 value.
      * @param array       $delivery_method_settings      Delivery method settings.
      * @param array       $delivery_instructions_settings Delivery instructions settings.
+     * @param array       $time_window_settings          Time window settings.
+     * @param array       $store_locations_settings      Store locations settings.
      * @param array       $delivery_settings             Delivery settings.
      * @param array       $field_settings                Field settings.
      * @param array       $field_2_settings              Field 2 settings.
      * @param bool        $show_delivery_method          Show delivery method.
+     * @param bool        $show_store_location           Show store location.
      * @param bool        $show_delivery_instructions    Show delivery instructions.
+     * @param bool        $show_time_window              Show time window.
      * @param bool        $show_delivery                 Show delivery date.
      * @param bool        $show_field                    Show custom field.
      * @param bool        $show_field_2                  Show custom field 2.
@@ -131,16 +161,22 @@ class EmailDisplay
         ?string $delivery_method,
         ?string $delivery_instructions_preset,
         ?string $delivery_instructions_custom,
+        ?string $time_window,
+        ?array $store_location_data,
         ?string $delivery_date,
         ?string $custom_field,
         ?string $custom_field_2,
         array $delivery_method_settings,
         array $delivery_instructions_settings,
+        array $time_window_settings,
+        array $store_locations_settings,
         array $delivery_settings,
         array $field_settings,
         array $field_2_settings,
         bool $show_delivery_method,
+        bool $show_store_location,
         bool $show_delivery_instructions,
+        bool $show_time_window,
         bool $show_delivery,
         bool $show_field,
         bool $show_field_2,
@@ -158,6 +194,26 @@ class EmailDisplay
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
             echo '<td style="text-align: left; padding: 12px;">' . esc_html($method_label) . '</td>';
+            echo '</tr>';
+        }
+
+        if ($show_store_location && $store_location_data) {
+            $label = $store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo');
+            $output = '<strong>' . esc_html($store_location_data['name']) . '</strong>';
+            if (!empty($store_location_data['address'])) {
+                $output .= '<br>' . esc_html($store_location_data['address']);
+            }
+            if (!empty($store_location_data['phone'])) {
+                $output .= '<br>' . esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($store_location_data['phone']);
+            }
+            if (!empty($store_location_data['hours'])) {
+                $output .= '<br>' . esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($store_location_data['hours']);
+            }
+
+            echo '<tr>';
+            echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8; vertical-align: top;">' . esc_html($label) . '</th>';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output is already escaped above.
+            echo '<td style="text-align: left; padding: 12px;">' . $output . '</td>';
             echo '</tr>';
         }
 
@@ -181,6 +237,16 @@ class EmailDisplay
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output is already escaped above.
             echo '<td style="text-align: left; padding: 12px;">' . $output . '</td>';
+            echo '</tr>';
+        }
+
+        if ($show_time_window) {
+            $label = $time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo');
+            $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
+
+            echo '<tr>';
+            echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
+            echo '<td style="text-align: left; padding: 12px;">' . esc_html($time_label) . '</td>';
             echo '</tr>';
         }
 
@@ -226,16 +292,22 @@ class EmailDisplay
      * @param string|null $delivery_method               Delivery method value.
      * @param string|null $delivery_instructions_preset  Delivery instructions preset.
      * @param string|null $delivery_instructions_custom  Delivery instructions custom.
+     * @param string|null $time_window                   Time window value.
+     * @param array|null  $store_location_data           Store location data.
      * @param string|null $delivery_date                 Delivery date.
      * @param string|null $custom_field                  Custom field value.
      * @param string|null $custom_field_2                Custom field 2 value.
      * @param array       $delivery_method_settings      Delivery method settings.
      * @param array       $delivery_instructions_settings Delivery instructions settings.
+     * @param array       $time_window_settings          Time window settings.
+     * @param array       $store_locations_settings      Store locations settings.
      * @param array       $delivery_settings             Delivery settings.
      * @param array       $field_settings                Field settings.
      * @param array       $field_2_settings              Field 2 settings.
      * @param bool        $show_delivery_method          Show delivery method.
+     * @param bool        $show_store_location           Show store location.
      * @param bool        $show_delivery_instructions    Show delivery instructions.
+     * @param bool        $show_time_window              Show time window.
      * @param bool        $show_delivery                 Show delivery date.
      * @param bool        $show_field                    Show custom field.
      * @param bool        $show_field_2                  Show custom field 2.
@@ -245,16 +317,22 @@ class EmailDisplay
         ?string $delivery_method,
         ?string $delivery_instructions_preset,
         ?string $delivery_instructions_custom,
+        ?string $time_window,
+        ?array $store_location_data,
         ?string $delivery_date,
         ?string $custom_field,
         ?string $custom_field_2,
         array $delivery_method_settings,
         array $delivery_instructions_settings,
+        array $time_window_settings,
+        array $store_locations_settings,
         array $delivery_settings,
         array $field_settings,
         array $field_2_settings,
         bool $show_delivery_method,
+        bool $show_store_location,
         bool $show_delivery_instructions,
+        bool $show_time_window,
         bool $show_delivery,
         bool $show_field,
         bool $show_field_2
@@ -271,6 +349,20 @@ class EmailDisplay
                 : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
 
             echo esc_html($label) . ': ' . esc_html($method_label) . "\n";
+        }
+
+        if ($show_store_location && $store_location_data) {
+            $label = $store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo');
+            echo esc_html($label) . ': ' . esc_html($store_location_data['name']) . "\n";
+            if (!empty($store_location_data['address'])) {
+                echo '  ' . esc_html__('Address:', 'checkout-toolkit-for-woo') . ' ' . esc_html($store_location_data['address']) . "\n";
+            }
+            if (!empty($store_location_data['phone'])) {
+                echo '  ' . esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($store_location_data['phone']) . "\n";
+            }
+            if (!empty($store_location_data['hours'])) {
+                echo '  ' . esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($store_location_data['hours']) . "\n";
+            }
         }
 
         if ($show_delivery_instructions) {
@@ -290,6 +382,13 @@ class EmailDisplay
             }
 
             echo esc_html($label) . ': ' . esc_html($output) . "\n";
+        }
+
+        if ($show_time_window) {
+            $label = $time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo');
+            $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
+
+            echo esc_html($label) . ': ' . esc_html($time_label) . "\n";
         }
 
         if ($show_delivery) {
@@ -382,5 +481,45 @@ class EmailDisplay
         }
 
         return $value;
+    }
+
+    /**
+     * Get time slot label by value
+     *
+     * @param string $value    Time slot value.
+     * @param array  $settings Time window settings.
+     * @return string Time slot label or value if not found.
+     */
+    private function get_time_slot_label(string $value, array $settings): string
+    {
+        $time_slots = $settings['time_slots'] ?? [];
+
+        foreach ($time_slots as $slot) {
+            if (($slot['value'] ?? '') === $value) {
+                return $slot['label'] ?? $value;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get store location by ID
+     *
+     * @param string $location_id Location ID.
+     * @param array  $settings    Store locations settings.
+     * @return array|null Location data or null if not found.
+     */
+    private function get_store_location_by_id(string $location_id, array $settings): ?array
+    {
+        $locations = $settings['locations'] ?? [];
+
+        foreach ($locations as $location) {
+            if (($location['id'] ?? '') === $location_id) {
+                return $location;
+            }
+        }
+
+        return null;
     }
 }

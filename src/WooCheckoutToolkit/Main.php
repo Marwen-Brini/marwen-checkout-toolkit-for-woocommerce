@@ -14,6 +14,8 @@ use WooCheckoutToolkit\Admin\DeliveryManager;
 use WooCheckoutToolkit\Delivery\DeliveryDate;
 use WooCheckoutToolkit\Delivery\DeliveryMethod;
 use WooCheckoutToolkit\Delivery\DeliveryInstructions;
+use WooCheckoutToolkit\Delivery\TimeWindow;
+use WooCheckoutToolkit\Pickup\StoreLocationSelector;
 use WooCheckoutToolkit\Fields\OrderFields;
 use WooCheckoutToolkit\Fields\OrderFields2;
 use WooCheckoutToolkit\Display\OrderDisplay;
@@ -57,6 +59,16 @@ final class Main
      * Delivery instructions instance
      */
     private ?DeliveryInstructions $delivery_instructions = null;
+
+    /**
+     * Time window instance
+     */
+    private ?TimeWindow $time_window = null;
+
+    /**
+     * Store location selector instance
+     */
+    private ?StoreLocationSelector $store_location_selector = null;
 
     /**
      * Order fields instance
@@ -174,6 +186,12 @@ final class Main
         $this->delivery_date = new DeliveryDate();
         $this->delivery_date->init();
 
+        $this->time_window = new TimeWindow();
+        $this->time_window->init();
+
+        $this->store_location_selector = new StoreLocationSelector();
+        $this->store_location_selector->init();
+
         $this->order_fields = new OrderFields();
         $this->order_fields->init();
 
@@ -229,6 +247,8 @@ final class Main
         $order_notes_settings = $this->get_order_notes_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_instructions_settings = $this->get_delivery_instructions_settings();
+        $time_window_settings = $this->get_time_window_settings();
+        $store_locations_settings = $this->get_store_locations_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
@@ -237,6 +257,8 @@ final class Main
         $has_enabled_feature = !empty($order_notes_settings['enabled'])
             || !empty($delivery_method_settings['enabled'])
             || !empty($delivery_instructions_settings['enabled'])
+            || !empty($time_window_settings['enabled'])
+            || !empty($store_locations_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
             || !empty($field_2_settings['enabled']);
@@ -297,6 +319,8 @@ final class Main
     {
         $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_instructions_settings = $this->get_delivery_instructions_settings();
+        $time_window_settings = $this->get_time_window_settings();
+        $store_locations_settings = $this->get_store_locations_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
@@ -325,6 +349,19 @@ final class Main
                 'customLabel' => $delivery_instructions_settings['custom_label'],
                 'customPlaceholder' => $delivery_instructions_settings['custom_placeholder'],
                 'maxLength' => $delivery_instructions_settings['max_length'],
+            ],
+            'timeWindow' => [
+                'enabled' => $time_window_settings['enabled'],
+                'required' => $time_window_settings['required'],
+                'fieldLabel' => $time_window_settings['field_label'],
+                'timeSlots' => $time_window_settings['time_slots'],
+                'showOnlyWithDelivery' => $time_window_settings['show_only_with_delivery'],
+            ],
+            'storeLocations' => [
+                'enabled' => $store_locations_settings['enabled'],
+                'required' => $store_locations_settings['required'],
+                'fieldLabel' => $store_locations_settings['field_label'],
+                'locations' => $store_locations_settings['locations'],
             ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
@@ -429,6 +466,61 @@ final class Main
     }
 
     /**
+     * Get default time window settings
+     */
+    public function get_default_time_window_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_label' => 'Preferred Time',
+            'time_slots' => [
+                ['value' => 'morning', 'label' => 'Morning (9am - 12pm)'],
+                ['value' => 'afternoon', 'label' => 'Afternoon (12pm - 5pm)'],
+                ['value' => 'evening', 'label' => 'Evening (5pm - 8pm)'],
+            ],
+            'show_only_with_delivery' => true,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Get time window settings (with defaults)
+     */
+    public function get_time_window_settings(): array
+    {
+        $defaults = $this->get_default_time_window_settings();
+        $settings = get_option('checkout_toolkit_time_window_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get default store locations settings
+     */
+    public function get_default_store_locations_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => true,
+            'field_label' => 'Pickup Location',
+            'locations' => [],
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Get store locations settings (with defaults)
+     */
+    public function get_store_locations_settings(): array
+    {
+        $defaults = $this->get_default_store_locations_settings();
+        $settings = get_option('checkout_toolkit_store_locations_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
      * Get default field 2 settings
      */
     public function get_default_field_2_settings(): array
@@ -487,6 +579,8 @@ final class Main
 
         $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_instructions_settings = $this->get_delivery_instructions_settings();
+        $time_window_settings = $this->get_time_window_settings();
+        $store_locations_settings = $this->get_store_locations_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
@@ -494,6 +588,8 @@ final class Main
         // Only load if at least one feature is enabled (order notes uses PHP filter, no JS needed for classic)
         $has_enabled_feature = !empty($delivery_method_settings['enabled'])
             || !empty($delivery_instructions_settings['enabled'])
+            || !empty($time_window_settings['enabled'])
+            || !empty($store_locations_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
             || !empty($field_2_settings['enabled']);

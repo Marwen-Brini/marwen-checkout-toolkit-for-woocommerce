@@ -82,9 +82,12 @@ function wct_init(): void
         return;
     }
 
-    // Initialize main plugin
-    $plugin = Main::get_instance();
-    $plugin->init();
+    // Initialize main plugin on init to ensure translations are auto-loaded first
+    // WordPress 4.6+ auto-loads translations for plugins hosted on WordPress.org
+    add_action('init', function () {
+        $plugin = Main::get_instance();
+        $plugin->init();
+    }, 5);
 }
 add_action('plugins_loaded', __NAMESPACE__ . '\\wct_init');
 

@@ -7,19 +7,19 @@
 
 defined('ABSPATH') || exit;
 
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
 $checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
-$delivery_settings = get_option('checkout_toolkit_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
-$field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
-$field_2_settings = get_option('checkout_toolkit_field_2_settings', $checkout_toolkit_settings_obj->get_default_field_2_settings());
-$order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
+$checkout_toolkit_delivery_settings = get_option('checkout_toolkit_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
+$checkout_toolkit_field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
+$checkout_toolkit_field_2_settings = get_option('checkout_toolkit_field_2_settings', $checkout_toolkit_settings_obj->get_default_field_2_settings());
+$checkout_toolkit_order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
     'enabled' => false,
     'custom_placeholder' => '',
     'custom_label' => '',
 ]);
-$delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', $checkout_toolkit_settings_obj->get_default_delivery_method_settings());
-$delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', $checkout_toolkit_settings_obj->get_default_delivery_instructions_settings());
-// phpcs:enable
+$checkout_toolkit_delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', $checkout_toolkit_settings_obj->get_default_delivery_method_settings());
+$checkout_toolkit_delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', $checkout_toolkit_settings_obj->get_default_delivery_instructions_settings());
+$checkout_toolkit_time_window_settings = get_option('checkout_toolkit_time_window_settings', $checkout_toolkit_settings_obj->get_default_time_window_settings());
+$checkout_toolkit_store_locations_settings = get_option('checkout_toolkit_store_locations_settings', $checkout_toolkit_settings_obj->get_default_store_locations_settings());
 ?>
 
 <div class="wrap wct-settings-wrap">
@@ -30,9 +30,17 @@ $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instruct
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-method' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Pickup/Delivery', 'checkout-toolkit-for-woo'); ?>
         </a>
+        <a href="?page=wct-settings&tab=store-locations"
+           class="nav-tab <?php echo esc_attr($active_tab === 'store-locations' ? 'nav-tab-active' : ''); ?>">
+            <?php esc_html_e('Store Locations', 'checkout-toolkit-for-woo'); ?>
+        </a>
         <a href="?page=wct-settings&tab=delivery-instructions"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-instructions' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Delivery Instructions', 'checkout-toolkit-for-woo'); ?>
+        </a>
+        <a href="?page=wct-settings&tab=time-windows"
+           class="nav-tab <?php echo esc_attr($active_tab === 'time-windows' ? 'nav-tab-active' : ''); ?>">
+            <?php esc_html_e('Time Windows', 'checkout-toolkit-for-woo'); ?>
         </a>
         <a href="?page=wct-settings&tab=delivery"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery' ? 'nav-tab-active' : ''); ?>">
@@ -53,8 +61,12 @@ $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instruct
 
         <?php if ($active_tab === 'delivery-method') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery-method.php'; ?>
+        <?php elseif ($active_tab === 'store-locations') : ?>
+            <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-store-locations.php'; ?>
         <?php elseif ($active_tab === 'delivery-instructions') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery-instructions.php'; ?>
+        <?php elseif ($active_tab === 'time-windows') : ?>
+            <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-time-windows.php'; ?>
         <?php elseif ($active_tab === 'delivery') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery.php'; ?>
         <?php elseif ($active_tab === 'fields') : ?>

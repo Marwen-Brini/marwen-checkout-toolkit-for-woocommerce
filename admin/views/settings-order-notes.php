@@ -4,7 +4,7 @@
  *
  * @package WooCheckoutToolkit
  *
- * @var array $order_notes_settings Order notes settings array.
+ * @var array $checkout_toolkit_order_notes_settings Order notes settings array.
  */
 
 defined('ABSPATH') || exit;
@@ -24,7 +24,7 @@ defined('ABSPATH') || exit;
                     <input type="checkbox"
                            name="checkout_toolkit_order_notes_settings[enabled]"
                            value="1"
-                           <?php checked(!empty($order_notes_settings['enabled'])); ?>>
+                           <?php checked(!empty($checkout_toolkit_order_notes_settings['enabled'])); ?>>
                     <?php esc_html_e('Enable order notes customization', 'checkout-toolkit-for-woo'); ?>
                 </label>
                 <p class="description">
@@ -41,7 +41,7 @@ defined('ABSPATH') || exit;
                 <input type="text"
                        id="wct_order_notes_label"
                        name="checkout_toolkit_order_notes_settings[custom_label]"
-                       value="<?php echo esc_attr($order_notes_settings['custom_label'] ?? ''); ?>"
+                       value="<?php echo esc_attr($checkout_toolkit_order_notes_settings['custom_label'] ?? ''); ?>"
                        class="regular-text">
                 <p class="description">
                     <?php esc_html_e('Leave empty to use the default WooCommerce label: "Order notes (optional)"', 'checkout-toolkit-for-woo'); ?>
@@ -57,7 +57,7 @@ defined('ABSPATH') || exit;
                 <textarea id="wct_order_notes_placeholder"
                           name="checkout_toolkit_order_notes_settings[custom_placeholder]"
                           rows="3"
-                          class="large-text"><?php echo esc_textarea($order_notes_settings['custom_placeholder'] ?? ''); ?></textarea>
+                          class="large-text"><?php echo esc_textarea($checkout_toolkit_order_notes_settings['custom_placeholder'] ?? ''); ?></textarea>
                 <p class="description">
                     <?php esc_html_e('Leave empty to use the default WooCommerce placeholder: "Notes about your order, e.g. special notes for delivery."', 'checkout-toolkit-for-woo'); ?>
                 </p>
@@ -73,8 +73,8 @@ defined('ABSPATH') || exit;
     <div class="wct-field-preview" style="max-width: 500px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
         <label for="checkout_toolkit_preview_notes" style="display: block; margin-bottom: 8px; font-weight: 600;">
             <?php
-            $checkout_toolkit_preview_label = !empty($order_notes_settings['custom_label'])
-                ? $order_notes_settings['custom_label']
+            $checkout_toolkit_preview_label = !empty($checkout_toolkit_order_notes_settings['custom_label'])
+                ? $checkout_toolkit_order_notes_settings['custom_label']
                 : __('Order notes (optional)', 'checkout-toolkit-for-woo');
             echo esc_html($checkout_toolkit_preview_label);
             ?>
@@ -83,8 +83,8 @@ defined('ABSPATH') || exit;
                   readonly
                   style="width: 100%; min-height: 80px; padding: 10px; border: 1px solid #8c8f94; border-radius: 4px;"
                   placeholder="<?php
-                      $checkout_toolkit_preview_placeholder = !empty($order_notes_settings['custom_placeholder'])
-                          ? $order_notes_settings['custom_placeholder']
+                      $checkout_toolkit_preview_placeholder = !empty($checkout_toolkit_order_notes_settings['custom_placeholder'])
+                          ? $checkout_toolkit_order_notes_settings['custom_placeholder']
                           : __('Notes about your order, e.g. special notes for delivery.', 'checkout-toolkit-for-woo');
                       echo esc_attr($checkout_toolkit_preview_placeholder);
                   ?>"></textarea>

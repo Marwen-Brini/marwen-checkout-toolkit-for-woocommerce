@@ -7,9 +7,7 @@
 
 defined('ABSPATH') || exit;
 
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
-$checkout_toolkit_blocked_dates = $delivery_settings['blocked_dates'] ?? [];
-// phpcs:enable
+$checkout_toolkit_blocked_dates = $checkout_toolkit_delivery_settings['blocked_dates'] ?? [];
 ?>
 
 <div class="wct-blocked-dates-manager">

@@ -7,7 +7,6 @@
 
 defined('ABSPATH') || exit;
 
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
 $checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
 $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_positions();
 $checkout_toolkit_date_formats = $checkout_toolkit_settings_obj->get_date_formats();
@@ -20,7 +19,6 @@ $checkout_toolkit_weekdays = [
     5 => __('Friday', 'checkout-toolkit-for-woo'),
     6 => __('Saturday', 'checkout-toolkit-for-woo'),
 ];
-// phpcs:enable
 ?>
 
 <table class="form-table wct-settings-table">
@@ -35,7 +33,7 @@ $checkout_toolkit_weekdays = [
                     <input type="checkbox"
                            name="checkout_toolkit_delivery_settings[enabled]"
                            value="1"
-                           <?php checked(!empty($delivery_settings['enabled'])); ?>>
+                           <?php checked(!empty($checkout_toolkit_delivery_settings['enabled'])); ?>>
                     <?php esc_html_e('Show delivery date picker on checkout', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
@@ -52,7 +50,7 @@ $checkout_toolkit_weekdays = [
                 <input type="text"
                        id="checkout_toolkit_delivery_label"
                        name="checkout_toolkit_delivery_settings[field_label]"
-                       value="<?php echo esc_attr($delivery_settings['field_label'] ?? ''); ?>"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['field_label'] ?? ''); ?>"
                        class="regular-text">
             </td>
         </tr>
@@ -67,7 +65,7 @@ $checkout_toolkit_weekdays = [
                     <input type="checkbox"
                            name="checkout_toolkit_delivery_settings[required]"
                            value="1"
-                           <?php checked(!empty($delivery_settings['required'])); ?>>
+                           <?php checked(!empty($checkout_toolkit_delivery_settings['required'])); ?>>
                     <?php esc_html_e('Make field required', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
@@ -84,7 +82,7 @@ $checkout_toolkit_weekdays = [
                 <input type="number"
                        id="checkout_toolkit_min_lead_days"
                        name="checkout_toolkit_delivery_settings[min_lead_days]"
-                       value="<?php echo esc_attr($delivery_settings['min_lead_days'] ?? 2); ?>"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['min_lead_days'] ?? 2); ?>"
                        min="0"
                        max="365"
                        class="small-text">
@@ -106,7 +104,7 @@ $checkout_toolkit_weekdays = [
                 <input type="number"
                        id="checkout_toolkit_max_future_days"
                        name="checkout_toolkit_delivery_settings[max_future_days]"
-                       value="<?php echo esc_attr($delivery_settings['max_future_days'] ?? 30); ?>"
+                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['max_future_days'] ?? 30); ?>"
                        min="1"
                        max="365"
                        class="small-text">
@@ -129,7 +127,7 @@ $checkout_toolkit_weekdays = [
                             <input type="checkbox"
                                    name="checkout_toolkit_delivery_settings[disabled_weekdays][]"
                                    value="<?php echo esc_attr($checkout_toolkit_day_num); ?>"
-                                   <?php checked(in_array($checkout_toolkit_day_num, $delivery_settings['disabled_weekdays'] ?? [], false)); ?>>
+                                   <?php checked(in_array($checkout_toolkit_day_num, $checkout_toolkit_delivery_settings['disabled_weekdays'] ?? [], false)); ?>>
                             <?php echo esc_html($checkout_toolkit_day_name); ?>
                         </label>
                     <?php endforeach; ?>
@@ -161,7 +159,7 @@ $checkout_toolkit_weekdays = [
                 <select id="checkout_toolkit_date_format" name="checkout_toolkit_delivery_settings[date_format]">
                     <?php foreach ($checkout_toolkit_date_formats as $checkout_toolkit_format => $checkout_toolkit_example) : ?>
                         <option value="<?php echo esc_attr($checkout_toolkit_format); ?>"
-                                <?php selected($delivery_settings['date_format'] ?? 'F j, Y', $checkout_toolkit_format); ?>>
+                                <?php selected($checkout_toolkit_delivery_settings['date_format'] ?? 'F j, Y', $checkout_toolkit_format); ?>>
                             <?php echo esc_html($checkout_toolkit_example); ?>
                         </option>
                     <?php endforeach; ?>
@@ -179,14 +177,14 @@ $checkout_toolkit_weekdays = [
                     <input type="radio"
                            name="checkout_toolkit_delivery_settings[first_day_of_week]"
                            value="0"
-                           <?php checked(($delivery_settings['first_day_of_week'] ?? 1) == 0); ?>>
+                           <?php checked(($checkout_toolkit_delivery_settings['first_day_of_week'] ?? 1) == 0); ?>>
                     <?php esc_html_e('Sunday', 'checkout-toolkit-for-woo'); ?>
                 </label>
                 <label>
                     <input type="radio"
                            name="checkout_toolkit_delivery_settings[first_day_of_week]"
                            value="1"
-                           <?php checked(($delivery_settings['first_day_of_week'] ?? 1) == 1); ?>>
+                           <?php checked(($checkout_toolkit_delivery_settings['first_day_of_week'] ?? 1) == 1); ?>>
                     <?php esc_html_e('Monday', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>
@@ -203,7 +201,7 @@ $checkout_toolkit_weekdays = [
                 <select id="checkout_toolkit_delivery_position" name="checkout_toolkit_delivery_settings[field_position]">
                     <?php foreach ($checkout_toolkit_positions as $checkout_toolkit_hook => $checkout_toolkit_label) : ?>
                         <option value="<?php echo esc_attr($checkout_toolkit_hook); ?>"
-                                <?php selected($delivery_settings['field_position'] ?? 'woocommerce_after_order_notes', $checkout_toolkit_hook); ?>>
+                                <?php selected($checkout_toolkit_delivery_settings['field_position'] ?? 'woocommerce_after_order_notes', $checkout_toolkit_hook); ?>>
                             <?php echo esc_html($checkout_toolkit_label); ?>
                         </option>
                     <?php endforeach; ?>
@@ -221,14 +219,14 @@ $checkout_toolkit_weekdays = [
                     <input type="checkbox"
                            name="checkout_toolkit_delivery_settings[show_in_admin]"
                            value="1"
-                           <?php checked(!empty($delivery_settings['show_in_admin'])); ?>>
+                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_in_admin'])); ?>>
                     <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
                 </label>
                 <label style="display: block;">
                     <input type="checkbox"
                            name="checkout_toolkit_delivery_settings[show_in_emails]"
                            value="1"
-                           <?php checked(!empty($delivery_settings['show_in_emails'])); ?>>
+                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_in_emails'])); ?>>
                     <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
                 </label>
             </td>

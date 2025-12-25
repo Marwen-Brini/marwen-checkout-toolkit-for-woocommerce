@@ -5,8 +5,8 @@
 Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
-**Completed:** 5
-**Progress:** 50%
+**Completed:** 7
+**Progress:** 70%
 
 ---
 
@@ -718,26 +718,166 @@ add_action('checkout_toolkit_delivery_instructions_custom_saved', function($orde
 
 ### Feature 6: Time Window Selection
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
-Allow customers to select a preferred delivery time window (Morning, Afternoon, Evening) or custom time slots defined by the store.
+Allow customers to select a preferred delivery time window (Morning, Afternoon, Evening) or custom time slots defined by the store. Only visible when "Delivery" is selected (hidden for Pickup orders).
 
-**Planned Settings:**
+**Settings:**
 | Setting | Type | Default |
 |---------|------|---------|
 | `enabled` | boolean | `false` |
 | `required` | boolean | `false` |
 | `field_label` | string | `'Preferred Time'` |
-| `time_slots` | array | `[['id' => 'morning', 'label' => 'Morning (9am-12pm)'], ...]` |
+| `time_slots` | array | `[['value' => 'morning', 'label' => 'Morning (9am-12pm)'], ...]` |
 | `show_only_with_delivery` | boolean | `true` |
+| `show_in_emails` | boolean | `true` |
+| `show_in_admin` | boolean | `true` |
 
-**Planned Meta Key:** `_wct_time_window`
+**Meta Key:** `_wct_time_window`
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **Class:** `src/WooCheckoutToolkit/Delivery/TimeWindow.php`
+   - Renders dropdown on checkout (classic checkout)
+   - Conditional visibility based on delivery method selection
+   - Listens for `wct_delivery_method_changed` event to show/hide
+   - Validates selected option is valid if required
+   - Saves selected time slot to meta
+
+2. **Admin View:** `admin/views/settings-time-windows.php`
+   - Enable/disable toggle with note about Delivery-only visibility
+   - Required checkbox
+   - Field label configuration
+   - Time slots repeater (add/remove options dynamically)
+   - Show only with delivery checkbox
+   - Show in admin/emails checkboxes
+   - Live preview section
+
+3. **Settings Registration:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Option name: `checkout_toolkit_time_window_settings`
+   - Sanitization: `sanitize_time_window_settings()`
+   - Default getter: `get_default_time_window_settings()`
+
+4. **Settings Page:** `admin/views/settings-page.php`
+   - Added "Time Windows" tab after Delivery Instructions
+
+5. **Blocks Integration:** `src/WooCheckoutToolkit/Blocks/BlocksIntegration.php`
+   - Added `time_window` to Store API schema
+   - Added `timeWindow` settings to `get_script_data()`
+   - Added `get_time_window_settings()` helper method
+   - Validates selected option and saves in `save_order_data()`
+
+6. **Frontend JS (Classic):** Inline JS in TimeWindow.php
+   - Listens for `wct_delivery_method_changed` event
+   - Shows/hides based on delivery method selection
+
+7. **Frontend JS (Blocks):** `public/js/blocks-checkout.js`
+   - Added `TimeWindowComponent` React component
+   - Dropdown select with time slot options
+   - Watches delivery method for visibility
+   - Dispatches selected value to extension data
+   - Renders at `woocommerce_before_order_notes` position
+
+8. **Display Components:**
+   - `OrderDisplay.php`: Shows time window in admin order view and meta box
+   - `EmailDisplay.php`: Includes time window in order emails (HTML and plain text)
+   - `AccountDisplay.php`: Shows time window in My Account order details
+   - All use `get_time_slot_label()` to display the label instead of value
+
+**Files Created:**
 ```
 src/WooCheckoutToolkit/Delivery/TimeWindow.php
 admin/views/settings-time-windows.php
+```
+
+**Files Modified:**
+```
+src/WooCheckoutToolkit/Main.php
+  - Added: use WooCheckoutToolkit\Delivery\TimeWindow;
+  - Added: private ?TimeWindow $time_window = null;
+  - Added: Initialization in init_frontend()
+  - Added: get_default_time_window_settings()
+  - Added: get_time_window_settings()
+  - Updated: get_blocks_script_data() with timeWindow
+  - Updated: enqueue checks to include time_window_settings
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: register_setting() for time_window_settings
+  - Added: get_default_time_window_settings()
+  - Added: sanitize_time_window_settings()
+
+admin/views/settings-page.php
+  - Added: $time_window_settings variable
+  - Added: Time Windows tab in navigation
+  - Added: Include for settings-time-windows.php
+
+src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: time_window to Store API schema
+  - Added: timeWindow to script data
+  - Added: get_time_window_settings() helper
+  - Updated: save_order_data() for time_window with validation
+
+public/js/blocks-checkout.js
+  - Added: timeWindow to destructured settings
+  - Added: TimeWindowComponent with visibility based on delivery method
+  - Updated: initPositionedFields() to render time window
+  - Updated: initExtensionData() with time_window
+
+src/WooCheckoutToolkit/Display/OrderDisplay.php
+  - Added: time_window variable and settings
+  - Added: Display logic in display_in_admin() and render_meta_box()
+  - Added: get_time_slot_label() helper method
+
+src/WooCheckoutToolkit/Display/EmailDisplay.php
+  - Added: time_window variable and settings
+  - Updated: render_html() and render_plain_text() signatures and content
+  - Added: get_time_slot_label() helper method
+
+src/WooCheckoutToolkit/Display/AccountDisplay.php
+  - Added: time_window variable and settings
+  - Added: Display logic for time window
+  - Added: get_time_slot_label() helper method
+```
+
+**Data Flow (Blocks Checkout):**
+```
+1. User selects time window from dropdown
+2. TimeWindowComponent calls setExtensionData('checkout-toolkit', 'time_window', value)
+3. On submit, Store API receives extensions['checkout-toolkit']['time_window']
+4. BlocksIntegration::save_order_data() validates against available options
+5. If valid, saves to _wct_time_window
+6. Display components read via $order->get_meta()
+```
+
+**Data Flow (Classic Checkout):**
+```
+1. User selects time window from dropdown
+2. Form submits with checkout_toolkit_time_window in POST
+3. TimeWindow::validate_time_window() validates selection
+4. TimeWindow::save_time_window() saves to _wct_time_window
+5. Display components read via $order->get_meta()
+```
+
+**Usage Example:**
+```php
+// Get time window from order
+$order = wc_get_order($order_id);
+$time_window = $order->get_meta('_wct_time_window');
+
+// Get time slot label from settings
+$settings = Main::get_instance()->get_time_window_settings();
+foreach ($settings['time_slots'] as $slot) {
+    if ($slot['value'] === $time_window) {
+        $time_label = $slot['label'];
+        break;
+    }
+}
+
+// Hook after time window saved
+add_action('checkout_toolkit_time_window_saved', function($order_id, $value) {
+    // Custom logic based on selected time
+}, 10, 2);
 ```
 
 ---
@@ -746,42 +886,228 @@ admin/views/settings-time-windows.php
 
 ### Feature 7: Store Location Selector
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
-For pickup orders, allow customers to select which store location to pick up from. Free version limited to 3 locations.
+For pickup orders, allow customers to select which store location to pick up from. Displays store details including name, address, phone, and hours. Only visible when "Pickup" is selected (hidden for Delivery orders).
 
-**Planned Settings:**
+**Settings:**
 | Setting | Type | Default |
 |---------|------|---------|
 | `enabled` | boolean | `false` |
-| `required` | boolean | `true` (when pickup selected) |
+| `required` | boolean | `true` |
 | `field_label` | string | `'Pickup Location'` |
+| `locations` | array | `[]` |
+| `show_in_emails` | boolean | `true` |
+| `show_in_admin` | boolean | `true` |
 
-**Planned Locations Array:** `checkout_toolkit_store_locations`
+**Locations Array Structure:**
 ```php
 [
     [
-        'id' => 'loc_1',
-        'name' => 'Downtown Store',
-        'address' => '123 Main St',
-        'hours' => 'Mon-Fri 9am-6pm',
-        'enabled' => true
+        'id' => 'main-store',
+        'name' => 'Main Store',
+        'address' => '123 Main Street, City, State 12345',
+        'phone' => '(555) 123-4567',
+        'hours' => 'Mon-Fri: 9am-6pm, Sat: 10am-4pm',
     ],
-    // ... max 3 in free version
+    // ... additional locations
 ]
 ```
 
-**Planned Meta Key:** `_wct_pickup_location`
+**Meta Key:** `_wct_store_location` (stores location ID)
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **Class:** `src/WooCheckoutToolkit/Pickup/StoreLocationSelector.php`
+   - Renders dropdown with configured store locations on checkout (classic)
+   - **OPPOSITE visibility** from delivery fields: Shows ONLY when Pickup selected, hidden for Delivery
+   - Listens for `wct_delivery_method_changed` event to show/hide
+   - Shows location details (address, phone, hours) when location is selected
+   - Validates that a location is selected when required
+   - Only saves to meta when Pickup is selected
+
+2. **Admin View:** `admin/views/settings-store-locations.php`
+   - Enable/disable toggle with note about Pickup-only visibility
+   - Required checkbox
+   - Field label configuration
+   - **Store locations repeater** (add/remove functionality):
+     - ID (auto-generated from name if empty)
+     - Name (required)
+     - Address
+     - Phone
+     - Hours
+   - Show in admin/emails checkboxes
+   - Live preview section
+
+3. **Settings Registration:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Option name: `checkout_toolkit_store_locations_settings`
+   - Sanitization: `sanitize_store_locations_settings()`
+   - Default getter: `get_default_store_locations_settings()`
+   - Uses `sanitize_store_locations()` helper for repeater
+
+4. **Settings Page:** `admin/views/settings-page.php`
+   - Added "Store Locations" tab after Pickup/Delivery
+
+5. **Blocks Integration:** `src/WooCheckoutToolkit/Blocks/BlocksIntegration.php`
+   - Added `store_location` to Store API schema
+   - Added `storeLocations` settings to `get_script_data()`
+   - Added `get_store_locations_settings()` helper method
+   - Validates against available locations and saves in `save_order_data()`
+   - Only saves when delivery method is 'pickup'
+
+6. **Frontend JS (Classic):** Inline JS in StoreLocationSelector.php
+   - Listens for `wct_delivery_method_changed` event
+   - Shows for pickup, hides for delivery (opposite of delivery fields)
+   - Shows location details when a location is selected
+
+7. **Frontend JS (Blocks):** `public/js/blocks-checkout.js`
+   - Added `StoreLocationComponent` React component
+   - Dropdown with configured locations
+   - Shows location details (address, phone, hours) when selected
+   - **OPPOSITE visibility**: `isVisible = (method === 'pickup')`
+   - Dispatches selected value to extension data
+   - Renders at `woocommerce_before_order_notes` position
+
+8. **Display Components:**
+   - `OrderDisplay.php`: Shows full location details in admin order view and meta box
+   - `EmailDisplay.php`: Includes location details in order emails (HTML and plain text)
+   - `AccountDisplay.php`: Shows location details in My Account order details
+   - All use `get_store_location_by_id()` to display full location data
+
+**Files Created:**
 ```
-src/WooCheckoutToolkit/Pickup/LocationManager.php  // CRUD for locations
-src/WooCheckoutToolkit/Pickup/LocationSelector.php // Frontend selector
-admin/views/settings-locations.php
+src/WooCheckoutToolkit/Pickup/StoreLocationSelector.php
+admin/views/settings-store-locations.php
 ```
 
-**Constraint:** `const MAX_FREE_LOCATIONS = 3;`
+**Files Modified:**
+```
+src/WooCheckoutToolkit/Main.php
+  - Added: use WooCheckoutToolkit\Pickup\StoreLocationSelector;
+  - Added: private ?StoreLocationSelector $store_location_selector = null;
+  - Added: Initialization in init_frontend()
+  - Added: get_default_store_locations_settings()
+  - Added: get_store_locations_settings()
+  - Updated: get_blocks_script_data() with storeLocations
+  - Updated: enqueue checks to include store_locations_settings
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: register_setting() for store_locations_settings
+  - Added: get_default_store_locations_settings()
+  - Added: sanitize_store_locations_settings()
+  - Added: sanitize_store_locations() helper
+
+admin/views/settings-page.php
+  - Added: $checkout_toolkit_store_locations_settings variable
+  - Added: Store Locations tab in navigation
+  - Added: Include for settings-store-locations.php
+
+src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: store_location to Store API schema
+  - Added: storeLocations to script data
+  - Added: get_store_locations_settings() helper
+  - Updated: save_order_data() for store_location (validates and saves only for pickup)
+
+public/js/blocks-checkout.js
+  - Added: storeLocations to destructured settings
+  - Added: StoreLocationComponent with opposite visibility logic
+  - Updated: initPositionedFields() to render store location
+  - Updated: initExtensionData() with store_location
+
+src/WooCheckoutToolkit/Display/OrderDisplay.php
+  - Added: store_location variable and settings
+  - Added: Display logic in display_in_admin() and render_meta_box()
+  - Added: get_store_location_by_id() helper method
+
+src/WooCheckoutToolkit/Display/EmailDisplay.php
+  - Added: store_location variable and settings
+  - Updated: render_html() and render_plain_text() signatures and content
+  - Added: get_store_location_by_id() helper method
+
+src/WooCheckoutToolkit/Display/AccountDisplay.php
+  - Added: store_location variable and settings
+  - Added: Display logic for store location
+  - Added: get_store_location_by_id() helper method
+```
+
+**Key Implementation Note - Opposite Visibility:**
+Unlike delivery-related fields (Delivery Date, Time Window, Delivery Instructions) which show when Delivery is selected and hide for Pickup, the Store Location Selector has **opposite visibility**:
+- Shows when Pickup is selected
+- Hides when Delivery is selected
+
+```javascript
+// Classic checkout
+$(document.body).on('wct_delivery_method_changed', function(e, method) {
+    if (method === 'pickup') {
+        $('#wct-store-location-wrapper').slideDown(200);
+    } else {
+        $('#wct-store-location-wrapper').slideUp(200);
+    }
+});
+
+// Blocks checkout
+const [isVisible, setIsVisible] = useState(initialMethod === 'pickup');
+// On method change: setIsVisible(method === 'pickup');
+```
+
+**Data Flow (Blocks Checkout):**
+```
+1. User selects Pickup as delivery method
+2. StoreLocationComponent becomes visible
+3. User selects store from dropdown
+4. StoreLocationComponent calls setExtensionData('checkout-toolkit', 'store_location', locationId)
+5. On submit, Store API receives extensions['checkout-toolkit']['store_location']
+6. BlocksIntegration::save_order_data() validates delivery method is pickup
+7. If pickup, validates location ID and saves to _wct_store_location
+8. Display components read via $order->get_meta() and look up full location data
+```
+
+**Data Flow (Classic Checkout):**
+```
+1. User selects Pickup as delivery method
+2. Store location wrapper becomes visible via jQuery
+3. User selects store from dropdown
+4. Form submits with checkout_toolkit_store_location in POST
+5. StoreLocationSelector::validate_field() checks if pickup and validates selection
+6. StoreLocationSelector::save_field() checks if pickup and saves to _wct_store_location
+7. Display components read via $order->get_meta() and look up full location data
+```
+
+**Display Format:**
+```
+Admin Order View / Emails / My Account:
+
+Pickup Location:
+Main Store
+123 Main Street, City, State 12345
+Phone: (555) 123-4567
+Hours: Mon-Fri: 9am-6pm, Sat: 10am-4pm
+```
+
+**Usage Example:**
+```php
+// Get store location from order
+$order = wc_get_order($order_id);
+$location_id = $order->get_meta('_wct_store_location');
+
+// Get full location data from settings
+$settings = Main::get_instance()->get_store_locations_settings();
+foreach ($settings['locations'] as $location) {
+    if ($location['id'] === $location_id) {
+        $store_name = $location['name'];
+        $store_address = $location['address'];
+        $store_phone = $location['phone'];
+        $store_hours = $location['hours'];
+        break;
+    }
+}
+
+// Hook after store location saved
+add_action('checkout_toolkit_store_location_saved', function($order_id, $location_id) {
+    // Custom logic based on selected store
+}, 10, 2);
+```
 
 ---
 
@@ -891,8 +1217,8 @@ templates/checkout/gift-options.php
 | 3 | 1 | Field type options | ✅ Completed | Medium |
 | 4 | 2 | Pickup vs Delivery toggle | ✅ Completed | High |
 | 5 | 2 | Delivery instructions | ✅ Completed | Medium |
-| 6 | 2 | Time window selection | ⏳ Pending | Medium |
-| 7 | 3 | Store location selector | ⏳ Pending | High |
+| 6 | 2 | Time window selection | ✅ Completed | Medium |
+| 7 | 3 | Store location selector | ✅ Completed | High |
 | 8 | 3 | Estimated delivery display | ⏳ Pending | Low |
 | 9 | 4 | Product/category visibility | ⏳ Pending | Medium |
 | 10 | 4 | Gift message option | ⏳ Pending | Low |
@@ -900,6 +1226,25 @@ templates/checkout/gift-options.php
 ---
 
 ## Technical Reference
+
+### Coding Standards
+
+All template variables in `admin/views/*.php` files must use the `$checkout_toolkit_` prefix to comply with WordPress Plugin Check requirements.
+
+Example:
+```php
+// Correct - uses plugin prefix
+$checkout_toolkit_settings = get_option('checkout_toolkit_delivery_settings');
+foreach ($checkout_toolkit_positions as $checkout_toolkit_hook => $checkout_toolkit_label) {
+    // ...
+}
+
+// Incorrect - will fail plugin check
+$settings = get_option('checkout_toolkit_delivery_settings');
+foreach ($positions as $hook => $label) {
+    // ...
+}
+```
 
 ### Available Hook Positions
 ```php
@@ -961,6 +1306,27 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2025-12-25 (Session 4)
+- Completed Feature 7: Store Location Selector
+  - Admin can configure multiple store locations (name, address, phone, hours)
+  - Dropdown appears on checkout ONLY when Pickup is selected (hidden for Delivery)
+  - **OPPOSITE visibility** from delivery-related fields
+  - Shows location details when selected
+  - Selected location saved to order meta `_wct_store_location`
+  - Displayed in admin orders, emails, and My Account with full location details
+  - Works in both Classic and Blocks checkout
+- Progress: 70% (7/10 features complete)
+
+### 2025-12-25 (Session 3)
+- Completed Feature 6: Time Window Selection
+  - Dropdown field for selecting preferred delivery time window
+  - Default time slots: Morning (9am-12pm), Afternoon (12pm-5pm), Evening (5pm-8pm)
+  - Configurable time slots with add/remove repeater in admin
+  - Conditional visibility: only shown when Delivery is selected, hidden for Pickup
+  - Works in both Classic and Blocks checkout
+  - Displayed in admin orders, emails, and My Account
+- Progress: 60% (6/10 features complete)
 
 ### 2025-12-25 (Session 2)
 - Completed Feature 5: Delivery Instructions Field

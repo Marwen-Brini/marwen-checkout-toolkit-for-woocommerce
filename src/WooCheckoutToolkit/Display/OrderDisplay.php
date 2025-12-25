@@ -44,6 +44,8 @@ class OrderDisplay
 
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
+        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
@@ -51,6 +53,8 @@ class OrderDisplay
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
         $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
+        $time_window = $order->get_meta('_wct_time_window');
+        $store_location = $order->get_meta('_wct_store_location');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
@@ -62,6 +66,25 @@ class OrderDisplay
                 : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
             echo '<p><strong>' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . ':</strong><br>';
             echo esc_html($method_label) . '</p>';
+        }
+
+        // Display store location (only when pickup)
+        if (!empty($store_location) && !empty($store_locations_settings['show_in_admin'])) {
+            $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
+            if ($location) {
+                echo '<p><strong>' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+                echo '<strong>' . esc_html($location['name']) . '</strong><br>';
+                if (!empty($location['address'])) {
+                    echo esc_html($location['address']) . '<br>';
+                }
+                if (!empty($location['phone'])) {
+                    echo esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['phone']) . '<br>';
+                }
+                if (!empty($location['hours'])) {
+                    echo esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['hours']);
+                }
+                echo '</p>';
+            }
         }
 
         // Display delivery instructions
@@ -78,6 +101,13 @@ class OrderDisplay
             }
 
             echo '</p>';
+        }
+
+        // Display time window
+        if (!empty($time_window) && !empty($time_window_settings['show_in_admin'])) {
+            $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
+            echo '<p><strong>' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo esc_html($time_label) . '</p>';
         }
 
         // Display delivery date
@@ -140,17 +170,21 @@ class OrderDisplay
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
         $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
+        $time_window = $order->get_meta('_wct_time_window');
+        $store_location = $order->get_meta('_wct_store_location');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
-        if (empty($delivery_method) && empty($delivery_instructions_preset) && empty($delivery_instructions_custom) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
+        if (empty($delivery_method) && empty($delivery_instructions_preset) && empty($delivery_instructions_custom) && empty($time_window) && empty($store_location) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
             echo '<p>' . esc_html__('No additional checkout data.', 'checkout-toolkit-for-woo') . '</p>';
             return;
         }
 
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
         $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
+        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
@@ -166,6 +200,28 @@ class OrderDisplay
             echo '<span class="delivery-label">' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . '</span>';
             echo '<span class="delivery-value">' . esc_html($method_label) . '</span>';
             echo '</div>';
+        }
+
+        // Display store location (only when pickup)
+        if (!empty($store_location)) {
+            $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
+            if ($location) {
+                echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
+                echo '<span class="delivery-label">' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo')) . '</span>';
+                echo '<span class="delivery-value" style="margin-top: 5px;">';
+                echo '<strong>' . esc_html($location['name']) . '</strong><br>';
+                if (!empty($location['address'])) {
+                    echo esc_html($location['address']) . '<br>';
+                }
+                if (!empty($location['phone'])) {
+                    echo esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['phone']) . '<br>';
+                }
+                if (!empty($location['hours'])) {
+                    echo esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['hours']);
+                }
+                echo '</span>';
+                echo '</div>';
+            }
         }
 
         // Display delivery instructions
@@ -184,6 +240,15 @@ class OrderDisplay
             }
 
             echo '</span>';
+            echo '</div>';
+        }
+
+        // Display time window
+        if (!empty($time_window)) {
+            $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
+            echo '<div class="delivery-row">';
+            echo '<span class="delivery-label">' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value">' . esc_html($time_label) . '</span>';
             echo '</div>';
         }
 
@@ -343,5 +408,45 @@ class OrderDisplay
         }
 
         return $value;
+    }
+
+    /**
+     * Get time slot label by value
+     *
+     * @param string $value    Time slot value.
+     * @param array  $settings Time window settings.
+     * @return string Time slot label or value if not found.
+     */
+    private function get_time_slot_label(string $value, array $settings): string
+    {
+        $time_slots = $settings['time_slots'] ?? [];
+
+        foreach ($time_slots as $slot) {
+            if (($slot['value'] ?? '') === $value) {
+                return $slot['label'] ?? $value;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get store location by ID
+     *
+     * @param string $location_id Location ID.
+     * @param array  $settings    Store locations settings.
+     * @return array|null Location data or null if not found.
+     */
+    private function get_store_location_by_id(string $location_id, array $settings): ?array
+    {
+        $locations = $settings['locations'] ?? [];
+
+        foreach ($locations as $location) {
+            if (($location['id'] ?? '') === $location_id) {
+                return $location;
+            }
+        }
+
+        return null;
     }
 }

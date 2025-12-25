@@ -108,6 +108,26 @@ class Settings
                 'default' => $this->get_default_delivery_instructions_settings(),
             ]
         );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_time_window_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_time_window_settings'],
+                'default' => $this->get_default_time_window_settings(),
+            ]
+        );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_store_locations_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_store_locations_settings'],
+                'default' => $this->get_default_store_locations_settings(),
+            ]
+        );
     }
 
     /**
@@ -301,6 +321,136 @@ class Settings
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
         ];
+    }
+
+    /**
+     * Get default time window settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_time_window_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_label' => 'Preferred Time',
+            'time_slots' => [
+                ['value' => 'morning', 'label' => 'Morning (9am - 12pm)'],
+                ['value' => 'afternoon', 'label' => 'Afternoon (12pm - 5pm)'],
+                ['value' => 'evening', 'label' => 'Evening (5pm - 8pm)'],
+            ],
+            'show_only_with_delivery' => true,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Sanitize time window settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_time_window_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_time_window_settings', $this->get_default_time_window_settings());
+        }
+
+        $defaults = $this->get_default_time_window_settings();
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'required' => !empty($input['required']),
+            'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
+            'time_slots' => $this->sanitize_select_options($input['time_slots'] ?? $defaults['time_slots']),
+            'show_only_with_delivery' => !empty($input['show_only_with_delivery']),
+            'show_in_emails' => !empty($input['show_in_emails']),
+            'show_in_admin' => !empty($input['show_in_admin']),
+        ];
+    }
+
+    /**
+     * Get default store locations settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_store_locations_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => true,
+            'field_label' => 'Pickup Location',
+            'locations' => [],
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Sanitize store locations settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_store_locations_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_store_locations_settings', $this->get_default_store_locations_settings());
+        }
+
+        $defaults = $this->get_default_store_locations_settings();
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'required' => !empty($input['required']),
+            'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
+            'locations' => $this->sanitize_store_locations($input['locations'] ?? []),
+            'show_in_emails' => !empty($input['show_in_emails']),
+            'show_in_admin' => !empty($input['show_in_admin']),
+        ];
+    }
+
+    /**
+     * Sanitize store locations array
+     *
+     * @param array $locations Raw locations array.
+     * @return array Sanitized locations.
+     */
+    private function sanitize_store_locations(array $locations): array
+    {
+        $sanitized = [];
+
+        foreach ($locations as $location) {
+            if (!is_array($location)) {
+                continue;
+            }
+
+            $name = sanitize_text_field($location['name'] ?? '');
+
+            // Skip locations without a name.
+            if (empty($name)) {
+                continue;
+            }
+
+            // Generate ID from name if not provided.
+            $id = sanitize_key($location['id'] ?? '');
+            if (empty($id)) {
+                $id = sanitize_key($name);
+            }
+
+            $sanitized[] = [
+                'id' => $id,
+                'name' => $name,
+                'address' => sanitize_textarea_field($location['address'] ?? ''),
+                'phone' => sanitize_text_field($location['phone'] ?? ''),
+                'hours' => sanitize_textarea_field($location['hours'] ?? ''),
+            ];
+        }
+
+        return $sanitized;
     }
 
     /**

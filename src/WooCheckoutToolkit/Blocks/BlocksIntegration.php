@@ -73,6 +73,8 @@ class BlocksIntegration implements IntegrationInterface
         $field_2_settings = $this->get_field_2_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
         $delivery_instructions_settings = $this->get_delivery_instructions_settings();
+        $time_window_settings = $this->get_time_window_settings();
+        $store_locations_settings = $this->get_store_locations_settings();
 
         return [
             'orderNotes' => [
@@ -97,6 +99,19 @@ class BlocksIntegration implements IntegrationInterface
                 'customLabel' => $delivery_instructions_settings['custom_label'],
                 'customPlaceholder' => $delivery_instructions_settings['custom_placeholder'],
                 'maxLength' => $delivery_instructions_settings['max_length'],
+            ],
+            'timeWindow' => [
+                'enabled' => $time_window_settings['enabled'],
+                'required' => $time_window_settings['required'],
+                'fieldLabel' => $time_window_settings['field_label'],
+                'timeSlots' => $time_window_settings['time_slots'],
+                'showOnlyWithDelivery' => $time_window_settings['show_only_with_delivery'],
+            ],
+            'storeLocations' => [
+                'enabled' => $store_locations_settings['enabled'],
+                'required' => $store_locations_settings['required'],
+                'fieldLabel' => $store_locations_settings['field_label'],
+                'locations' => $store_locations_settings['locations'],
             ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
@@ -188,6 +203,30 @@ class BlocksIntegration implements IntegrationInterface
     {
         $defaults = (new Settings())->get_default_delivery_instructions_settings();
         $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get time window settings
+     *
+     * @return array Settings array.
+     */
+    private function get_time_window_settings(): array
+    {
+        $defaults = (new Settings())->get_default_time_window_settings();
+        $settings = get_option('checkout_toolkit_time_window_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get store locations settings
+     *
+     * @return array Settings array.
+     */
+    private function get_store_locations_settings(): array
+    {
+        $defaults = (new Settings())->get_default_store_locations_settings();
+        $settings = get_option('checkout_toolkit_store_locations_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -289,6 +328,18 @@ class BlocksIntegration implements IntegrationInterface
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
+            'time_window' => [
+                'description' => __('Preferred time window', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
+            'store_location' => [
+                'description' => __('Pickup store location', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
             'delivery_date' => [
                 'description' => __('Preferred delivery date', 'checkout-toolkit-for-woo'),
                 'type' => ['string', 'null'],
@@ -366,6 +417,44 @@ class BlocksIntegration implements IntegrationInterface
 
                 $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
                 do_action('checkout_toolkit_delivery_instructions_custom_saved', $order->get_id(), $custom);
+            }
+        }
+
+        // Save time window (only if not pickup and show_only_with_delivery is true)
+        if (!empty($data['time_window'])) {
+            $time_window_settings = $this->get_time_window_settings();
+            $show_only_delivery = $time_window_settings['show_only_with_delivery'] ?? true;
+            $should_save = !$show_only_delivery || $delivery_method !== 'pickup';
+
+            if ($should_save) {
+                $time_window = sanitize_key($data['time_window']);
+
+                // Validate against available options
+                $valid_values = array_column($time_window_settings['time_slots'] ?? [], 'value');
+                if (in_array($time_window, $valid_values, true)) {
+                    $order->update_meta_data('_wct_time_window', $time_window);
+                    do_action('checkout_toolkit_time_window_saved', $order->get_id(), $time_window);
+                }
+            }
+        }
+
+        // Save store location (only if pickup is selected)
+        if (!empty($data['store_location']) && $current_delivery_method === 'pickup') {
+            $store_location_settings = $this->get_store_locations_settings();
+            $store_location = sanitize_key($data['store_location']);
+
+            // Validate against available locations
+            $valid_locations = array_column($store_location_settings['locations'] ?? [], 'id');
+            if (in_array($store_location, $valid_locations, true)) {
+                $order->update_meta_data('_wct_store_location', $store_location);
+
+                /**
+                 * Action fired after store location is saved from blocks checkout.
+                 *
+                 * @param int $order_id The order ID.
+                 * @param string $store_location The store location ID.
+                 */
+                do_action('checkout_toolkit_store_location_saved', $order->get_id(), $store_location);
             }
         }
 
