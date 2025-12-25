@@ -218,8 +218,17 @@ class DeliveryMethod
      */
     private function get_posted_value(): string
     {
+        // Verify WooCommerce checkout nonce
+        $nonce = isset($_POST['woocommerce-process-checkout-nonce'])
+            ? sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce']))
+            : '';
+
+        if (!wp_verify_nonce($nonce, 'woocommerce-process_checkout')) {
+            return $this->settings['default_method'] ?? 'delivery';
+        }
+
         $value = isset($_POST['checkout_toolkit_delivery_method'])
-            ? sanitize_key($_POST['checkout_toolkit_delivery_method'])
+            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_method']))
             : '';
 
         // Default to delivery if not set

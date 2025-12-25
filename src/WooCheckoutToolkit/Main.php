@@ -190,11 +190,18 @@ final class Main
             return;
         }
 
+        // Register the integration with WooCommerce Blocks IntegrationRegistry
+        add_action('woocommerce_blocks_checkout_block_registration', function ($integration_registry) {
+            $integration = new BlocksIntegration();
+            $integration_registry->register($integration);
+            Logger::debug('Blocks integration registered with IntegrationRegistry');
+        });
+
         // Register Store API endpoint for saving data
         add_action('woocommerce_blocks_loaded', function () {
             $integration = new BlocksIntegration();
             $integration->initialize();
-            Logger::debug('Blocks integration initialized');
+            Logger::debug('Blocks Store API initialized');
         });
 
         // Enqueue blocks assets
@@ -301,6 +308,7 @@ final class Main
                 'enabled' => $delivery_settings['enabled'],
                 'required' => $delivery_settings['required'],
                 'label' => $delivery_settings['field_label'],
+                'position' => $delivery_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'minLeadDays' => $delivery_settings['min_lead_days'],
                 'maxFutureDays' => $delivery_settings['max_future_days'],
                 'disabledWeekdays' => array_map('intval', $delivery_settings['disabled_weekdays']),
@@ -314,6 +322,7 @@ final class Main
                 'type' => $field_settings['field_type'],
                 'label' => $field_settings['field_label'],
                 'placeholder' => $field_settings['field_placeholder'],
+                'position' => $field_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'maxLength' => $field_settings['max_length'],
                 'checkboxLabel' => $field_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_settings['select_options'] ?? [],
@@ -324,6 +333,7 @@ final class Main
                 'type' => $field_2_settings['field_type'],
                 'label' => $field_2_settings['field_label'],
                 'placeholder' => $field_2_settings['field_placeholder'],
+                'position' => $field_2_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'maxLength' => $field_2_settings['max_length'],
                 'checkboxLabel' => $field_2_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_2_settings['select_options'] ?? [],
@@ -459,7 +469,10 @@ final class Main
             CHECKOUT_TOOLKIT_VERSION
         );
 
-        // Flatpickr JS
+        // Build dependencies array - flatpickr only needed if delivery date enabled
+        $checkout_js_deps = ['jquery'];
+
+        // Flatpickr JS (only if delivery date enabled)
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
                 'flatpickr',
@@ -468,13 +481,14 @@ final class Main
                 '4.6.13',
                 true
             );
+            $checkout_js_deps[] = 'flatpickr';
         }
 
         // Main checkout JS
         wp_enqueue_script(
             'wct-checkout',
             CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/checkout.js',
-            ['jquery', 'flatpickr'],
+            $checkout_js_deps,
             CHECKOUT_TOOLKIT_VERSION,
             true
         );

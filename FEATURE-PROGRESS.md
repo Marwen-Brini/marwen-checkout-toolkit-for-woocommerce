@@ -5,8 +5,8 @@
 Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
-**Completed:** 2
-**Progress:** 20%
+**Completed:** 4
+**Progress:** 40%
 
 ---
 
@@ -268,49 +268,105 @@ add_action('checkout_toolkit_custom_field_2_saved', function($order_id, $value) 
 
 ### Feature 3: Field Type Options
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
 Extend custom fields to support multiple input types: text, textarea, checkbox, and select (dropdown). This provides more flexibility in the type of information collected.
 
-**Planned Settings Addition:**
+**Settings Addition:**
 | Setting | Type | Options |
 |---------|------|---------|
 | `field_type` | string | `'text'`, `'textarea'`, `'checkbox'`, `'select'` |
 | `select_options` | array | For select type: `[['value' => '', 'label' => '']]` |
 | `checkbox_label` | string | Label shown next to checkbox |
 
-**Planned Implementation:**
+**Implementation Details:**
 
-1. **Update Settings:**
-   - Add radio buttons for field type selection
-   - Add conditional UI for select options (repeater field)
-   - Add checkbox label input
+1. **Settings Updates:** `admin/views/settings-fields.php`
+   - Radio buttons for field type selection (text, textarea, checkbox, select)
+   - Conditional UI showing checkbox label input when checkbox selected
+   - JavaScript-powered repeater for select options (add/remove options dynamically)
+   - Real-time UI updates when field type changes
 
-2. **Update OrderFields.php & OrderFields2.php:**
-   - Handle different field types in render methods
-   - Adjust validation per type (checkbox = boolean, select = in_array)
-   - Adjust sanitization per type
+2. **OrderFields.php & OrderFields2.php Updates:**
+   - Added `get_select_options()` method for parsing select options
+   - Updated `render_custom_field()` with switch statement for different types
+   - Checkbox renders as labeled checkbox input
+   - Select renders as dropdown with configured options
+   - Validation adjusted per type (checkbox accepts '1' or empty, select validates against options)
+   - Added `get_posted_value()` method to centralize $_POST access
 
-3. **Update blocks-checkout.js:**
-   - Add checkbox component rendering
-   - Add select/dropdown component rendering
-   - Handle different value types
+3. **Blocks Integration:**
+   - `BlocksIntegration.php` passes `checkboxLabel` and `selectOptions` to frontend
+   - Save logic handles checkbox type (stores '1' or '0')
+   - Select options validated server-side
 
-4. **Update Display Components:**
-   - Format checkbox as Yes/No
-   - Format select as selected label
+4. **blocks-checkout.js Updates:**
+   - Added checkbox rendering with label in both `CustomFieldComponent` and `CustomField2Component`
+   - Added select/dropdown rendering with placeholder option
+   - Handle different value types (checkbox = '1'/'' toggle)
 
-**Files to Modify:**
+5. **Display Components Updates:**
+   - `OrderDisplay.php`: Added `format_field_value()` method
+   - `EmailDisplay.php`: Added `format_field_value()` method
+   - Checkbox displays as "Yes" / "No"
+   - Select displays the option label instead of value
+
+**Files Modified:**
 ```
 admin/views/settings-fields.php
+  - Complete rewrite with field type selector
+  - Added checkbox label input
+  - Added select options repeater with JavaScript
+
 src/WooCheckoutToolkit/Fields/OrderFields.php
+  - Added: get_select_options() method
+  - Added: get_posted_value() method
+  - Updated: render_custom_field() with switch for types
+  - Updated: validate_field() for checkbox/select validation
+  - Updated: save_field() for checkbox handling
+
 src/WooCheckoutToolkit/Fields/OrderFields2.php
+  - Same updates as OrderFields.php
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: sanitize_select_options() method
+  - Updated: sanitize_field_settings() for checkbox_label and select_options
+  - Updated: sanitize_field_2_settings() similarly
+
 src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: checkboxLabel and selectOptions to script data
+  - Updated: save_order_data() for checkbox type handling
+
 public/js/blocks-checkout.js
+  - Added: checkbox rendering in renderField()
+  - Added: select rendering in renderField()
+  - Updated: handleChange for checkbox toggle
+
 src/WooCheckoutToolkit/Display/OrderDisplay.php
+  - Added: format_field_value() method for Yes/No and label display
+
 src/WooCheckoutToolkit/Display/EmailDisplay.php
-src/WooCheckoutToolkit/Display/AccountDisplay.php
+  - Added: format_field_value() method for Yes/No and label display
+
+src/WooCheckoutToolkit/Main.php
+  - Added: checkbox_label and select_options to default field settings
+```
+
+**Usage Example:**
+```php
+// Checkbox field - stored value is '1' or '0'
+$is_checked = $order->get_meta('_wct_custom_field') === '1';
+
+// Select field - stored value is the option value
+$selected_option = $order->get_meta('_wct_custom_field');
+$settings = Main::get_instance()->get_field_settings();
+foreach ($settings['select_options'] as $option) {
+    if ($option['value'] === $selected_option) {
+        $label = $option['label'];
+        break;
+    }
+}
 ```
 
 ---
@@ -319,32 +375,154 @@ src/WooCheckoutToolkit/Display/AccountDisplay.php
 
 ### Feature 4: Pickup vs Delivery Toggle
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
 Allow customers to choose between pickup and delivery at checkout. This choice affects which other fields are shown (delivery shows date/time/instructions, pickup shows location selector).
 
-**Planned Settings:**
+**Settings:**
 | Setting | Type | Default |
 |---------|------|---------|
 | `enabled` | boolean | `false` |
 | `default_method` | string | `'delivery'` |
+| `field_label` | string | `'Fulfillment Method'` |
 | `delivery_label` | string | `'Delivery'` |
 | `pickup_label` | string | `'Pickup'` |
 | `show_as` | string | `'toggle'` or `'radio'` |
+| `show_in_admin` | boolean | `true` |
+| `show_in_emails` | boolean | `true` |
 
-**Planned Meta Key:** `_wct_delivery_method` (values: `'delivery'` or `'pickup'`)
+**Meta Key:** `_wct_delivery_method` (values: `'delivery'` or `'pickup'`)
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **Class:** `src/WooCheckoutToolkit/Delivery/DeliveryMethod.php`
+   - Renders toggle or radio buttons on checkout (classic checkout)
+   - Hooks into `woocommerce_before_order_notes` at priority 5
+   - Validates that a valid method is selected
+   - Saves to `_wct_delivery_method` order meta
+   - Inline CSS for toggle button styling
+   - jQuery for toggle button active state management
+   - Fires `wct_delivery_method_changed` event for other components
+
+2. **Admin View:** `admin/views/settings-delivery-method.php`
+   - Enable/disable toggle
+   - Default method selection (radio)
+   - Field label, delivery label, pickup label inputs
+   - Display style selection (toggle buttons vs radio)
+   - Show in admin/emails checkboxes
+   - Live preview section with working toggle/radio demo
+   - JavaScript for real-time preview updates
+
+3. **Settings Registration:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Option name: `checkout_toolkit_delivery_method_settings`
+   - Sanitization: `sanitize_delivery_method_settings()`
+   - Default getter: `get_default_delivery_method_settings()`
+
+4. **Settings Page:** `admin/views/settings-page.php`
+   - Added "Pickup/Delivery" as the first tab (now default tab)
+   - Default tab changed from 'delivery' to 'delivery-method'
+
+5. **Blocks Integration:** `src/WooCheckoutToolkit/Blocks/BlocksIntegration.php`
+   - Added `delivery_method` to Store API schema
+   - Added `deliveryMethod` settings to `get_script_data()`
+   - Added `get_delivery_method_settings()` helper method
+   - Saves delivery method in `save_order_data()`
+
+6. **Frontend JS:** `public/js/blocks-checkout.js`
+   - Added `DeliveryMethodComponent` React component
+   - Renders toggle buttons or radio buttons based on settings
+   - Dispatches extension data on change
+   - Updated `CheckoutToolkitFields` to include delivery method
+
+7. **Display Components:**
+   - `OrderDisplay.php`: Shows delivery method in admin order view and meta box
+   - `EmailDisplay.php`: Includes delivery method in order emails (HTML and plain text)
+   - Both display the configured label (Delivery/Pickup) instead of raw value
+
+8. **Main Class:** `src/WooCheckoutToolkit/Main.php`
+   - Added `get_default_delivery_method_settings()` method
+   - Added `get_delivery_method_settings()` method
+   - Updated `get_blocks_script_data()` to include deliveryMethod
+   - Initializes DeliveryMethod in `init_frontend()`
+
+**Files Created:**
 ```
 src/WooCheckoutToolkit/Delivery/DeliveryMethod.php
 admin/views/settings-delivery-method.php
-templates/checkout/delivery-method-toggle.php
+```
+
+**Files Modified:**
+```
+src/WooCheckoutToolkit/Main.php
+  - Added: use WooCheckoutToolkit\Delivery\DeliveryMethod;
+  - Added: private ?DeliveryMethod $delivery_method = null;
+  - Added: Initialization in init_frontend()
+  - Added: get_default_delivery_method_settings()
+  - Added: get_delivery_method_settings()
+  - Updated: get_blocks_script_data() with deliveryMethod
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: register_setting() for delivery_method_settings
+  - Added: get_default_delivery_method_settings()
+  - Added: sanitize_delivery_method_settings()
+  - Updated: default tab to 'delivery-method'
+
+admin/views/settings-page.php
+  - Added: $delivery_method_settings variable
+  - Added: Pickup/Delivery tab (first position)
+  - Added: Include for settings-delivery-method.php
+
+src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: delivery_method to Store API schema
+  - Added: deliveryMethod to script data
+  - Added: get_delivery_method_settings() helper
+  - Updated: save_order_data() for delivery_method
+
+public/js/blocks-checkout.js
+  - Added: deliveryMethod to destructured settings
+  - Added: DeliveryMethodComponent with toggle/radio rendering
+  - Updated: CheckoutToolkitFields to render delivery method
+  - Updated: Extension data initialization
+
+src/WooCheckoutToolkit/Display/OrderDisplay.php
+  - Added: $delivery_method_settings and $delivery_method variables
+  - Added: Display logic for delivery method in display_in_admin()
+  - Added: Display logic for delivery method in render_meta_box()
+
+src/WooCheckoutToolkit/Display/EmailDisplay.php
+  - Added: $delivery_method_settings and $delivery_method variables
+  - Updated: Method signatures for render_html() and render_plain_text()
+  - Added: Display logic for delivery method
 ```
 
 **Frontend Behavior:**
-- When PICKUP selected: Hide delivery date, time window, instructions; Show location selector
-- When DELIVERY selected: Show delivery date, time window, instructions; Hide location selector
+- When PICKUP selected: Future features will hide delivery date, time window, instructions; Show location selector
+- When DELIVERY selected: Future features will show delivery date, time window, instructions; Hide location selector
+- Event `wct_delivery_method_changed` fired on change for other components to react
+
+**Usage Example:**
+```php
+// Get delivery method from order
+$order = wc_get_order($order_id);
+$method = $order->get_meta('_wct_delivery_method');
+
+if ($method === 'pickup') {
+    // Handle pickup order
+} else {
+    // Handle delivery order (default)
+}
+
+// Get settings
+$settings = Main::get_instance()->get_delivery_method_settings();
+$delivery_label = $settings['delivery_label'];
+$pickup_label = $settings['pickup_label'];
+
+// Hook after delivery method saved
+add_action('checkout_toolkit_delivery_method_saved', function($order_id, $method) {
+    // Custom logic based on method
+}, 10, 2);
+```
 
 ---
 
@@ -548,8 +726,8 @@ templates/checkout/gift-options.php
 |---|-------|---------|--------|----------|
 | 1 | 1 | Order notes placeholder | ✅ Completed | Low |
 | 2 | 1 | Second custom field | ✅ Completed | Medium |
-| 3 | 1 | Field type options | ⏳ Pending | Medium |
-| 4 | 2 | Pickup vs Delivery toggle | ⏳ Pending | High |
+| 3 | 1 | Field type options | ✅ Completed | Medium |
+| 4 | 2 | Pickup vs Delivery toggle | ✅ Completed | High |
 | 5 | 2 | Delivery instructions | ⏳ Pending | Medium |
 | 6 | 2 | Time window selection | ⏳ Pending | Medium |
 | 7 | 3 | Store location selector | ⏳ Pending | High |
@@ -621,6 +799,11 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2024-12-24
+- Completed Feature 3: Field Type Options (text, textarea, checkbox, select)
+- Completed Feature 4: Pickup vs Delivery Toggle
+- Progress: 40% (4/10 features complete)
 
 ### 2024-12-23
 - Completed Feature 1: Order Notes Placeholder Customization

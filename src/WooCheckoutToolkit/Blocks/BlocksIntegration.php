@@ -35,18 +35,20 @@ class BlocksIntegration implements IntegrationInterface
      */
     public function initialize(): void
     {
-        // Only register Store API data - scripts are enqueued via Main::enqueue_blocks_assets()
+        // Scripts are registered via Main::enqueue_blocks_assets() at the proper wp_enqueue_scripts hook
         $this->register_store_api_data();
     }
 
     /**
      * Get script handles to register
      *
+     * Scripts are enqueued via Main::enqueue_blocks_assets() instead.
+     *
      * @return string[]
      */
     public function get_script_handles(): array
     {
-        return ['checkout-toolkit-blocks'];
+        return [];
     }
 
     /**
@@ -65,12 +67,18 @@ class BlocksIntegration implements IntegrationInterface
     public function get_script_data(): array
     {
         $main = Main::get_instance();
+        $order_notes_settings = $main->get_order_notes_settings();
         $delivery_settings = $main->get_delivery_settings();
         $field_settings = $main->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
 
         return [
+            'orderNotes' => [
+                'enabled' => $order_notes_settings['enabled'],
+                'customLabel' => $order_notes_settings['custom_label'],
+                'customPlaceholder' => $order_notes_settings['custom_placeholder'],
+            ],
             'deliveryMethod' => [
                 'enabled' => $delivery_method_settings['enabled'],
                 'defaultMethod' => $delivery_method_settings['default_method'],
@@ -83,6 +91,7 @@ class BlocksIntegration implements IntegrationInterface
                 'enabled' => $delivery_settings['enabled'],
                 'required' => $delivery_settings['required'],
                 'label' => $delivery_settings['field_label'],
+                'position' => $delivery_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'minLeadDays' => $delivery_settings['min_lead_days'],
                 'maxFutureDays' => $delivery_settings['max_future_days'],
                 'disabledWeekdays' => $delivery_settings['disabled_weekdays'],
@@ -96,6 +105,7 @@ class BlocksIntegration implements IntegrationInterface
                 'type' => $field_settings['field_type'],
                 'label' => $field_settings['field_label'],
                 'placeholder' => $field_settings['field_placeholder'],
+                'position' => $field_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'maxLength' => $field_settings['max_length'],
                 'checkboxLabel' => $field_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_settings['select_options'] ?? [],
@@ -106,6 +116,7 @@ class BlocksIntegration implements IntegrationInterface
                 'type' => $field_2_settings['field_type'],
                 'label' => $field_2_settings['field_label'],
                 'placeholder' => $field_2_settings['field_placeholder'],
+                'position' => $field_2_settings['field_position'] ?? 'woocommerce_after_order_notes',
                 'maxLength' => $field_2_settings['max_length'],
                 'checkboxLabel' => $field_2_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_2_settings['select_options'] ?? [],

@@ -141,10 +141,31 @@ class DeliveryList extends \WP_List_Table
     }
 
     /**
+     * Verify filter nonce
+     *
+     * @return bool Whether nonce is valid.
+     */
+    private function verify_filter_nonce(): bool
+    {
+        // No filter parameters means no nonce needed
+        if (!isset($_GET['filter_date']) && !isset($_GET['filter_status']) && !isset($_GET['filter_order_status']) && !isset($_GET['orderby']) && !isset($_GET['order'])) {
+            return true;
+        }
+
+        $nonce = isset($_GET['wct_filter_nonce']) ? sanitize_text_field(wp_unslash($_GET['wct_filter_nonce'])) : '';
+        return wp_verify_nonce($nonce, 'wct_delivery_list_filter');
+    }
+
+    /**
      * Prepare items for display
      */
     public function prepare_items(): void
     {
+        // Verify user capability
+        if (!current_user_can('manage_woocommerce')) {
+            return;
+        }
+
         $this->process_bulk_action();
 
         $columns = $this->get_columns();
@@ -153,10 +174,24 @@ class DeliveryList extends \WP_List_Table
 
         $this->_column_headers = [$columns, $hidden, $sortable];
 
-        // Get filter values
-        $filter_date = isset($_GET['filter_date']) ? sanitize_text_field(wp_unslash($_GET['filter_date'])) : '';
-        $filter_status = isset($_GET['filter_status']) ? sanitize_key(wp_unslash($_GET['filter_status'])) : '';
-        $filter_order_status = isset($_GET['filter_order_status']) ? sanitize_key(wp_unslash($_GET['filter_order_status'])) : '';
+        // Get filter values only if nonce is valid
+        $filter_date = '';
+        $filter_status = '';
+        $filter_order_status = '';
+
+        $has_filters = isset($_GET['filter_date']) || isset($_GET['filter_status']) || isset($_GET['filter_order_status']);
+        $nonce_value = isset($_GET['wct_filter_nonce']) ? sanitize_text_field(wp_unslash($_GET['wct_filter_nonce'])) : '';
+        $nonce_valid = !$has_filters || wp_verify_nonce($nonce_value, 'wct_delivery_list_filter');
+
+        if ($nonce_valid && isset($_GET['filter_date'])) {
+            $filter_date = sanitize_text_field(wp_unslash($_GET['filter_date']));
+        }
+        if ($nonce_valid && isset($_GET['filter_status'])) {
+            $filter_status = sanitize_key(wp_unslash($_GET['filter_status']));
+        }
+        if ($nonce_valid && isset($_GET['filter_order_status'])) {
+            $filter_order_status = sanitize_key(wp_unslash($_GET['filter_order_status']));
+        }
 
         // Build query args
         $args = [
@@ -200,11 +235,20 @@ class DeliveryList extends \WP_List_Table
             });
         }
 
-        // Handle sorting
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only sorting parameter
-        $orderby = isset($_GET['orderby']) ? sanitize_key(wp_unslash($_GET['orderby'])) : 'delivery_date';
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only order parameter
-        $order = isset($_GET['order']) && strtoupper(wp_unslash($_GET['order'])) === 'DESC' ? 'DESC' : 'ASC';
+        // Handle sorting (uses same nonce validation as filters)
+        $orderby = 'delivery_date';
+        $order = 'ASC';
+
+        $has_sort = isset($_GET['orderby']) || isset($_GET['order']);
+        $sort_nonce_valid = !$has_sort || wp_verify_nonce($nonce_value, 'wct_delivery_list_filter');
+
+        if ($sort_nonce_valid && isset($_GET['orderby'])) {
+            $orderby = sanitize_key(wp_unslash($_GET['orderby']));
+        }
+        if ($sort_nonce_valid && isset($_GET['order'])) {
+            $order_param = sanitize_key(wp_unslash($_GET['order']));
+            $order = strtoupper($order_param) === 'DESC' ? 'DESC' : 'ASC';
+        }
 
         usort($orders, function ($a, $b) use ($orderby, $order) {
             $result = 0;
@@ -457,14 +501,29 @@ class DeliveryList extends \WP_List_Table
             return;
         }
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only filter values
-        $filter_date = isset($_GET['filter_date']) ? sanitize_text_field(wp_unslash($_GET['filter_date'])) : '';
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only filter values
-        $filter_status = isset($_GET['filter_status']) ? sanitize_key(wp_unslash($_GET['filter_status'])) : '';
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only filter values
-        $filter_order_status = isset($_GET['filter_order_status']) ? sanitize_key(wp_unslash($_GET['filter_order_status'])) : '';
+        // Get current filter values for display
+        $filter_date = '';
+        $filter_status = '';
+        $filter_order_status = '';
+
+        $has_filters = isset($_GET['filter_date']) || isset($_GET['filter_status']) || isset($_GET['filter_order_status']);
+        $nonce_value = isset($_GET['wct_filter_nonce']) ? sanitize_text_field(wp_unslash($_GET['wct_filter_nonce'])) : '';
+        $nonce_valid = !$has_filters || wp_verify_nonce($nonce_value, 'wct_delivery_list_filter');
+
+        if ($nonce_valid && isset($_GET['filter_date'])) {
+            $filter_date = sanitize_text_field(wp_unslash($_GET['filter_date']));
+        }
+        if ($nonce_valid && isset($_GET['filter_status'])) {
+            $filter_status = sanitize_key(wp_unslash($_GET['filter_status']));
+        }
+        if ($nonce_valid && isset($_GET['filter_order_status'])) {
+            $filter_order_status = sanitize_key(wp_unslash($_GET['filter_order_status']));
+        }
 
         echo '<div class="alignleft actions">';
+
+        // Add nonce field for filter form
+        wp_nonce_field('wct_delivery_list_filter', 'wct_filter_nonce', false);
 
         // Date filter
         echo '<select name="filter_date" id="filter_date">';

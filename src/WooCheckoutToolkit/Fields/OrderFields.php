@@ -211,6 +211,15 @@ class OrderFields
      */
     private function get_posted_value(string $field_type): string
     {
+        // Verify WooCommerce checkout nonce
+        $nonce = isset($_POST['woocommerce-process-checkout-nonce'])
+            ? sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce']))
+            : '';
+
+        if (!wp_verify_nonce($nonce, 'woocommerce-process_checkout')) {
+            return '';
+        }
+
         if ($field_type === 'checkbox') {
             return isset($_POST['checkout_toolkit_custom_field']) ? '1' : '';
         }

@@ -46,6 +46,18 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
 .wct-conditional-field.active {
     display: table-row;
 }
+/* Disabled state for field options */
+.wct-field-options-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.wct-field-options-disabled input,
+.wct-field-options-disabled select,
+.wct-field-options-disabled textarea,
+.wct-field-options-disabled button,
+.wct-field-options-disabled a {
+    pointer-events: none;
+}
 </style>
 
 <!-- Custom Field 1 -->
@@ -63,13 +75,15 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                     <label>
                         <input type="checkbox"
                                name="checkout_toolkit_field_settings[enabled]"
+                               id="wct-field-1-enabled"
                                value="1"
                                <?php checked(!empty($field_settings['enabled'])); ?>>
                         <?php esc_html_e('Show this field on checkout', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
             </tr>
-
+        </tbody>
+        <tbody id="wct-field-1-options" class="<?php echo empty($field_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
             <!-- Field Type -->
             <tr>
                 <th scope="row">
@@ -167,14 +181,14 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                             ?>
                             <div class="wct-select-option-row">
                                 <input type="text"
-                                       name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
-                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
-                                       class="regular-text">
-                                <input type="text"
                                        name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <input type="text"
+                                       name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
                                        class="regular-text">
                                 <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
                             </div>
@@ -300,13 +314,15 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                     <label>
                         <input type="checkbox"
                                name="checkout_toolkit_field_2_settings[enabled]"
+                               id="wct-field-2-enabled"
                                value="1"
                                <?php checked(!empty($field_2_settings['enabled'])); ?>>
                         <?php esc_html_e('Show this field on checkout', 'checkout-toolkit-for-woo'); ?>
                     </label>
                 </td>
             </tr>
-
+        </tbody>
+        <tbody id="wct-field-2-options" class="<?php echo empty($field_2_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
             <!-- Field Type 2 -->
             <tr>
                 <th scope="row">
@@ -404,14 +420,14 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                             ?>
                             <div class="wct-select-option-row">
                                 <input type="text"
-                                       name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
-                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
-                                       class="regular-text">
-                                <input type="text"
                                        name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       class="regular-text">
+                                <input type="text"
+                                       name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
+                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
                                        class="regular-text">
                                 <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
                             </div>
@@ -524,6 +540,27 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
 
 <script>
 jQuery(document).ready(function($) {
+    // Enable/disable field options based on enabled checkbox
+    function toggleFieldOptions(fieldNum) {
+        var isEnabled = $('#wct-field-' + fieldNum + '-enabled').is(':checked');
+        var optionsWrapper = $('#wct-field-' + fieldNum + '-options');
+
+        if (isEnabled) {
+            optionsWrapper.removeClass('wct-field-options-disabled');
+        } else {
+            optionsWrapper.addClass('wct-field-options-disabled');
+        }
+    }
+
+    // Bind enable checkbox handlers
+    $('#wct-field-1-enabled').on('change', function() {
+        toggleFieldOptions(1);
+    });
+
+    $('#wct-field-2-enabled').on('change', function() {
+        toggleFieldOptions(2);
+    });
+
     // Field type change handler
     $('.wct-field-type-radio').on('change', function() {
         var fieldNum = $(this).data('field');
@@ -540,13 +577,13 @@ jQuery(document).ready(function($) {
     $('.wct-add-option').on('click', function(e) {
         e.preventDefault();
         var fieldNum = $(this).data('field');
-        var wrapper = $('#wct-field-' + fieldNum + '-options .wct-select-options-list');
+        var wrapper = $('#wct-field-' + fieldNum + '-select-options .wct-select-options-list');
         var optionName = fieldNum === 1 ? 'checkout_toolkit_field_settings' : 'checkout_toolkit_field_2_settings';
         var index = wrapper.find('.wct-select-option-row').length;
 
         var newRow = '<div class="wct-select-option-row">' +
-            '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="<?php echo esc_js(__('Value', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
             '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="<?php echo esc_js(__('Label', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
+            '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="<?php echo esc_js(__('Value', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
             '<a href="#" class="button-link-delete wct-remove-option" title="<?php echo esc_js(__('Remove', 'checkout-toolkit-for-woo')); ?>">&times;</a>' +
             '</div>';
 

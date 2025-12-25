@@ -172,6 +172,8 @@ class AvailabilityChecker
      */
     private function get_settings(): array
     {
-        return get_option('checkout_toolkit_delivery_settings', []);
+        $defaults = \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings();
+        $settings = get_option('checkout_toolkit_delivery_settings', []);
+        return wp_parse_args($settings, $defaults);
     }
 }
