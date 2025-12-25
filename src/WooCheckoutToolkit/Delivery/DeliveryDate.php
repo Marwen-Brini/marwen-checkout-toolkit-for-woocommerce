@@ -72,7 +72,17 @@ class DeliveryDate
             return;
         }
 
+        // Check if delivery method is enabled - if so, we need conditional visibility
+        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $delivery_method_enabled = !empty($delivery_method_settings['enabled']);
+        $default_method = $delivery_method_settings['default_method'] ?? 'delivery';
+        $initial_hidden = $delivery_method_enabled && $default_method === 'pickup';
+
         do_action('checkout_toolkit_before_delivery_date_field');
+
+        // Wrapper for conditional visibility
+        $style = $initial_hidden ? 'display: none;' : '';
+        echo '<div class="checkout-toolkit-delivery-date-wrapper" style="' . esc_attr($style) . '">';
 
         woocommerce_form_field(
             'checkout_toolkit_delivery_date',
@@ -92,6 +102,25 @@ class DeliveryDate
 
         // Hidden field for actual date value (Y-m-d format)
         echo '<input type="hidden" name="checkout_toolkit_delivery_date_value" id="checkout_toolkit_delivery_date_value" value="" />';
+
+        echo '</div>';
+
+        // Add JavaScript for conditional visibility
+        if ($delivery_method_enabled) {
+            ?>
+            <script>
+            jQuery(function($) {
+                $(document).on('wct_delivery_method_changed', function(e, method) {
+                    if (method === 'pickup') {
+                        $('.checkout-toolkit-delivery-date-wrapper').slideUp(200);
+                    } else {
+                        $('.checkout-toolkit-delivery-date-wrapper').slideDown(200);
+                    }
+                });
+            });
+            </script>
+            <?php
+        }
 
         do_action('checkout_toolkit_after_delivery_date_field');
     }

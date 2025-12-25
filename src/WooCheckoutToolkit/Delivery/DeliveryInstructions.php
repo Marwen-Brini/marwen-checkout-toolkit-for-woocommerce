@@ -1,0 +1,437 @@
+<?php
+/**
+ * Delivery Instructions Field Handler
+ *
+ * @package WooCheckoutToolkit
+ */
+
+declare(strict_types=1);
+
+namespace WooCheckoutToolkit\Delivery;
+
+use WooCheckoutToolkit\CheckoutDetector;
+use WooCheckoutToolkit\Main;
+
+defined('ABSPATH') || exit;
+
+/**
+ * Class DeliveryInstructions
+ *
+ * Handles the delivery instructions field on checkout.
+ * Shows preset options (dropdown) + custom textarea.
+ * Only visible when delivery is selected (hidden for pickup).
+ */
+class DeliveryInstructions
+{
+    /**
+     * Settings
+     */
+    private array $settings;
+
+    /**
+     * Initialize the class
+     */
+    public function init(): void
+    {
+        $this->settings = $this->get_settings();
+
+        if (empty($this->settings['enabled'])) {
+            return;
+        }
+
+        // Add field to checkout (classic checkout) - after delivery method
+        add_action('woocommerce_before_order_notes', [$this, 'render_delivery_instructions_field'], 10);
+
+        // Validate field
+        add_action('woocommerce_checkout_process', [$this, 'validate_field']);
+
+        // Save field to order
+        add_action('woocommerce_checkout_create_order', [$this, 'save_field'], 10, 2);
+    }
+
+    /**
+     * Render delivery instructions field
+     */
+    public function render_delivery_instructions_field(): void
+    {
+        // Skip rendering for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
+        $settings = $this->settings;
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        $show = apply_filters('checkout_toolkit_show_delivery_instructions', true, WC()->cart);
+
+        if (!$show) {
+            return;
+        }
+
+        // Get current delivery method to determine initial visibility
+        $delivery_method_settings = Main::get_instance()->get_delivery_method_settings();
+        $current_method = WC()->checkout->get_value('checkout_toolkit_delivery_method');
+        if (empty($current_method)) {
+            $current_method = $delivery_method_settings['default_method'] ?? 'delivery';
+        }
+
+        // Determine if delivery method feature is enabled
+        $delivery_method_enabled = !empty($delivery_method_settings['enabled']);
+
+        // If delivery method is not enabled, always show (assume delivery)
+        // If delivery method is enabled and pickup is selected, hide initially
+        $initial_display = 'block';
+        if ($delivery_method_enabled && $current_method === 'pickup') {
+            $initial_display = 'none';
+        }
+
+        $current_preset = WC()->checkout->get_value('checkout_toolkit_delivery_instructions_preset') ?: '';
+        $current_custom = WC()->checkout->get_value('checkout_toolkit_delivery_instructions_custom') ?: '';
+
+        $preset_options = $settings['preset_options'] ?? [];
+        $required = !empty($settings['required']);
+        $required_attr = $required ? ' required' : '';
+        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'checkout-toolkit-for-woo') . '">*</abbr>' : '';
+
+        do_action('checkout_toolkit_before_delivery_instructions');
+        ?>
+        <div class="wct-delivery-instructions-wrapper" id="wct-delivery-instructions-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
+            <h3>
+                <?php echo esc_html($settings['field_label'] ?: __('Delivery Instructions', 'checkout-toolkit-for-woo')); ?>
+                <?php echo wp_kses_post($required_mark); ?>
+            </h3>
+
+            <!-- Preset Dropdown -->
+            <p class="form-row form-row-wide">
+                <label for="checkout_toolkit_delivery_instructions_preset">
+                    <?php echo esc_html($settings['preset_label'] ?: __('Common Instructions', 'checkout-toolkit-for-woo')); ?>
+                </label>
+                <select name="checkout_toolkit_delivery_instructions_preset"
+                        id="checkout_toolkit_delivery_instructions_preset"
+                        class="wct-delivery-instructions-preset"
+                        <?php echo esc_attr($required_attr); ?>>
+                    <option value=""><?php esc_html_e('Select an option...', 'checkout-toolkit-for-woo'); ?></option>
+                    <?php foreach ($preset_options as $option) : ?>
+                        <?php if (!empty($option['label'])) : ?>
+                            <option value="<?php echo esc_attr($option['value'] ?? ''); ?>"
+                                    <?php selected($current_preset, $option['value'] ?? ''); ?>>
+                                <?php echo esc_html($option['label']); ?>
+                            </option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </p>
+
+            <!-- Custom Textarea -->
+            <p class="form-row form-row-wide">
+                <label for="checkout_toolkit_delivery_instructions_custom">
+                    <?php echo esc_html($settings['custom_label'] ?: __('Additional Instructions', 'checkout-toolkit-for-woo')); ?>
+                </label>
+                <textarea name="checkout_toolkit_delivery_instructions_custom"
+                          id="checkout_toolkit_delivery_instructions_custom"
+                          class="wct-delivery-instructions-custom"
+                          placeholder="<?php echo esc_attr($settings['custom_placeholder'] ?: ''); ?>"
+                          rows="3"
+                          <?php if (!empty($settings['max_length'])) : ?>
+                              maxlength="<?php echo esc_attr($settings['max_length']); ?>"
+                          <?php endif; ?>
+                ><?php echo esc_textarea($current_custom); ?></textarea>
+                <?php if (!empty($settings['max_length'])) : ?>
+                    <span class="wct-char-counter wct-di-char-counter"></span>
+                <?php endif; ?>
+            </p>
+        </div>
+
+        <style>
+            .wct-delivery-instructions-wrapper {
+                margin-bottom: 20px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            .wct-delivery-instructions-wrapper h3 {
+                margin-bottom: 15px;
+            }
+            .wct-delivery-instructions-wrapper .form-row {
+                margin-bottom: 15px;
+            }
+            .wct-delivery-instructions-wrapper label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+            }
+            .wct-delivery-instructions-wrapper select,
+            .wct-delivery-instructions-wrapper textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+            .wct-delivery-instructions-wrapper textarea {
+                resize: vertical;
+                min-height: 80px;
+            }
+            .wct-di-char-counter {
+                display: block;
+                text-align: right;
+                font-size: 12px;
+                color: #666;
+                margin-top: 5px;
+            }
+            .wct-di-char-counter.warning {
+                color: #d63638;
+            }
+        </style>
+
+        <script>
+        jQuery(function($) {
+            // Handle delivery method change - show/hide instructions
+            $(document.body).on('wct_delivery_method_changed', function(e, method) {
+                if (method === 'pickup') {
+                    $('#wct-delivery-instructions-wrapper').slideUp(200);
+                } else {
+                    $('#wct-delivery-instructions-wrapper').slideDown(200);
+                }
+            });
+
+            // Character counter for custom textarea
+            var $customField = $('#checkout_toolkit_delivery_instructions_custom');
+            var $counter = $('.wct-di-char-counter');
+            var maxLength = <?php echo (int) ($settings['max_length'] ?? 0); ?>;
+
+            if ($customField.length && $counter.length && maxLength > 0) {
+                var updateCounter = function() {
+                    var remaining = maxLength - $customField.val().length;
+                    $counter.text(remaining + ' <?php echo esc_js(__('characters remaining', 'checkout-toolkit-for-woo')); ?>');
+
+                    if (remaining <= 20) {
+                        $counter.addClass('warning');
+                    } else {
+                        $counter.removeClass('warning');
+                    }
+                };
+
+                $customField.on('input keyup', updateCounter);
+                updateCounter();
+            }
+        });
+        </script>
+        <?php
+        do_action('checkout_toolkit_after_delivery_instructions');
+    }
+
+    /**
+     * Validate delivery instructions field
+     */
+    public function validate_field(): void
+    {
+        $settings = $this->settings;
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        // Check if pickup is selected - skip validation
+        $delivery_method = $this->get_posted_delivery_method();
+        if ($delivery_method === 'pickup') {
+            return;
+        }
+
+        // Only validate if required
+        if (empty($settings['required'])) {
+            return;
+        }
+
+        $preset = $this->get_posted_preset_value();
+        $custom = $this->get_posted_custom_value();
+
+        // At least one of preset or custom must be filled
+        if (empty($preset) && empty($custom)) {
+            wc_add_notice(
+                /* translators: %s: field label */
+                sprintf(__('%s is required.', 'checkout-toolkit-for-woo'), $settings['field_label']),
+                'error'
+            );
+        }
+    }
+
+    /**
+     * Get posted delivery method
+     *
+     * @return string Delivery method (delivery or pickup).
+     */
+    private function get_posted_delivery_method(): string
+    {
+        // Verify WooCommerce checkout nonce
+        $nonce = isset($_POST['woocommerce-process-checkout-nonce'])
+            ? sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce']))
+            : '';
+
+        if (!wp_verify_nonce($nonce, 'woocommerce-process_checkout')) {
+            return 'delivery';
+        }
+
+        $value = isset($_POST['checkout_toolkit_delivery_method'])
+            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_method']))
+            : '';
+
+        if (empty($value) || !in_array($value, ['delivery', 'pickup'], true)) {
+            // Check if delivery method is enabled, if not assume delivery
+            $dm_settings = Main::get_instance()->get_delivery_method_settings();
+            return $dm_settings['default_method'] ?? 'delivery';
+        }
+
+        return $value;
+    }
+
+    /**
+     * Get posted preset value
+     *
+     * @return string Preset value.
+     */
+    private function get_posted_preset_value(): string
+    {
+        // Verify WooCommerce checkout nonce
+        $nonce = isset($_POST['woocommerce-process-checkout-nonce'])
+            ? sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce']))
+            : '';
+
+        if (!wp_verify_nonce($nonce, 'woocommerce-process_checkout')) {
+            return '';
+        }
+
+        return isset($_POST['checkout_toolkit_delivery_instructions_preset'])
+            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_instructions_preset']))
+            : '';
+    }
+
+    /**
+     * Get posted custom value
+     *
+     * @return string Custom value.
+     */
+    private function get_posted_custom_value(): string
+    {
+        // Verify WooCommerce checkout nonce
+        $nonce = isset($_POST['woocommerce-process-checkout-nonce'])
+            ? sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce']))
+            : '';
+
+        if (!wp_verify_nonce($nonce, 'woocommerce-process_checkout')) {
+            return '';
+        }
+
+        $value = isset($_POST['checkout_toolkit_delivery_instructions_custom'])
+            ? sanitize_textarea_field(wp_unslash($_POST['checkout_toolkit_delivery_instructions_custom']))
+            : '';
+
+        // Apply max length
+        $max_length = (int) ($this->settings['max_length'] ?? 0);
+        if ($max_length > 0 && mb_strlen($value) > $max_length) {
+            $value = mb_substr($value, 0, $max_length);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Save delivery instructions to order
+     *
+     * @param \WC_Order $order Order object.
+     * @param array     $data  Checkout data.
+     */
+    public function save_field(\WC_Order $order, array $data): void
+    {
+        // Skip for blocks checkout - handled by BlocksIntegration
+        if (CheckoutDetector::is_blocks_checkout()) {
+            return;
+        }
+
+        $settings = $this->settings;
+
+        if (empty($settings['enabled'])) {
+            return;
+        }
+
+        // Check if pickup is selected - don't save instructions
+        $delivery_method = $this->get_posted_delivery_method();
+        if ($delivery_method === 'pickup') {
+            return;
+        }
+
+        $preset = $this->get_posted_preset_value();
+        $custom = $this->get_posted_custom_value();
+
+        // Save preset value
+        if (!empty($preset)) {
+            $order->update_meta_data('_wct_delivery_instructions_preset', $preset);
+            do_action('checkout_toolkit_delivery_instructions_preset_saved', $order->get_id(), $preset);
+        }
+
+        // Save custom value
+        if (!empty($custom)) {
+            $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
+            do_action('checkout_toolkit_delivery_instructions_custom_saved', $order->get_id(), $custom);
+        }
+    }
+
+    /**
+     * Get settings
+     *
+     * @return array Settings array.
+     */
+    public function get_settings(): array
+    {
+        $defaults = $this->get_default_settings();
+        $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get default settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_label' => 'Delivery Instructions',
+            'preset_label' => 'Common Instructions',
+            'preset_options' => [
+                ['value' => 'leave_door', 'label' => 'Leave at door'],
+                ['value' => 'ring_bell', 'label' => 'Ring doorbell'],
+                ['value' => 'call_arrival', 'label' => 'Call on arrival'],
+                ['value' => 'front_desk', 'label' => 'Leave with front desk/reception'],
+            ],
+            'custom_label' => 'Additional Instructions',
+            'custom_placeholder' => 'Any other delivery instructions...',
+            'max_length' => 500,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Get preset label by value
+     *
+     * @param string $value Preset value.
+     * @return string Preset label or value if not found.
+     */
+    public function get_preset_label(string $value): string
+    {
+        $settings = $this->get_settings();
+        $preset_options = $settings['preset_options'] ?? [];
+
+        foreach ($preset_options as $option) {
+            if (($option['value'] ?? '') === $value) {
+                return $option['label'] ?? $value;
+            }
+        }
+
+        return $value;
+    }
+}

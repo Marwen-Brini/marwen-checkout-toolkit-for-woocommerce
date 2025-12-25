@@ -43,11 +43,14 @@ class OrderDisplay
         }
 
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
 
         $delivery_method = $order->get_meta('_wct_delivery_method');
+        $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
+        $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
@@ -59,6 +62,22 @@ class OrderDisplay
                 : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
             echo '<p><strong>' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . ':</strong><br>';
             echo esc_html($method_label) . '</p>';
+        }
+
+        // Display delivery instructions
+        if ((!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) && !empty($delivery_instructions_settings['show_in_admin'])) {
+            echo '<p><strong>' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+
+            if (!empty($delivery_instructions_preset)) {
+                $preset_label = $this->get_preset_label($delivery_instructions_preset, $delivery_instructions_settings);
+                echo esc_html($preset_label) . '<br>';
+            }
+
+            if (!empty($delivery_instructions_custom)) {
+                echo nl2br(esc_html($delivery_instructions_custom));
+            }
+
+            echo '</p>';
         }
 
         // Display delivery date
@@ -119,16 +138,19 @@ class OrderDisplay
         }
 
         $delivery_method = $order->get_meta('_wct_delivery_method');
+        $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
+        $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
         $delivery_date = $order->get_meta('_wct_delivery_date');
         $custom_field = $order->get_meta('_wct_custom_field');
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
-        if (empty($delivery_method) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
+        if (empty($delivery_method) && empty($delivery_instructions_preset) && empty($delivery_instructions_custom) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
             echo '<p>' . esc_html__('No additional checkout data.', 'checkout-toolkit-for-woo') . '</p>';
             return;
         }
 
         $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
         $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
         $field_settings = get_option('checkout_toolkit_field_settings', []);
         $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
@@ -143,6 +165,25 @@ class OrderDisplay
             echo '<div class="delivery-row">';
             echo '<span class="delivery-label">' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . '</span>';
             echo '<span class="delivery-value">' . esc_html($method_label) . '</span>';
+            echo '</div>';
+        }
+
+        // Display delivery instructions
+        if (!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) {
+            echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
+            echo '<span class="delivery-label">' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-value" style="margin-top: 5px;">';
+
+            if (!empty($delivery_instructions_preset)) {
+                $preset_label = $this->get_preset_label($delivery_instructions_preset, $delivery_instructions_settings);
+                echo '<strong>' . esc_html($preset_label) . '</strong><br>';
+            }
+
+            if (!empty($delivery_instructions_custom)) {
+                echo nl2br(esc_html($delivery_instructions_custom));
+            }
+
+            echo '</span>';
             echo '</div>';
         }
 
@@ -282,5 +323,25 @@ class OrderDisplay
             default:
                 return $value;
         }
+    }
+
+    /**
+     * Get preset label by value
+     *
+     * @param string $value    Preset value.
+     * @param array  $settings Delivery instructions settings.
+     * @return string Preset label or value if not found.
+     */
+    private function get_preset_label(string $value, array $settings): string
+    {
+        $preset_options = $settings['preset_options'] ?? [];
+
+        foreach ($preset_options as $option) {
+            if (($option['value'] ?? '') === $value) {
+                return $option['label'] ?? $value;
+            }
+        }
+
+        return $value;
     }
 }

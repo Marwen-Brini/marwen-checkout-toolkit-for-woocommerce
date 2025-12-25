@@ -98,6 +98,16 @@ class Settings
                 'default' => $this->get_default_delivery_method_settings(),
             ]
         );
+
+        register_setting(
+            'checkout_toolkit_settings',
+            'checkout_toolkit_delivery_instructions_settings',
+            [
+                'type' => 'array',
+                'sanitize_callback' => [$this, 'sanitize_delivery_instructions_settings'],
+                'default' => $this->get_default_delivery_instructions_settings(),
+            ]
+        );
     }
 
     /**
@@ -235,6 +245,61 @@ class Settings
                 : $defaults['show_as'],
             'show_in_admin' => !empty($input['show_in_admin']),
             'show_in_emails' => !empty($input['show_in_emails']),
+        ];
+    }
+
+    /**
+     * Get default delivery instructions settings
+     *
+     * @return array Default settings.
+     */
+    public function get_default_delivery_instructions_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_label' => 'Delivery Instructions',
+            'preset_label' => 'Common Instructions',
+            'preset_options' => [
+                ['value' => 'leave_door', 'label' => 'Leave at door'],
+                ['value' => 'ring_bell', 'label' => 'Ring doorbell'],
+                ['value' => 'call_arrival', 'label' => 'Call on arrival'],
+                ['value' => 'front_desk', 'label' => 'Leave with front desk/reception'],
+            ],
+            'custom_label' => 'Additional Instructions',
+            'custom_placeholder' => 'Any other delivery instructions...',
+            'max_length' => 500,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Sanitize delivery instructions settings
+     *
+     * @param array|null $input Input array or null when saving other tab.
+     * @return array Sanitized settings.
+     */
+    public function sanitize_delivery_instructions_settings(?array $input): array
+    {
+        // Return current settings if input is null (saving from another tab).
+        if ($input === null) {
+            return get_option('checkout_toolkit_delivery_instructions_settings', $this->get_default_delivery_instructions_settings());
+        }
+
+        $defaults = $this->get_default_delivery_instructions_settings();
+
+        return [
+            'enabled' => !empty($input['enabled']),
+            'required' => !empty($input['required']),
+            'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
+            'preset_label' => sanitize_text_field($input['preset_label'] ?? $defaults['preset_label']),
+            'preset_options' => $this->sanitize_select_options($input['preset_options'] ?? $defaults['preset_options']),
+            'custom_label' => sanitize_text_field($input['custom_label'] ?? $defaults['custom_label']),
+            'custom_placeholder' => sanitize_text_field($input['custom_placeholder'] ?? $defaults['custom_placeholder']),
+            'max_length' => absint($input['max_length'] ?? $defaults['max_length']),
+            'show_in_emails' => !empty($input['show_in_emails']),
+            'show_in_admin' => !empty($input['show_in_admin']),
         ];
     }
 

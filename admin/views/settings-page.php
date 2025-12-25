@@ -18,6 +18,7 @@ $order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
     'custom_label' => '',
 ]);
 $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', $checkout_toolkit_settings_obj->get_default_delivery_method_settings());
+$delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', $checkout_toolkit_settings_obj->get_default_delivery_instructions_settings());
 // phpcs:enable
 ?>
 
@@ -28,6 +29,10 @@ $delivery_method_settings = get_option('checkout_toolkit_delivery_method_setting
         <a href="?page=wct-settings&tab=delivery-method"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-method' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Pickup/Delivery', 'checkout-toolkit-for-woo'); ?>
+        </a>
+        <a href="?page=wct-settings&tab=delivery-instructions"
+           class="nav-tab <?php echo esc_attr($active_tab === 'delivery-instructions' ? 'nav-tab-active' : ''); ?>">
+            <?php esc_html_e('Delivery Instructions', 'checkout-toolkit-for-woo'); ?>
         </a>
         <a href="?page=wct-settings&tab=delivery"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery' ? 'nav-tab-active' : ''); ?>">
@@ -48,6 +53,8 @@ $delivery_method_settings = get_option('checkout_toolkit_delivery_method_setting
 
         <?php if ($active_tab === 'delivery-method') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery-method.php'; ?>
+        <?php elseif ($active_tab === 'delivery-instructions') : ?>
+            <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery-instructions.php'; ?>
         <?php elseif ($active_tab === 'delivery') : ?>
             <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-delivery.php'; ?>
         <?php elseif ($active_tab === 'fields') : ?>

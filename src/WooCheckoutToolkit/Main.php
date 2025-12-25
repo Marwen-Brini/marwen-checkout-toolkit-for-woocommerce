@@ -13,6 +13,7 @@ use WooCheckoutToolkit\Admin\Admin;
 use WooCheckoutToolkit\Admin\DeliveryManager;
 use WooCheckoutToolkit\Delivery\DeliveryDate;
 use WooCheckoutToolkit\Delivery\DeliveryMethod;
+use WooCheckoutToolkit\Delivery\DeliveryInstructions;
 use WooCheckoutToolkit\Fields\OrderFields;
 use WooCheckoutToolkit\Fields\OrderFields2;
 use WooCheckoutToolkit\Display\OrderDisplay;
@@ -51,6 +52,11 @@ final class Main
      * Delivery method instance
      */
     private ?DeliveryMethod $delivery_method = null;
+
+    /**
+     * Delivery instructions instance
+     */
+    private ?DeliveryInstructions $delivery_instructions = null;
 
     /**
      * Order fields instance
@@ -162,6 +168,9 @@ final class Main
         $this->delivery_method = new DeliveryMethod();
         $this->delivery_method->init();
 
+        $this->delivery_instructions = new DeliveryInstructions();
+        $this->delivery_instructions->init();
+
         $this->delivery_date = new DeliveryDate();
         $this->delivery_date->init();
 
@@ -219,6 +228,7 @@ final class Main
 
         $order_notes_settings = $this->get_order_notes_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
+        $delivery_instructions_settings = $this->get_delivery_instructions_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
@@ -226,6 +236,7 @@ final class Main
         // Only load if at least one feature is enabled
         $has_enabled_feature = !empty($order_notes_settings['enabled'])
             || !empty($delivery_method_settings['enabled'])
+            || !empty($delivery_instructions_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
             || !empty($field_2_settings['enabled']);
@@ -285,6 +296,7 @@ final class Main
     private function get_blocks_script_data(): array
     {
         $delivery_method_settings = $this->get_delivery_method_settings();
+        $delivery_instructions_settings = $this->get_delivery_instructions_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
@@ -303,6 +315,16 @@ final class Main
                 'deliveryLabel' => $delivery_method_settings['delivery_label'],
                 'pickupLabel' => $delivery_method_settings['pickup_label'],
                 'showAs' => $delivery_method_settings['show_as'],
+            ],
+            'deliveryInstructions' => [
+                'enabled' => $delivery_instructions_settings['enabled'],
+                'required' => $delivery_instructions_settings['required'],
+                'fieldLabel' => $delivery_instructions_settings['field_label'],
+                'presetLabel' => $delivery_instructions_settings['preset_label'],
+                'presetOptions' => $delivery_instructions_settings['preset_options'],
+                'customLabel' => $delivery_instructions_settings['custom_label'],
+                'customPlaceholder' => $delivery_instructions_settings['custom_placeholder'],
+                'maxLength' => $delivery_instructions_settings['max_length'],
             ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
@@ -373,6 +395,40 @@ final class Main
     }
 
     /**
+     * Get default delivery instructions settings
+     */
+    public function get_default_delivery_instructions_settings(): array
+    {
+        return [
+            'enabled' => false,
+            'required' => false,
+            'field_label' => 'Delivery Instructions',
+            'preset_label' => 'Common Instructions',
+            'preset_options' => [
+                ['value' => 'leave_door', 'label' => 'Leave at door'],
+                ['value' => 'ring_bell', 'label' => 'Ring doorbell'],
+                ['value' => 'call_arrival', 'label' => 'Call on arrival'],
+                ['value' => 'front_desk', 'label' => 'Leave with front desk/reception'],
+            ],
+            'custom_label' => 'Additional Instructions',
+            'custom_placeholder' => 'Any other delivery instructions...',
+            'max_length' => 500,
+            'show_in_emails' => true,
+            'show_in_admin' => true,
+        ];
+    }
+
+    /**
+     * Get delivery instructions settings (with defaults)
+     */
+    public function get_delivery_instructions_settings(): array
+    {
+        $defaults = $this->get_default_delivery_instructions_settings();
+        $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
      * Get default field 2 settings
      */
     public function get_default_field_2_settings(): array
@@ -430,12 +486,14 @@ final class Main
         }
 
         $delivery_method_settings = $this->get_delivery_method_settings();
+        $delivery_instructions_settings = $this->get_delivery_instructions_settings();
         $delivery_settings = $this->get_delivery_settings();
         $field_settings = $this->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
 
         // Only load if at least one feature is enabled (order notes uses PHP filter, no JS needed for classic)
         $has_enabled_feature = !empty($delivery_method_settings['enabled'])
+            || !empty($delivery_instructions_settings['enabled'])
             || !empty($delivery_settings['enabled'])
             || !empty($field_settings['enabled'])
             || !empty($field_2_settings['enabled']);

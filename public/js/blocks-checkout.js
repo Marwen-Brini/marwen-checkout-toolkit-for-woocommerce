@@ -42,13 +42,10 @@
     }
 
     if (!settings || Object.keys(settings).length === 0) {
-        console.warn('Checkout Toolkit: No settings found');
         return;
     }
 
-    console.log('Checkout Toolkit: Initializing blocks integration', settings);
-
-    const { orderNotes, deliveryMethod, delivery, customField, customField2, i18n } = settings;
+    const { orderNotes, deliveryMethod, deliveryInstructions, delivery, customField, customField2, i18n } = settings;
 
     /**
      * Position mapping: PHP hooks to DOM selectors
@@ -234,9 +231,16 @@
         const handleChange = (method) => {
             setSelectedMethod(method);
             setExtensionData('checkout-toolkit', 'delivery_method', method);
+
+            // Dispatch custom event for other components to listen to
+            document.dispatchEvent(new CustomEvent('wct_delivery_method_changed', {
+                detail: { method }
+            }));
         };
 
-        if (!deliveryMethod || !deliveryMethod.enabled) return null;
+        if (!deliveryMethod || !deliveryMethod.enabled) {
+            return null;
+        }
 
         const toggleStyles = {
             display: 'flex',
@@ -311,12 +315,137 @@
     };
 
     /**
+     * Delivery Instructions Component
+     * Shows preset dropdown + custom textarea
+     * Only visible when delivery is selected (hidden for pickup)
+     */
+    const DeliveryInstructionsComponent = () => {
+        const [presetValue, setPresetValue] = useState('');
+        const [customValue, setCustomValue] = useState('');
+        const [charCount, setCharCount] = useState(0);
+        const initialMethod = extensionDataState.delivery_method || (deliveryMethod?.defaultMethod || 'delivery');
+        const [isVisible, setIsVisible] = useState(initialMethod !== 'pickup');
+
+        // Listen for delivery method changes via custom event
+        useEffect(() => {
+            const handleMethodChange = (e) => {
+                const method = e.detail?.method || 'delivery';
+                setIsVisible(method !== 'pickup');
+            };
+
+            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+        }, []);
+
+        const handlePresetChange = (e) => {
+            const val = e.target.value;
+            setPresetValue(val);
+            setExtensionData('checkout-toolkit', 'delivery_instructions_preset', val);
+        };
+
+        const handleCustomChange = (e) => {
+            let val = e.target.value;
+            const maxLen = deliveryInstructions.maxLength || 0;
+
+            if (maxLen > 0 && val.length > maxLen) {
+                val = val.substring(0, maxLen);
+            }
+
+            setCustomValue(val);
+            setCharCount(val.length);
+            setExtensionData('checkout-toolkit', 'delivery_instructions_custom', val);
+        };
+
+        if (!deliveryInstructions || !deliveryInstructions.enabled) return null;
+        if (!isVisible) return null;
+
+        const inputStyles = {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #8c8f94',
+            borderRadius: '4px',
+            fontSize: '16px',
+            fontFamily: 'inherit'
+        };
+
+        const presetOptions = deliveryInstructions.presetOptions || [];
+
+        return el('div', {
+            className: 'checkout-toolkit-delivery-instructions-block wc-block-components-checkout-step',
+            style: { marginTop: '16px', marginBottom: '16px' }
+        },
+            el('div', { className: 'wc-block-components-checkout-step__heading' },
+                el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
+                    deliveryInstructions.fieldLabel || 'Delivery Instructions',
+                    deliveryInstructions.required && el('span', { style: { color: '#cc0000' } }, ' *')
+                )
+            ),
+            el('div', { className: 'wc-block-components-checkout-step__container' },
+                el('div', { className: 'wc-block-components-checkout-step__content' },
+                    // Preset dropdown
+                    el('div', { style: { marginBottom: '15px' } },
+                        el('label', {
+                            htmlFor: 'wct-delivery-instructions-preset',
+                            style: { display: 'block', marginBottom: '5px', fontWeight: '500' }
+                        }, deliveryInstructions.presetLabel || 'Common Instructions'),
+                        el('select', {
+                            id: 'wct-delivery-instructions-preset',
+                            value: presetValue,
+                            onChange: handlePresetChange,
+                            required: deliveryInstructions.required,
+                            style: inputStyles
+                        },
+                            el('option', { value: '' }, i18n?.selectOption || 'Select an option...'),
+                            presetOptions.map(opt =>
+                                opt.label ? el('option', { key: opt.value, value: opt.value }, opt.label) : null
+                            )
+                        )
+                    ),
+                    // Custom textarea
+                    el('div', null,
+                        el('label', {
+                            htmlFor: 'wct-delivery-instructions-custom',
+                            style: { display: 'block', marginBottom: '5px', fontWeight: '500' }
+                        }, deliveryInstructions.customLabel || 'Additional Instructions'),
+                        el('textarea', {
+                            id: 'wct-delivery-instructions-custom',
+                            placeholder: deliveryInstructions.customPlaceholder || '',
+                            value: customValue,
+                            onChange: handleCustomChange,
+                            rows: 3,
+                            maxLength: deliveryInstructions.maxLength > 0 ? deliveryInstructions.maxLength : undefined,
+                            style: { ...inputStyles, resize: 'vertical', minHeight: '80px' }
+                        }),
+                        deliveryInstructions.maxLength > 0 && el('div', {
+                            style: { marginTop: '8px', fontSize: '14px', color: '#757575', textAlign: 'right' }
+                        }, (deliveryInstructions.maxLength - charCount) + ' ' + (i18n?.charactersRemaining || 'characters remaining'))
+                    )
+                )
+            )
+        );
+    };
+
+    /**
      * Delivery Date Field Component
+     * Only visible when delivery is selected (hidden for pickup)
      */
     const DeliveryDateField = () => {
         const [selectedDate, setSelectedDate] = useState('');
         const inputRef = useRef(null);
         const flatpickrRef = useRef(null);
+        const initialMethod = extensionDataState.delivery_method || (deliveryMethod?.defaultMethod || 'delivery');
+        const [isVisible, setIsVisible] = useState(initialMethod !== 'pickup');
+
+        // Listen for delivery method changes
+        useEffect(() => {
+            const handleMethodChange = (e) => {
+                const method = e.detail?.method || 'delivery';
+                setIsVisible(method !== 'pickup');
+            };
+
+            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+        }, []);
 
         useEffect(() => {
             const initPicker = () => {
@@ -373,6 +502,7 @@
         }, []);
 
         if (!delivery || !delivery.enabled) return null;
+        if (!isVisible) return null;
 
         return el('div', { className: 'checkout-toolkit-delivery-date-block wc-block-components-checkout-step', style: { marginTop: '16px', marginBottom: '16px' } },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
@@ -511,12 +641,18 @@
      * Render a field at its configured position
      */
     const renderFieldAtPosition = (Component, containerId, position) => {
-        // Check if already rendered
-        if (document.getElementById(containerId)) return;
+        // Check if already rendered with content
+        const existingContainer = document.getElementById(containerId);
+        if (existingContainer) {
+            if (existingContainer.hasChildNodes()) {
+                return;
+            }
+            // Container exists but is empty - remove it and recreate
+            existingContainer.remove();
+        }
 
         const posConfig = positionMap[position];
         if (!posConfig) {
-            console.warn(`Checkout Toolkit: Unknown position "${position}"`);
             return;
         }
 
@@ -526,20 +662,21 @@
 
         const inserted = insertAtPosition(container, posConfig.selector, posConfig.insertPosition);
         if (!inserted) {
-            console.warn(`Checkout Toolkit: Could not find target for position "${position}"`);
             return;
         }
 
         // Render React component into container
-        const { createRoot, render: legacyRender } = wp.element;
-        if (createRoot) {
-            const root = createRoot(container);
-            root.render(el(Component, null));
-        } else if (legacyRender) {
-            legacyRender(el(Component, null), container);
+        try {
+            const { createRoot, render: legacyRender } = wp.element;
+            if (createRoot) {
+                const root = createRoot(container);
+                root.render(el(Component, null));
+            } else if (legacyRender) {
+                legacyRender(el(Component, null), container);
+            }
+        } catch (error) {
+            console.error('Checkout Toolkit: Error rendering component:', error);
         }
-
-        console.log(`Checkout Toolkit: Rendered field at ${position}`);
     };
 
     /**
@@ -549,6 +686,11 @@
         // Render delivery method
         if (deliveryMethod && deliveryMethod.enabled) {
             renderFieldAtPosition(DeliveryMethodComponent, 'wct-delivery-method-container', 'woocommerce_before_order_notes');
+        }
+
+        // Render delivery instructions (after delivery method, before order notes)
+        if (deliveryInstructions && deliveryInstructions.enabled) {
+            renderFieldAtPosition(DeliveryInstructionsComponent, 'wct-delivery-instructions-container', 'woocommerce_before_order_notes');
         }
 
         // Render delivery date at its position
@@ -618,6 +760,12 @@
         if (deliveryMethod && deliveryMethod.enabled) {
             extensionDataState.delivery_method = deliveryMethod.defaultMethod || 'delivery';
             pendingExtensionData.delivery_method = deliveryMethod.defaultMethod || 'delivery';
+        }
+        if (deliveryInstructions && deliveryInstructions.enabled) {
+            extensionDataState.delivery_instructions_preset = '';
+            pendingExtensionData.delivery_instructions_preset = '';
+            extensionDataState.delivery_instructions_custom = '';
+            pendingExtensionData.delivery_instructions_custom = '';
         }
         if (delivery && delivery.enabled) {
             extensionDataState.delivery_date = '';

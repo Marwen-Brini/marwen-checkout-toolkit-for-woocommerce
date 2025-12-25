@@ -5,8 +5,8 @@
 Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
-**Completed:** 4
-**Progress:** 40%
+**Completed:** 5
+**Progress:** 50%
 
 ---
 
@@ -528,28 +528,190 @@ add_action('checkout_toolkit_delivery_method_saved', function($order_id, $method
 
 ### Feature 5: Delivery Instructions Field
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
-Add a dedicated field for delivery instructions such as "Leave at door", "Ring doorbell", "Call on arrival", etc. Can include preset options or free text.
+Add a dedicated field for delivery instructions with preset dropdown options plus custom textarea. Only visible when "Delivery" is selected (hidden for Pickup orders).
 
-**Planned Settings:**
+**Settings:**
 | Setting | Type | Default |
 |---------|------|---------|
 | `enabled` | boolean | `false` |
 | `required` | boolean | `false` |
 | `field_label` | string | `'Delivery Instructions'` |
-| `field_type` | string | `'textarea'` or `'select'` or `'both'` |
-| `preset_options` | array | Common delivery instructions |
-| `allow_custom` | boolean | `true` |
+| `preset_label` | string | `'Common Instructions'` |
+| `preset_options` | array | `[['value' => 'leave_door', 'label' => 'Leave at door'], ...]` |
+| `custom_label` | string | `'Additional Instructions'` |
+| `custom_placeholder` | string | `'Any other delivery instructions...'` |
 | `max_length` | integer | `500` |
+| `show_in_emails` | boolean | `true` |
+| `show_in_admin` | boolean | `true` |
 
-**Planned Meta Key:** `_wct_delivery_instructions`
+**Meta Keys:**
+- `_wct_delivery_instructions_preset` - Selected preset option value
+- `_wct_delivery_instructions_custom` - Custom text instructions
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **Class:** `src/WooCheckoutToolkit/Delivery/DeliveryInstructions.php`
+   - Renders preset dropdown + custom textarea on checkout (classic)
+   - Conditional visibility based on delivery method selection
+   - Listens for `wct_delivery_method_changed` event to show/hide
+   - Validates that at least one field is filled if required
+   - Saves both preset and custom values to separate meta keys
+   - Character counter for custom textarea
+
+2. **Admin View:** `admin/views/settings-delivery-instructions.php`
+   - Enable/disable toggle with note about Delivery-only visibility
+   - Required checkbox
+   - Section label, preset dropdown label configuration
+   - Preset options repeater (add/remove options dynamically)
+   - Custom text label and placeholder configuration
+   - Max length setting with character counter
+   - Show in admin/emails checkboxes
+   - Live preview section
+
+3. **Settings Registration:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Option name: `checkout_toolkit_delivery_instructions_settings`
+   - Sanitization: `sanitize_delivery_instructions_settings()`
+   - Default getter: `get_default_delivery_instructions_settings()`
+   - Uses existing `sanitize_select_options()` for preset options
+
+4. **Settings Page:** `admin/views/settings-page.php`
+   - Added "Delivery Instructions" tab after Pickup/Delivery
+   - Added include for settings-delivery-instructions.php
+
+5. **Blocks Integration:** `src/WooCheckoutToolkit/Blocks/BlocksIntegration.php`
+   - Added `delivery_instructions_preset` and `delivery_instructions_custom` to Store API schema
+   - Added `deliveryInstructions` settings to `get_script_data()`
+   - Added `get_delivery_instructions_settings()` helper method
+   - Saves both fields in `save_order_data()` only if not pickup
+
+6. **Frontend JS (Classic):** Inline JS in DeliveryInstructions.php
+   - Listens for `wct_delivery_method_changed` event
+   - Shows/hides with slideUp/slideDown animation
+   - Character counter updates on input
+
+7. **Frontend JS (Blocks):** `public/js/blocks-checkout.js`
+   - Added `DeliveryInstructionsComponent` React component
+   - Preset dropdown + custom textarea with consistent styling
+   - Watches `extensionDataState.delivery_method` for visibility
+   - Dispatches both preset and custom values to extension data
+   - Renders at `woocommerce_before_order_notes` position
+
+8. **Display Components:**
+   - `OrderDisplay.php`: Shows preset label + custom text in admin order view and meta box
+   - `EmailDisplay.php`: Includes delivery instructions in order emails (HTML and plain text)
+   - `AccountDisplay.php`: Shows delivery instructions in My Account order details
+   - All use `get_preset_label()` to display the label instead of value
+
+**Files Created:**
 ```
 src/WooCheckoutToolkit/Delivery/DeliveryInstructions.php
 admin/views/settings-delivery-instructions.php
+```
+
+**Files Modified:**
+```
+src/WooCheckoutToolkit/Main.php
+  - Added: use WooCheckoutToolkit\Delivery\DeliveryInstructions;
+  - Added: private ?DeliveryInstructions $delivery_instructions = null;
+  - Added: Initialization in init_frontend()
+  - Added: get_default_delivery_instructions_settings()
+  - Added: get_delivery_instructions_settings()
+  - Updated: get_blocks_script_data() with deliveryInstructions
+  - Updated: enqueue checks to include delivery_instructions_settings
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: register_setting() for delivery_instructions_settings
+  - Added: get_default_delivery_instructions_settings()
+  - Added: sanitize_delivery_instructions_settings()
+
+admin/views/settings-page.php
+  - Added: $delivery_instructions_settings variable
+  - Added: Delivery Instructions tab in navigation
+  - Added: Include for settings-delivery-instructions.php
+
+src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: delivery_instructions_preset and delivery_instructions_custom to schema
+  - Added: deliveryInstructions to script data
+  - Added: get_delivery_instructions_settings() helper
+  - Updated: save_order_data() for delivery instructions (respects pickup)
+
+public/js/blocks-checkout.js
+  - Added: deliveryInstructions to destructured settings
+  - Added: DeliveryInstructionsComponent with visibility based on delivery method
+  - Updated: initPositionedFields() to render delivery instructions
+  - Updated: initExtensionData() with delivery instructions
+
+src/WooCheckoutToolkit/Display/OrderDisplay.php
+  - Added: delivery_instructions_preset/custom variables and settings
+  - Added: Display logic in display_in_admin() and render_meta_box()
+  - Added: get_preset_label() helper method
+
+src/WooCheckoutToolkit/Display/EmailDisplay.php
+  - Added: delivery_instructions_preset/custom variables and settings
+  - Updated: render_html() and render_plain_text() signatures and content
+  - Added: get_preset_label() helper method
+
+src/WooCheckoutToolkit/Display/AccountDisplay.php
+  - Added: delivery_instructions_preset/custom variables and settings
+  - Added: Display logic for delivery instructions
+  - Added: get_preset_label() helper method
+```
+
+**Data Flow (Blocks Checkout):**
+```
+1. User selects preset option or types custom text
+2. DeliveryInstructionsComponent calls setExtensionData() for each
+3. On submit, Store API receives extensions['checkout-toolkit']['delivery_instructions_preset/custom']
+4. BlocksIntegration::save_order_data() checks delivery method
+5. If not pickup, saves to _wct_delivery_instructions_preset and _wct_delivery_instructions_custom
+6. Display components read via $order->get_meta()
+```
+
+**Data Flow (Classic Checkout):**
+```
+1. User selects preset option or types custom text
+2. Form submits with checkout_toolkit_delivery_instructions_preset/custom in POST
+3. DeliveryInstructions::validate_field() validates if required
+4. DeliveryInstructions::save_field() checks delivery method and saves
+5. Display components read via $order->get_meta()
+```
+
+**Usage Example:**
+```php
+// Get delivery instructions from order
+$order = wc_get_order($order_id);
+$preset = $order->get_meta('_wct_delivery_instructions_preset');
+$custom = $order->get_meta('_wct_delivery_instructions_custom');
+
+// Get preset label from settings
+$settings = Main::get_instance()->get_delivery_instructions_settings();
+foreach ($settings['preset_options'] as $option) {
+    if ($option['value'] === $preset) {
+        $preset_label = $option['label'];
+        break;
+    }
+}
+
+// Combine for display
+$instructions = '';
+if (!empty($preset_label)) {
+    $instructions .= $preset_label;
+}
+if (!empty($custom)) {
+    $instructions .= ' - ' . $custom;
+}
+
+// Hook after delivery instructions saved
+add_action('checkout_toolkit_delivery_instructions_preset_saved', function($order_id, $value) {
+    // Custom logic
+}, 10, 2);
+
+add_action('checkout_toolkit_delivery_instructions_custom_saved', function($order_id, $value) {
+    // Custom logic
+}, 10, 2);
 ```
 
 ---
@@ -728,7 +890,7 @@ templates/checkout/gift-options.php
 | 2 | 1 | Second custom field | ✅ Completed | Medium |
 | 3 | 1 | Field type options | ✅ Completed | Medium |
 | 4 | 2 | Pickup vs Delivery toggle | ✅ Completed | High |
-| 5 | 2 | Delivery instructions | ⏳ Pending | Medium |
+| 5 | 2 | Delivery instructions | ✅ Completed | Medium |
 | 6 | 2 | Time window selection | ⏳ Pending | Medium |
 | 7 | 3 | Store location selector | ⏳ Pending | High |
 | 8 | 3 | Estimated delivery display | ⏳ Pending | Low |
@@ -799,6 +961,39 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2025-12-25 (Session 2)
+- Completed Feature 5: Delivery Instructions Field
+  - Preset dropdown with configurable options (Leave at door, Ring bell, etc.)
+  - Custom textarea for additional instructions
+  - Conditional visibility: only shown when Delivery is selected, hidden for Pickup
+  - Works in both Classic and Blocks checkout
+  - Displayed in admin orders, emails, and My Account
+- Added conditional visibility to Delivery Date field (hide for Pickup)
+- Progress: 50% (5/10 features complete)
+
+---
+
+## Future Refactoring Notes
+
+### Pickup/Delivery Field Visibility Review
+Once all Pickup/Delivery features are complete, conduct a full review of field visibility:
+- **Issue:** Some fields (e.g., custom field checkbox) still show when Pickup is selected
+- **Action:** Review all checkout fields and ensure proper conditional visibility based on delivery method
+- **Scope:**
+  - Custom Field 1 and 2 - add option for "Show only for Delivery" / "Show only for Pickup" / "Show for both"
+  - Any other delivery-specific fields should respect the Pickup/Delivery toggle
+- **Priority:** After Phase 2 features complete
+
+### 2025-12-25
+- Fixed dropdown label/value order in settings-fields.php
+- Added UX improvement: field options disabled until field is enabled
+- Implemented position-based rendering for Blocks checkout (full position support)
+- Fixed `__internalSetExtensionData` deprecation (using new `setExtensionData` API with fallback)
+- Added debouncing to reduce `useSelect` re-render warnings
+- Fixed settings defaults merging in DeliveryDate.php and AvailabilityChecker.php
+- Security hardening: Added proper nonce verification to OrderFields, OrderFields2, DeliveryMethod, DeliveryList
+- Plugin passes WordPress Plugin Check (only hidden files and unavoidable slow DB query warnings remain)
 
 ### 2024-12-24
 - Completed Feature 3: Field Type Options (text, textarea, checkbox, select)

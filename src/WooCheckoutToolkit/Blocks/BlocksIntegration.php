@@ -72,6 +72,7 @@ class BlocksIntegration implements IntegrationInterface
         $field_settings = $main->get_field_settings();
         $field_2_settings = $this->get_field_2_settings();
         $delivery_method_settings = $this->get_delivery_method_settings();
+        $delivery_instructions_settings = $this->get_delivery_instructions_settings();
 
         return [
             'orderNotes' => [
@@ -86,6 +87,16 @@ class BlocksIntegration implements IntegrationInterface
                 'deliveryLabel' => $delivery_method_settings['delivery_label'],
                 'pickupLabel' => $delivery_method_settings['pickup_label'],
                 'showAs' => $delivery_method_settings['show_as'],
+            ],
+            'deliveryInstructions' => [
+                'enabled' => $delivery_instructions_settings['enabled'],
+                'required' => $delivery_instructions_settings['required'],
+                'fieldLabel' => $delivery_instructions_settings['field_label'],
+                'presetLabel' => $delivery_instructions_settings['preset_label'],
+                'presetOptions' => $delivery_instructions_settings['preset_options'],
+                'customLabel' => $delivery_instructions_settings['custom_label'],
+                'customPlaceholder' => $delivery_instructions_settings['custom_placeholder'],
+                'maxLength' => $delivery_instructions_settings['max_length'],
             ],
             'delivery' => [
                 'enabled' => $delivery_settings['enabled'],
@@ -165,6 +176,18 @@ class BlocksIntegration implements IntegrationInterface
     {
         $defaults = (new Settings())->get_default_delivery_method_settings();
         $settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get delivery instructions settings
+     *
+     * @return array Settings array.
+     */
+    private function get_delivery_instructions_settings(): array
+    {
+        $defaults = (new Settings())->get_default_delivery_instructions_settings();
+        $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -254,6 +277,18 @@ class BlocksIntegration implements IntegrationInterface
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
+            'delivery_instructions_preset' => [
+                'description' => __('Delivery instructions preset option', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
+            'delivery_instructions_custom' => [
+                'description' => __('Custom delivery instructions', 'checkout-toolkit-for-woo'),
+                'type' => ['string', 'null'],
+                'context' => ['view', 'edit'],
+                'default' => '',
+            ],
             'delivery_date' => [
                 'description' => __('Preferred delivery date', 'checkout-toolkit-for-woo'),
                 'type' => ['string', 'null'],
@@ -292,9 +327,11 @@ class BlocksIntegration implements IntegrationInterface
         $data = $extensions['checkout-toolkit'];
 
         // Save delivery method
+        $current_delivery_method = 'delivery';
         if (!empty($data['delivery_method'])) {
             $delivery_method = sanitize_key($data['delivery_method']);
             if (in_array($delivery_method, ['delivery', 'pickup'], true)) {
+                $current_delivery_method = $delivery_method;
                 $order->update_meta_data('_wct_delivery_method', $delivery_method);
 
                 /**
@@ -304,6 +341,31 @@ class BlocksIntegration implements IntegrationInterface
                  * @param string $delivery_method The delivery method.
                  */
                 do_action('checkout_toolkit_delivery_method_saved', $order->get_id(), $delivery_method);
+            }
+        }
+
+        // Save delivery instructions (only if not pickup)
+        if ($current_delivery_method !== 'pickup') {
+            // Save preset
+            if (!empty($data['delivery_instructions_preset'])) {
+                $preset = sanitize_key($data['delivery_instructions_preset']);
+                $order->update_meta_data('_wct_delivery_instructions_preset', $preset);
+                do_action('checkout_toolkit_delivery_instructions_preset_saved', $order->get_id(), $preset);
+            }
+
+            // Save custom text
+            if (!empty($data['delivery_instructions_custom'])) {
+                $custom = sanitize_textarea_field($data['delivery_instructions_custom']);
+
+                // Apply max length
+                $di_settings = $this->get_delivery_instructions_settings();
+                $max_length = (int) ($di_settings['max_length'] ?? 0);
+                if ($max_length > 0 && mb_strlen($custom) > $max_length) {
+                    $custom = mb_substr($custom, 0, $max_length);
+                }
+
+                $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
+                do_action('checkout_toolkit_delivery_instructions_custom_saved', $order->get_id(), $custom);
             }
         }
 
