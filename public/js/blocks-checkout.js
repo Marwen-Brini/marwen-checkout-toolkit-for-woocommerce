@@ -45,7 +45,48 @@
         return;
     }
 
-    const { orderNotes, deliveryMethod, deliveryInstructions, timeWindow, storeLocations, delivery, estimatedDelivery, customField, customField2, i18n } = settings;
+    const { orderNotes, deliveryMethod, deliveryInstructions, timeWindow, storeLocations, delivery, estimatedDelivery, customField, customField2, cart, i18n } = settings;
+
+    /**
+     * Check if a custom field should be shown based on visibility settings
+     *
+     * @param {Object} fieldConfig - The field configuration with visibility settings
+     * @returns {boolean} Whether the field should be visible
+     */
+    const shouldShowFieldByVisibility = (fieldConfig) => {
+        const { visibilityType, visibilityProducts, visibilityCategories, visibilityMode } = fieldConfig || {};
+
+        // Default to always visible
+        if (!visibilityType || visibilityType === 'always') {
+            return true;
+        }
+
+        // Get cart data
+        const cartProductIds = (cart?.productIds || []).map(id => parseInt(id, 10));
+        const cartCategoryIds = (cart?.categoryIds || []).map(id => parseInt(id, 10));
+
+        // Empty cart handling
+        if (cartProductIds.length === 0) {
+            return visibilityMode !== 'show';
+        }
+
+        let hasMatch = false;
+
+        if (visibilityType === 'products') {
+            const targetIds = (visibilityProducts || []).map(id => parseInt(id, 10));
+            hasMatch = cartProductIds.some(id => targetIds.includes(id));
+        } else if (visibilityType === 'categories') {
+            const targetIds = (visibilityCategories || []).map(id => parseInt(id, 10));
+            hasMatch = cartCategoryIds.some(id => targetIds.includes(id));
+        }
+
+        // Apply visibility mode
+        if (visibilityMode === 'hide') {
+            return !hasMatch; // Hide when match = show when no match
+        }
+
+        return hasMatch; // Show when match
+    };
 
     /**
      * Position mapping: PHP hooks to DOM selectors
@@ -800,6 +841,9 @@
             };
 
             if (!fieldConfig || !fieldConfig.enabled) return null;
+
+            // Check product/category visibility rules
+            if (!shouldShowFieldByVisibility(fieldConfig)) return null;
 
             const inputStyles = {
                 width: '100%',

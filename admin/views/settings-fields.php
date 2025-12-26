@@ -12,6 +12,17 @@ defined('ABSPATH') || exit;
 
 $checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
 $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_positions();
+
+// Get product categories for visibility settings
+$checkout_toolkit_product_categories = get_terms([
+    'taxonomy' => 'product_cat',
+    'hide_empty' => false,
+    'orderby' => 'name',
+    'order' => 'ASC',
+]);
+if (is_wp_error($checkout_toolkit_product_categories)) {
+    $checkout_toolkit_product_categories = [];
+}
 ?>
 
 <style>
@@ -55,6 +66,44 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
 .wct-field-options-disabled button,
 .wct-field-options-disabled a {
     pointer-events: none;
+}
+/* Visibility settings styles */
+.wct-visibility-options {
+    border: 1px solid #c3c4c7;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+.wct-visibility-products,
+.wct-visibility-categories {
+    display: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+.wct-visibility-products.active,
+.wct-visibility-categories.active {
+    display: block;
+}
+.wct-visibility-mode {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+.wct-category-checkboxes {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #fff;
+}
+.wct-category-checkboxes label {
+    display: block;
+    margin-bottom: 5px;
+}
+.wct-visibility-products .select2-container {
+    min-width: 400px;
 }
 </style>
 
@@ -291,6 +340,103 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                                <?php checked(!empty($checkout_toolkit_field_settings['show_in_emails'])); ?>>
                         <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
                     </label>
+                </td>
+            </tr>
+
+            <!-- Visibility Settings -->
+            <tr>
+                <th scope="row">
+                    <?php esc_html_e('Field Visibility', 'checkout-toolkit-for-woo'); ?>
+                </th>
+                <td>
+                    <div class="wct-visibility-options">
+                        <label style="display: block; margin-bottom: 8px;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_settings[visibility_type]"
+                                   value="always"
+                                   class="wct-visibility-type-radio"
+                                   data-field="1"
+                                   <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'always'); ?>>
+                            <?php esc_html_e('Always show', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+                        <label style="display: block; margin-bottom: 8px;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_settings[visibility_type]"
+                                   value="products"
+                                   class="wct-visibility-type-radio"
+                                   data-field="1"
+                                   <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'products'); ?>>
+                            <?php esc_html_e('Show for specific products', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+                        <label style="display: block;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_settings[visibility_type]"
+                                   value="categories"
+                                   class="wct-visibility-type-radio"
+                                   data-field="1"
+                                   <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
+                            <?php esc_html_e('Show for specific categories', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+
+                        <!-- Product Selection -->
+                        <div class="wct-visibility-products wct-visibility-1-products <?php echo ($checkout_toolkit_field_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
+                            <label><?php esc_html_e('Select Products:', 'checkout-toolkit-for-woo'); ?></label>
+                            <select class="wc-product-search"
+                                    multiple="multiple"
+                                    style="width: 100%;"
+                                    data-placeholder="<?php esc_attr_e('Search for products...', 'checkout-toolkit-for-woo'); ?>"
+                                    data-action="woocommerce_json_search_products"
+                                    name="checkout_toolkit_field_settings[visibility_products][]">
+                                <?php
+                                $checkout_toolkit_selected_products_1 = $checkout_toolkit_field_settings['visibility_products'] ?? [];
+                                foreach ($checkout_toolkit_selected_products_1 as $checkout_toolkit_product_id) :
+                                    $checkout_toolkit_product = wc_get_product($checkout_toolkit_product_id);
+                                    if ($checkout_toolkit_product) :
+                                ?>
+                                    <option value="<?php echo esc_attr($checkout_toolkit_product_id); ?>" selected>
+                                        <?php echo esc_html($checkout_toolkit_product->get_formatted_name()); ?>
+                                    </option>
+                                <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+
+                        <!-- Category Selection -->
+                        <div class="wct-visibility-categories wct-visibility-1-categories <?php echo ($checkout_toolkit_field_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
+                            <label><?php esc_html_e('Select Categories:', 'checkout-toolkit-for-woo'); ?></label>
+                            <div class="wct-category-checkboxes">
+                                <?php
+                                $checkout_toolkit_selected_cats_1 = $checkout_toolkit_field_settings['visibility_categories'] ?? [];
+                                foreach ($checkout_toolkit_product_categories as $checkout_toolkit_cat) :
+                                ?>
+                                <label>
+                                    <input type="checkbox"
+                                           name="checkout_toolkit_field_settings[visibility_categories][]"
+                                           value="<?php echo esc_attr($checkout_toolkit_cat->term_id); ?>"
+                                           <?php checked(in_array($checkout_toolkit_cat->term_id, $checkout_toolkit_selected_cats_1)); ?>>
+                                    <?php echo esc_html($checkout_toolkit_cat->name); ?>
+                                </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <!-- Visibility Mode -->
+                        <div class="wct-visibility-mode wct-visibility-1-mode" style="<?php echo ($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="radio"
+                                       name="checkout_toolkit_field_settings[visibility_mode]"
+                                       value="show"
+                                       <?php checked(($checkout_toolkit_field_settings['visibility_mode'] ?? 'show') === 'show'); ?>>
+                                <?php esc_html_e('Show field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                            </label>
+                            <label style="display: block;">
+                                <input type="radio"
+                                       name="checkout_toolkit_field_settings[visibility_mode]"
+                                       value="hide"
+                                       <?php checked(($checkout_toolkit_field_settings['visibility_mode'] ?? 'show') === 'hide'); ?>>
+                                <?php esc_html_e('Hide field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                            </label>
+                        </div>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -532,6 +678,103 @@ $checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_position
                     </label>
                 </td>
             </tr>
+
+            <!-- Visibility Settings 2 -->
+            <tr>
+                <th scope="row">
+                    <?php esc_html_e('Field Visibility', 'checkout-toolkit-for-woo'); ?>
+                </th>
+                <td>
+                    <div class="wct-visibility-options">
+                        <label style="display: block; margin-bottom: 8px;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_2_settings[visibility_type]"
+                                   value="always"
+                                   class="wct-visibility-type-radio"
+                                   data-field="2"
+                                   <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'always'); ?>>
+                            <?php esc_html_e('Always show', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+                        <label style="display: block; margin-bottom: 8px;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_2_settings[visibility_type]"
+                                   value="products"
+                                   class="wct-visibility-type-radio"
+                                   data-field="2"
+                                   <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'products'); ?>>
+                            <?php esc_html_e('Show for specific products', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+                        <label style="display: block;">
+                            <input type="radio"
+                                   name="checkout_toolkit_field_2_settings[visibility_type]"
+                                   value="categories"
+                                   class="wct-visibility-type-radio"
+                                   data-field="2"
+                                   <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
+                            <?php esc_html_e('Show for specific categories', 'checkout-toolkit-for-woo'); ?>
+                        </label>
+
+                        <!-- Product Selection 2 -->
+                        <div class="wct-visibility-products wct-visibility-2-products <?php echo ($checkout_toolkit_field_2_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
+                            <label><?php esc_html_e('Select Products:', 'checkout-toolkit-for-woo'); ?></label>
+                            <select class="wc-product-search"
+                                    multiple="multiple"
+                                    style="width: 100%;"
+                                    data-placeholder="<?php esc_attr_e('Search for products...', 'checkout-toolkit-for-woo'); ?>"
+                                    data-action="woocommerce_json_search_products"
+                                    name="checkout_toolkit_field_2_settings[visibility_products][]">
+                                <?php
+                                $checkout_toolkit_selected_products_2 = $checkout_toolkit_field_2_settings['visibility_products'] ?? [];
+                                foreach ($checkout_toolkit_selected_products_2 as $checkout_toolkit_product_id) :
+                                    $checkout_toolkit_product = wc_get_product($checkout_toolkit_product_id);
+                                    if ($checkout_toolkit_product) :
+                                ?>
+                                    <option value="<?php echo esc_attr($checkout_toolkit_product_id); ?>" selected>
+                                        <?php echo esc_html($checkout_toolkit_product->get_formatted_name()); ?>
+                                    </option>
+                                <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+
+                        <!-- Category Selection 2 -->
+                        <div class="wct-visibility-categories wct-visibility-2-categories <?php echo ($checkout_toolkit_field_2_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
+                            <label><?php esc_html_e('Select Categories:', 'checkout-toolkit-for-woo'); ?></label>
+                            <div class="wct-category-checkboxes">
+                                <?php
+                                $checkout_toolkit_selected_cats_2 = $checkout_toolkit_field_2_settings['visibility_categories'] ?? [];
+                                foreach ($checkout_toolkit_product_categories as $checkout_toolkit_cat) :
+                                ?>
+                                <label>
+                                    <input type="checkbox"
+                                           name="checkout_toolkit_field_2_settings[visibility_categories][]"
+                                           value="<?php echo esc_attr($checkout_toolkit_cat->term_id); ?>"
+                                           <?php checked(in_array($checkout_toolkit_cat->term_id, $checkout_toolkit_selected_cats_2)); ?>>
+                                    <?php echo esc_html($checkout_toolkit_cat->name); ?>
+                                </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <!-- Visibility Mode 2 -->
+                        <div class="wct-visibility-mode wct-visibility-2-mode" style="<?php echo ($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
+                            <label style="display: block; margin-bottom: 8px;">
+                                <input type="radio"
+                                       name="checkout_toolkit_field_2_settings[visibility_mode]"
+                                       value="show"
+                                       <?php checked(($checkout_toolkit_field_2_settings['visibility_mode'] ?? 'show') === 'show'); ?>>
+                                <?php esc_html_e('Show field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                            </label>
+                            <label style="display: block;">
+                                <input type="radio"
+                                       name="checkout_toolkit_field_2_settings[visibility_mode]"
+                                       value="hide"
+                                       <?php checked(($checkout_toolkit_field_2_settings['visibility_mode'] ?? 'show') === 'hide'); ?>>
+                                <?php esc_html_e('Hide field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                            </label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -598,5 +841,66 @@ jQuery(document).ready(function($) {
             $(this).closest('.wct-select-option-row').remove();
         }
     });
+
+    // Visibility type change handler
+    $('.wct-visibility-type-radio').on('change', function() {
+        var fieldNum = $(this).data('field');
+        var visibilityType = $(this).val();
+
+        // Hide all visibility options for this field
+        $('.wct-visibility-' + fieldNum + '-products').removeClass('active');
+        $('.wct-visibility-' + fieldNum + '-categories').removeClass('active');
+
+        // Show/hide visibility mode section
+        if (visibilityType === 'always') {
+            $('.wct-visibility-' + fieldNum + '-mode').hide();
+        } else {
+            $('.wct-visibility-' + fieldNum + '-mode').show();
+            // Show the relevant visibility option
+            $('.wct-visibility-' + fieldNum + '-' + visibilityType).addClass('active');
+        }
+    });
+
+    // Initialize WooCommerce enhanced select (product search)
+    if (typeof $.fn.selectWoo !== 'undefined') {
+        $('select.wc-product-search').each(function() {
+            var $el = $(this);
+            // Only initialize if not already done
+            if (!$el.hasClass('select2-hidden-accessible')) {
+                $el.selectWoo({
+                    minimumInputLength: 3,
+                    allowClear: true,
+                    placeholder: $el.data('placeholder'),
+                    ajax: {
+                        url: ajaxurl,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                term: params.term,
+                                action: $el.data('action'),
+                                security: '<?php echo esc_js(wp_create_nonce('search-products')); ?>'
+                            };
+                        },
+                        processResults: function(data) {
+                            var terms = [];
+                            if (data) {
+                                $.each(data, function(id, text) {
+                                    terms.push({
+                                        id: id,
+                                        text: text
+                                    });
+                                });
+                            }
+                            return {
+                                results: terms
+                            };
+                        },
+                        cache: true
+                    }
+                });
+            }
+        });
+    }
 });
 </script>

@@ -64,6 +64,11 @@ class OrderFields
             return;
         }
 
+        // Check visibility based on cart contents
+        if (!$this->should_show_field()) {
+            return;
+        }
+
         $show = apply_filters('checkout_toolkit_show_custom_field', true, WC()->cart);
 
         if (!$show) {
@@ -150,6 +155,11 @@ class OrderFields
         $settings = $this->get_settings();
 
         if (empty($settings['enabled'])) {
+            return;
+        }
+
+        // Skip validation if field is hidden by visibility rules
+        if (!$this->should_show_field()) {
             return;
         }
 
@@ -245,6 +255,11 @@ class OrderFields
             return;
         }
 
+        // Skip saving if field was hidden by visibility rules
+        if (!$this->should_show_field()) {
+            return;
+        }
+
         $field_type = $settings['field_type'] ?? 'textarea';
         $value = $this->get_posted_value($field_type);
 
@@ -271,5 +286,64 @@ class OrderFields
         $defaults = \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings();
         $settings = get_option('checkout_toolkit_field_settings', []);
         return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Check if field should be shown based on visibility settings
+     *
+     * @return bool Whether field should be displayed.
+     */
+    private function should_show_field(): bool
+    {
+        $settings = $this->get_settings();
+
+        // Always show if visibility_type is 'always' or not set
+        $visibility_type = $settings['visibility_type'] ?? 'always';
+        if ($visibility_type === 'always') {
+            return true;
+        }
+
+        // Get cart contents
+        $cart = WC()->cart;
+        if (!$cart || $cart->is_empty()) {
+            // Empty cart: show if mode is 'hide', hide if mode is 'show'
+            return ($settings['visibility_mode'] ?? 'show') !== 'show';
+        }
+
+        $cart_product_ids = [];
+        $cart_category_ids = [];
+
+        foreach ($cart->get_cart() as $cart_item) {
+            $product_id = $cart_item['product_id'];
+            $cart_product_ids[] = $product_id;
+
+            // Get product categories
+            $terms = get_the_terms($product_id, 'product_cat');
+            if ($terms && !is_wp_error($terms)) {
+                foreach ($terms as $term) {
+                    $cart_category_ids[] = $term->term_id;
+                }
+            }
+        }
+
+        $cart_category_ids = array_unique($cart_category_ids);
+
+        $has_match = false;
+
+        if ($visibility_type === 'products') {
+            $target_ids = array_map('intval', (array) ($settings['visibility_products'] ?? []));
+            $has_match = !empty(array_intersect($cart_product_ids, $target_ids));
+        } elseif ($visibility_type === 'categories') {
+            $target_ids = array_map('intval', (array) ($settings['visibility_categories'] ?? []));
+            $has_match = !empty(array_intersect($cart_category_ids, $target_ids));
+        }
+
+        // Apply visibility mode
+        $visibility_mode = $settings['visibility_mode'] ?? 'show';
+        if ($visibility_mode === 'hide') {
+            return !$has_match; // Hide when match = show when no match
+        }
+
+        return $has_match; // Show when match
     }
 }

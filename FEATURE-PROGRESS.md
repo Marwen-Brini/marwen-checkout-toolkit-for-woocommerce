@@ -5,8 +5,8 @@
 Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
-**Completed:** 8
-**Progress:** 80%
+**Completed:** 9
+**Progress:** 90%
 
 ---
 
@@ -1222,38 +1222,142 @@ $message = $settings['cutoff_message']; // e.g., 'Order by {time} for delivery a
 
 ### Feature 9: Product/Category Field Visibility
 
-**Status:** ⏳ Pending
+**Status:** ✅ Completed
 
 **Description:**
-Show custom fields only when specific products or product categories are in the cart. Useful for conditional information collection.
+Show or hide custom fields based on products or product categories in the cart. Each custom field (Field 1 and Field 2) has independent visibility rules.
 
-**Planned Settings Addition to Field Settings:**
+**Settings Added to Field Settings:**
 | Setting | Type | Default |
 |---------|------|---------|
-| `visibility_type` | string | `'all'`, `'products'`, `'categories'` |
+| `visibility_type` | string | `'always'`, `'products'`, `'categories'` |
 | `visibility_products` | array | Product IDs |
-| `visibility_categories` | array | Category IDs/slugs |
-| `visibility_mode` | string | `'show'` or `'hide'` |
+| `visibility_categories` | array | Category term IDs |
+| `visibility_mode` | string | `'show'` (show when match) or `'hide'` (hide when match) |
 
-**Planned Files:**
+**Implementation Details:**
+
+1. **Settings Defaults:** `src/WooCheckoutToolkit/Main.php`
+   - Added visibility settings to both `get_default_field_settings()` and `get_default_field_2_settings()`
+   - Default: `visibility_type => 'always'` (show for all products)
+
+2. **Settings Sanitization:** `src/WooCheckoutToolkit/Admin/Settings.php`
+   - Added sanitization for visibility fields in `sanitize_field_settings()` and `sanitize_field_2_settings()`
+   - Added `sanitize_visibility_ids()` helper for product/category ID arrays
+
+3. **Admin UI:** `admin/views/settings-fields.php`
+   - Radio buttons for visibility type (Always / Specific Products / Specific Categories)
+   - WooCommerce AJAX product search dropdown (`wc-product-search` class)
+   - Category checkboxes populated from `get_terms('product_cat')`
+   - Visibility mode selection (Show when in cart / Hide when in cart)
+   - JavaScript handlers for conditional display and selectWoo initialization
+
+4. **Admin Assets:** `src/WooCheckoutToolkit/Admin/Admin.php`
+   - Enqueues `wc-enhanced-select` script and `woocommerce_admin_styles` for product search
+
+5. **Classic Checkout:** `src/WooCheckoutToolkit/Fields/OrderFields.php` and `OrderFields2.php`
+   - Added `should_show_field(): bool` method
+   - Checks cart contents against configured product/category IDs
+   - Applied in `render_custom_field()`, `validate_field()`, and `save_field()`
+
+6. **Blocks Integration:** `src/WooCheckoutToolkit/Blocks/BlocksIntegration.php`
+   - Added visibility settings to `customField` and `customField2` in `get_script_data()`
+   - Added `cart` data with `productIds` and `categoryIds` via `get_cart_visibility_data()`
+   - Added `should_show_custom_field()` method for server-side validation
+   - Updated `save_order_data()` to skip saving when field is hidden by visibility rules
+
+7. **Blocks Frontend:** `public/js/blocks-checkout.js`
+   - Added `shouldShowFieldByVisibility(fieldConfig)` helper function
+   - Updated `createCustomFieldComponent()` to check visibility before rendering
+   - Uses cart data from settings for product/category matching
+
+**Files Modified:**
 ```
-src/WooCheckoutToolkit/Fields/FieldVisibility.php
+src/WooCheckoutToolkit/Main.php
+  - Added: visibility_type, visibility_products, visibility_categories, visibility_mode defaults
+
+src/WooCheckoutToolkit/Admin/Settings.php
+  - Added: sanitize_visibility_ids() method
+  - Updated: sanitize_field_settings() and sanitize_field_2_settings()
+
+src/WooCheckoutToolkit/Admin/Admin.php
+  - Added: wp_enqueue_script('wc-enhanced-select') and wp_enqueue_style('woocommerce_admin_styles')
+
+admin/views/settings-fields.php
+  - Added: Visibility settings UI for both fields
+  - Added: CSS and JavaScript for visibility controls
+
+src/WooCheckoutToolkit/Fields/OrderFields.php
+  - Added: should_show_field() method
+  - Updated: render_custom_field(), validate_field(), save_field() to use visibility check
+
+src/WooCheckoutToolkit/Fields/OrderFields2.php
+  - Same changes as OrderFields.php
+
+src/WooCheckoutToolkit/Blocks/BlocksIntegration.php
+  - Added: visibilityType, visibilityProducts, visibilityCategories, visibilityMode to script data
+  - Added: cart.productIds and cart.categoryIds via get_cart_visibility_data()
+  - Added: should_show_custom_field() method
+  - Updated: save_order_data() with visibility checks
+
+public/js/blocks-checkout.js
+  - Added: shouldShowFieldByVisibility() helper function
+  - Updated: createCustomFieldComponent() with visibility check
 ```
 
-**Logic:**
+**Visibility Logic:**
 ```php
-// In cart check
-foreach (WC()->cart->get_cart() as $item) {
-    $product_id = $item['product_id'];
-    $categories = wp_get_post_terms($product_id, 'product_cat', ['fields' => 'ids']);
+private function should_show_field(): bool
+{
+    $settings = $this->get_settings();
+    $visibility_type = $settings['visibility_type'] ?? 'always';
 
-    if ($visibility_type === 'products' && in_array($product_id, $visibility_products)) {
+    if ($visibility_type === 'always') {
         return true;
     }
-    if ($visibility_type === 'categories' && array_intersect($categories, $visibility_categories)) {
-        return true;
+
+    // Get cart product and category IDs
+    $cart_product_ids = [];
+    $cart_category_ids = [];
+    foreach (WC()->cart->get_cart() as $cart_item) {
+        $cart_product_ids[] = $cart_item['product_id'];
+        $terms = get_the_terms($cart_item['product_id'], 'product_cat');
+        if ($terms) {
+            foreach ($terms as $term) {
+                $cart_category_ids[] = $term->term_id;
+            }
+        }
     }
+
+    $has_match = false;
+    if ($visibility_type === 'products') {
+        $has_match = !empty(array_intersect($cart_product_ids, $settings['visibility_products']));
+    } elseif ($visibility_type === 'categories') {
+        $has_match = !empty(array_intersect($cart_category_ids, $settings['visibility_categories']));
+    }
+
+    // Apply visibility mode
+    return ($settings['visibility_mode'] === 'hide') ? !$has_match : $has_match;
 }
+```
+
+**Usage Example:**
+```php
+// Configure field to show only for products in category "Gift Baskets"
+$settings = [
+    'visibility_type' => 'categories',
+    'visibility_categories' => [15], // Category ID for "Gift Baskets"
+    'visibility_mode' => 'show',     // Show when match
+];
+// Field will only appear when cart contains products from the Gift Baskets category
+
+// Configure field to hide for specific products
+$settings = [
+    'visibility_type' => 'products',
+    'visibility_products' => [123, 456], // Product IDs
+    'visibility_mode' => 'hide',         // Hide when match
+];
+// Field will be hidden when products 123 or 456 are in the cart
 ```
 
 ---
@@ -1302,7 +1406,7 @@ templates/checkout/gift-options.php
 | 6 | 2 | Time window selection | ✅ Completed | Medium |
 | 7 | 3 | Store location selector | ✅ Completed | High |
 | 8 | 3 | Estimated delivery display | ✅ Completed | Low |
-| 9 | 4 | Product/category visibility | ⏳ Pending | Medium |
+| 9 | 4 | Product/category visibility | ✅ Completed | Medium |
 | 10 | 4 | Gift message option | ⏳ Pending | Low |
 
 ---
@@ -1388,6 +1492,18 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2025-12-26 (Session 6)
+- Completed Feature 9: Product/Category Field Visibility
+  - Custom fields can now be shown/hidden based on cart contents
+  - Added visibility_type setting (always, products, categories)
+  - Added visibility_mode setting (show when match, hide when match)
+  - WooCommerce AJAX product search for selecting products
+  - Category checkboxes for selecting product categories
+  - Independent visibility rules for Field 1 and Field 2
+  - Server-side validation in BlocksIntegration.php
+  - Works in both Classic and Blocks checkout
+- Progress: 90% (9/10 features complete)
 
 ### 2025-12-25 (Session 5)
 - Completed Feature 8: Estimated Delivery Display

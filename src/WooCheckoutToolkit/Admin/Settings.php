@@ -149,6 +149,10 @@ class Settings
             'show_in_admin' => true,
             'checkbox_label' => '',
             'select_options' => [],
+            'visibility_type' => 'always',
+            'visibility_products' => [],
+            'visibility_categories' => [],
+            'visibility_mode' => 'show',
         ];
     }
 
@@ -181,6 +185,14 @@ class Settings
             'show_in_admin' => !empty($input['show_in_admin']),
             'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? $defaults['checkbox_label']),
             'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
+            'visibility_type' => in_array($input['visibility_type'] ?? '', ['always', 'products', 'categories'], true)
+                ? $input['visibility_type']
+                : $defaults['visibility_type'],
+            'visibility_products' => $this->sanitize_visibility_ids($input['visibility_products'] ?? []),
+            'visibility_categories' => $this->sanitize_visibility_ids($input['visibility_categories'] ?? []),
+            'visibility_mode' => in_array($input['visibility_mode'] ?? '', ['show', 'hide'], true)
+                ? $input['visibility_mode']
+                : $defaults['visibility_mode'],
         ];
     }
 
@@ -518,7 +530,30 @@ class Settings
             'show_in_admin' => !empty($input['show_in_admin']),
             'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? ($defaults['checkbox_label'] ?? '')),
             'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
+            'visibility_type' => in_array($input['visibility_type'] ?? '', ['always', 'products', 'categories'], true)
+                ? $input['visibility_type']
+                : $defaults['visibility_type'],
+            'visibility_products' => $this->sanitize_visibility_ids($input['visibility_products'] ?? []),
+            'visibility_categories' => $this->sanitize_visibility_ids($input['visibility_categories'] ?? []),
+            'visibility_mode' => in_array($input['visibility_mode'] ?? '', ['show', 'hide'], true)
+                ? $input['visibility_mode']
+                : $defaults['visibility_mode'],
         ];
+    }
+
+    /**
+     * Sanitize visibility IDs array
+     *
+     * @param mixed $ids Input IDs (array or empty).
+     * @return array Sanitized array of integer IDs.
+     */
+    private function sanitize_visibility_ids($ids): array
+    {
+        if (!is_array($ids)) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map('absint', $ids)));
     }
 
     /**

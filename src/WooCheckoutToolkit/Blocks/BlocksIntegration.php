@@ -135,6 +135,10 @@ class BlocksIntegration implements IntegrationInterface
                 'maxLength' => $field_settings['max_length'],
                 'checkboxLabel' => $field_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_settings['select_options'] ?? [],
+                'visibilityType' => $field_settings['visibility_type'] ?? 'always',
+                'visibilityProducts' => array_map('intval', $field_settings['visibility_products'] ?? []),
+                'visibilityCategories' => array_map('intval', $field_settings['visibility_categories'] ?? []),
+                'visibilityMode' => $field_settings['visibility_mode'] ?? 'show',
             ],
             'customField2' => [
                 'enabled' => $field_2_settings['enabled'],
@@ -146,7 +150,12 @@ class BlocksIntegration implements IntegrationInterface
                 'maxLength' => $field_2_settings['max_length'],
                 'checkboxLabel' => $field_2_settings['checkbox_label'] ?? '',
                 'selectOptions' => $field_2_settings['select_options'] ?? [],
+                'visibilityType' => $field_2_settings['visibility_type'] ?? 'always',
+                'visibilityProducts' => array_map('intval', $field_2_settings['visibility_products'] ?? []),
+                'visibilityCategories' => array_map('intval', $field_2_settings['visibility_categories'] ?? []),
+                'visibilityMode' => $field_2_settings['visibility_mode'] ?? 'show',
             ],
+            'cart' => $this->get_cart_visibility_data(),
             'i18n' => [
                 'selectDate' => __('Select a date', 'checkout-toolkit-for-woo'),
                 'selectOption' => __('Select an option...', 'checkout-toolkit-for-woo'),
@@ -180,6 +189,36 @@ class BlocksIntegration implements IntegrationInterface
         $defaults = (new Settings())->get_default_field_2_settings();
         $settings = get_option('checkout_toolkit_field_2_settings', []);
         return wp_parse_args($settings, $defaults);
+    }
+
+    /**
+     * Get cart data for visibility checks
+     *
+     * @return array Cart product and category IDs.
+     */
+    private function get_cart_visibility_data(): array
+    {
+        $cart_product_ids = [];
+        $cart_category_ids = [];
+
+        if (WC()->cart && !WC()->cart->is_empty()) {
+            foreach (WC()->cart->get_cart() as $cart_item) {
+                $product_id = $cart_item['product_id'];
+                $cart_product_ids[] = $product_id;
+
+                $terms = get_the_terms($product_id, 'product_cat');
+                if ($terms && !is_wp_error($terms)) {
+                    foreach ($terms as $term) {
+                        $cart_category_ids[] = $term->term_id;
+                    }
+                }
+            }
+        }
+
+        return [
+            'productIds' => array_values(array_unique($cart_product_ids)),
+            'categoryIds' => array_values(array_unique($cart_category_ids)),
+        ];
     }
 
     /**
@@ -479,28 +518,34 @@ class BlocksIntegration implements IntegrationInterface
         if (isset($data['custom_field'])) {
             $main = Main::get_instance();
             $settings = $main->get_field_settings();
-            $field_type = $settings['field_type'] ?? 'textarea';
 
-            // Handle checkbox type
-            if ($field_type === 'checkbox') {
-                $value = !empty($data['custom_field']) ? '1' : '0';
-                $order->update_meta_data('_wct_custom_field', $value);
-                do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+            // Skip saving if field is hidden by visibility rules
+            if (!$this->should_show_custom_field($settings)) {
+                // Field was hidden, don't save
             } else {
-                $value = sanitize_textarea_field($data['custom_field']);
+                $field_type = $settings['field_type'] ?? 'textarea';
 
-                // Enforce max length for text fields
-                if (in_array($field_type, ['text', 'textarea'], true) &&
-                    $settings['max_length'] > 0 &&
-                    mb_strlen($value) > $settings['max_length']) {
-                    $value = mb_substr($value, 0, $settings['max_length']);
-                }
-
-                $value = apply_filters('checkout_toolkit_sanitize_field_value', $value, $order);
-
-                if (!empty($value)) {
+                // Handle checkbox type
+                if ($field_type === 'checkbox') {
+                    $value = !empty($data['custom_field']) ? '1' : '0';
                     $order->update_meta_data('_wct_custom_field', $value);
                     do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+                } else {
+                    $value = sanitize_textarea_field($data['custom_field']);
+
+                    // Enforce max length for text fields
+                    if (in_array($field_type, ['text', 'textarea'], true) &&
+                        $settings['max_length'] > 0 &&
+                        mb_strlen($value) > $settings['max_length']) {
+                        $value = mb_substr($value, 0, $settings['max_length']);
+                    }
+
+                    $value = apply_filters('checkout_toolkit_sanitize_field_value', $value, $order);
+
+                    if (!empty($value)) {
+                        $order->update_meta_data('_wct_custom_field', $value);
+                        do_action('checkout_toolkit_custom_field_saved', $order->get_id(), $value);
+                    }
                 }
             }
         }
@@ -508,28 +553,34 @@ class BlocksIntegration implements IntegrationInterface
         // Save custom field 2
         if (isset($data['custom_field_2'])) {
             $field_2_settings = $this->get_field_2_settings();
-            $field_type = $field_2_settings['field_type'] ?? 'text';
 
-            // Handle checkbox type
-            if ($field_type === 'checkbox') {
-                $value = !empty($data['custom_field_2']) ? '1' : '0';
-                $order->update_meta_data('_wct_custom_field_2', $value);
-                do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
+            // Skip saving if field is hidden by visibility rules
+            if (!$this->should_show_custom_field($field_2_settings)) {
+                // Field was hidden, don't save
             } else {
-                $value = sanitize_textarea_field($data['custom_field_2']);
+                $field_type = $field_2_settings['field_type'] ?? 'text';
 
-                // Enforce max length for text fields
-                if (in_array($field_type, ['text', 'textarea'], true) &&
-                    $field_2_settings['max_length'] > 0 &&
-                    mb_strlen($value) > $field_2_settings['max_length']) {
-                    $value = mb_substr($value, 0, $field_2_settings['max_length']);
-                }
-
-                $value = apply_filters('checkout_toolkit_sanitize_field_2_value', $value, $order);
-
-                if (!empty($value)) {
+                // Handle checkbox type
+                if ($field_type === 'checkbox') {
+                    $value = !empty($data['custom_field_2']) ? '1' : '0';
                     $order->update_meta_data('_wct_custom_field_2', $value);
                     do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
+                } else {
+                    $value = sanitize_textarea_field($data['custom_field_2']);
+
+                    // Enforce max length for text fields
+                    if (in_array($field_type, ['text', 'textarea'], true) &&
+                        $field_2_settings['max_length'] > 0 &&
+                        mb_strlen($value) > $field_2_settings['max_length']) {
+                        $value = mb_substr($value, 0, $field_2_settings['max_length']);
+                    }
+
+                    $value = apply_filters('checkout_toolkit_sanitize_field_2_value', $value, $order);
+
+                    if (!empty($value)) {
+                        $order->update_meta_data('_wct_custom_field_2', $value);
+                        do_action('checkout_toolkit_custom_field_2_saved', $order->get_id(), $value);
+                    }
                 }
             }
         }
@@ -554,5 +605,59 @@ class BlocksIntegration implements IntegrationInterface
         ];
 
         return strtr($php_format, $replacements);
+    }
+
+    /**
+     * Check if a custom field should be shown based on visibility settings
+     *
+     * @param array $settings Field settings with visibility rules.
+     * @return bool Whether field should be shown.
+     */
+    private function should_show_custom_field(array $settings): bool
+    {
+        $visibility_type = $settings['visibility_type'] ?? 'always';
+
+        if ($visibility_type === 'always') {
+            return true;
+        }
+
+        // Get cart contents
+        $cart = WC()->cart;
+        if (!$cart || $cart->is_empty()) {
+            return ($settings['visibility_mode'] ?? 'show') !== 'show';
+        }
+
+        $cart_product_ids = [];
+        $cart_category_ids = [];
+
+        foreach ($cart->get_cart() as $cart_item) {
+            $product_id = $cart_item['product_id'];
+            $cart_product_ids[] = $product_id;
+
+            $terms = get_the_terms($product_id, 'product_cat');
+            if ($terms && !is_wp_error($terms)) {
+                foreach ($terms as $term) {
+                    $cart_category_ids[] = $term->term_id;
+                }
+            }
+        }
+
+        $cart_category_ids = array_unique($cart_category_ids);
+        $has_match = false;
+
+        if ($visibility_type === 'products') {
+            $target_ids = array_map('intval', (array) ($settings['visibility_products'] ?? []));
+            $has_match = !empty(array_intersect($cart_product_ids, $target_ids));
+        } elseif ($visibility_type === 'categories') {
+            $target_ids = array_map('intval', (array) ($settings['visibility_categories'] ?? []));
+            $has_match = !empty(array_intersect($cart_category_ids, $target_ids));
+        }
+
+        $visibility_mode = $settings['visibility_mode'] ?? 'show';
+        if ($visibility_mode === 'hide') {
+            return !$has_match;
+        }
+
+        return $has_match;
     }
 }

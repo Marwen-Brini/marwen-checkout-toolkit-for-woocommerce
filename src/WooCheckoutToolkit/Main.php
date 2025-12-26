@@ -536,6 +536,12 @@ final class Main
             'max_length' => 200,
             'show_in_emails' => true,
             'show_in_admin' => true,
+            'checkbox_label' => '',
+            'select_options' => [],
+            'visibility_type' => 'always',
+            'visibility_products' => [],
+            'visibility_categories' => [],
+            'visibility_mode' => 'show',
         ];
     }
 
@@ -788,6 +794,10 @@ final class Main
             'show_in_admin' => true,
             'checkbox_label' => '',
             'select_options' => [],
+            'visibility_type' => 'always',
+            'visibility_products' => [],
+            'visibility_categories' => [],
+            'visibility_mode' => 'show',
         ];
     }
 

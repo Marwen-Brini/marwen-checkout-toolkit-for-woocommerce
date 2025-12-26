@@ -60,6 +60,10 @@ class Admin
             true
         );
 
+        // WooCommerce enhanced select for product search
+        wp_enqueue_script('wc-enhanced-select');
+        wp_enqueue_style('woocommerce_admin_styles');
+
         // Flatpickr for blocked dates manager
         wp_enqueue_style(
             'flatpickr',
