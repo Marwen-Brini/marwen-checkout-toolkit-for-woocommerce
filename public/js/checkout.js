@@ -18,6 +18,11 @@
 
             this.initDeliveryDatePicker();
             this.initCharacterCounter();
+            this.initDeliveryMethodToggle();
+            this.initDeliveryInstructions();
+            this.initStoreLocationSelector();
+            this.initTimeWindow();
+            this.initDeliveryDateVisibility();
         },
 
         /**
@@ -131,6 +136,148 @@
 
             // Initial update
             updateCounter();
+        },
+
+        /**
+         * Initialize delivery method toggle
+         */
+        initDeliveryMethodToggle: function() {
+            // Toggle style
+            $('.wct-toggle-option input[type="radio"]').off('change.wct').on('change.wct', function() {
+                $('.wct-toggle-option').removeClass('active');
+                $(this).closest('.wct-toggle-option').addClass('active');
+                $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
+            });
+
+            // Radio style
+            $('.wct-radio-option input[type="radio"]').off('change.wct').on('change.wct', function() {
+                $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
+            });
+        },
+
+        /**
+         * Initialize delivery instructions field
+         */
+        initDeliveryInstructions: function() {
+            const self = this;
+
+            // Handle delivery method change - show/hide instructions
+            $(document.body).off('wct_delivery_method_changed.instructions').on('wct_delivery_method_changed.instructions', function(e, method) {
+                if (method === 'pickup') {
+                    $('#wct-delivery-instructions-wrapper').slideUp(200);
+                } else {
+                    $('#wct-delivery-instructions-wrapper').slideDown(200);
+                }
+            });
+
+            // Character counter for custom textarea
+            self.initDeliveryInstructionsCounter();
+        },
+
+        /**
+         * Initialize delivery instructions character counter
+         */
+        initDeliveryInstructionsCounter: function() {
+            var $customField = $('#checkout_toolkit_delivery_instructions_custom');
+            var $counter = $('.wct-di-char-counter');
+
+            if (!$customField.length || !$counter.length) {
+                return;
+            }
+
+            var maxLength = parseInt($customField.attr('maxlength'), 10) || 0;
+
+            if (maxLength <= 0) {
+                return;
+            }
+
+            var updateCounter = function() {
+                var remaining = maxLength - $customField.val().length;
+                var text = wctConfig.i18n ? wctConfig.i18n.charactersRemaining : 'characters remaining';
+                $counter.text(remaining + ' ' + text);
+
+                if (remaining <= 20) {
+                    $counter.addClass('warning');
+                } else {
+                    $counter.removeClass('warning');
+                }
+            };
+
+            $customField.off('input.wct keyup.wct').on('input.wct keyup.wct', updateCounter);
+            updateCounter();
+        },
+
+        /**
+         * Initialize store location selector
+         */
+        initStoreLocationSelector: function() {
+            // Handle delivery method change - show/hide store location (OPPOSITE of delivery fields)
+            $(document.body).off('wct_delivery_method_changed.storelocation').on('wct_delivery_method_changed.storelocation', function(e, method) {
+                if (method === 'pickup') {
+                    $('#wct-store-location-wrapper').slideDown(200);
+                } else {
+                    $('#wct-store-location-wrapper').slideUp(200);
+                }
+            });
+
+            // Show location details when a location is selected
+            var $select = $('#checkout_toolkit_store_location');
+            var $details = $('#wct-store-location-details');
+
+            $select.off('change.wct').on('change.wct', function() {
+                var $selected = $(this).find('option:selected');
+                var address = $selected.data('address');
+                var phone = $selected.data('phone');
+                var hours = $selected.data('hours');
+
+                if ($(this).val() && (address || phone || hours)) {
+                    $('.wct-location-address').toggle(!!address);
+                    $('.wct-location-address .wct-detail-value').text(address || '');
+
+                    $('.wct-location-phone').toggle(!!phone);
+                    $('.wct-location-phone .wct-detail-value').text(phone || '');
+
+                    $('.wct-location-hours').toggle(!!hours);
+                    $('.wct-location-hours .wct-detail-value').text(hours || '');
+
+                    $details.slideDown(200);
+                } else {
+                    $details.slideUp(200);
+                }
+            });
+
+            // Trigger initial update if a location is pre-selected
+            if ($select.val()) {
+                $select.trigger('change');
+            }
+        },
+
+        /**
+         * Initialize time window field
+         */
+        initTimeWindow: function() {
+            // Handle delivery method change - show/hide time window
+            $(document.body).off('wct_delivery_method_changed.timewindow').on('wct_delivery_method_changed.timewindow', function(e, method) {
+                if (method === 'pickup') {
+                    $('.checkout-toolkit-time-window-wrapper').slideUp(200);
+                } else {
+                    $('.checkout-toolkit-time-window-wrapper').slideDown(200);
+                }
+            });
+        },
+
+        /**
+         * Initialize delivery date conditional visibility
+         */
+        initDeliveryDateVisibility: function() {
+            // Handle delivery method change - show/hide delivery date
+            $(document.body).off('wct_delivery_method_changed.deliverydate').on('wct_delivery_method_changed.deliverydate', function(e, method) {
+                if (method === 'pickup') {
+                    $('.checkout-toolkit-delivery-date-wrapper').slideUp(200);
+                } else {
+                    $('.checkout-toolkit-delivery-date-wrapper').slideDown(200);
+                }
+            });
         }
     };
 

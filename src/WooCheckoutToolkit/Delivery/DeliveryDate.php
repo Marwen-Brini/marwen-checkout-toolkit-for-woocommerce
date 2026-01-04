@@ -108,23 +108,6 @@ class DeliveryDate
 
         echo '</div>';
 
-        // Add JavaScript for conditional visibility
-        if ($delivery_method_enabled) {
-            ?>
-            <script>
-            jQuery(function($) {
-                $(document).on('wct_delivery_method_changed', function(e, method) {
-                    if (method === 'pickup') {
-                        $('.checkout-toolkit-delivery-date-wrapper').slideUp(200);
-                    } else {
-                        $('.checkout-toolkit-delivery-date-wrapper').slideDown(200);
-                    }
-                });
-            });
-            </script>
-            <?php
-        }
-
         do_action('checkout_toolkit_after_delivery_date_field');
     }
 

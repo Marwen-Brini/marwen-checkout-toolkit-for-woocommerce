@@ -40,17 +40,20 @@ class Admin
      */
     public function enqueue_assets(string $hook): void
     {
-        // Only load on our settings page
+        // Load CSS on settings page and dashboard (for widget)
+        if (in_array($hook, ['woocommerce_page_wct-settings', 'index.php'], true)) {
+            wp_enqueue_style(
+                'wct-admin',
+                CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/css/admin.css',
+                [],
+                CHECKOUT_TOOLKIT_VERSION
+            );
+        }
+
+        // Only load full JS on our settings page
         if ($hook !== 'woocommerce_page_wct-settings') {
             return;
         }
-
-        wp_enqueue_style(
-            'wct-admin',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/css/admin.css',
-            [],
-            CHECKOUT_TOOLKIT_VERSION
-        );
 
         wp_enqueue_script(
             'wct-admin',
@@ -83,10 +86,37 @@ class Admin
         wp_localize_script('wct-admin', 'wctAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_admin'),
+            'nonces' => [
+                'searchProducts' => wp_create_nonce('search-products'),
+            ],
             'i18n' => [
+                // General
                 'confirmRemove' => __('Are you sure you want to remove this date?', 'checkout-toolkit-for-woo'),
                 'dateAdded' => __('Date added successfully', 'checkout-toolkit-for-woo'),
                 'dateRemoved' => __('Date removed', 'checkout-toolkit-for-woo'),
+                'selectDate' => __('Please select a date', 'checkout-toolkit-for-woo'),
+                'remove' => __('Remove', 'checkout-toolkit-for-woo'),
+                'label' => __('Label', 'checkout-toolkit-for-woo'),
+                'value' => __('Value', 'checkout-toolkit-for-woo'),
+                // Delivery Instructions
+                'labelShownToCustomer' => __('Label (shown to customer)', 'checkout-toolkit-for-woo'),
+                'valueStored' => __('Value (stored)', 'checkout-toolkit-for-woo'),
+                // Store Locations
+                'location' => __('Location', 'checkout-toolkit-for-woo'),
+                'removeLocation' => __('Remove location', 'checkout-toolkit-for-woo'),
+                'locationId' => __('Location ID', 'checkout-toolkit-for-woo'),
+                'locationIdPlaceholder' => __('e.g., main-store (auto-generated if empty)', 'checkout-toolkit-for-woo'),
+                'storeName' => __('Store Name', 'checkout-toolkit-for-woo'),
+                'storeNamePlaceholder' => __('Store name (required)', 'checkout-toolkit-for-woo'),
+                'address' => __('Address', 'checkout-toolkit-for-woo'),
+                'fullAddress' => __('Full address', 'checkout-toolkit-for-woo'),
+                'phone' => __('Phone', 'checkout-toolkit-for-woo'),
+                'phoneNumber' => __('Phone number', 'checkout-toolkit-for-woo'),
+                'hours' => __('Hours', 'checkout-toolkit-for-woo'),
+                'hoursPlaceholder' => __('e.g., Mon-Fri: 9am-6pm', 'checkout-toolkit-for-woo'),
+                // Time Window
+                'timeSlotValuePlaceholder' => __('Value (e.g., morning)', 'checkout-toolkit-for-woo'),
+                'timeSlotLabelPlaceholder' => __('Label (e.g., Morning 9am-12pm)', 'checkout-toolkit-for-woo'),
             ],
         ]);
     }

@@ -96,23 +96,6 @@ class TimeWindow
 
         echo '</div>';
 
-        // Add JavaScript for conditional visibility
-        if ($delivery_method_enabled && $show_only_delivery) {
-            ?>
-            <script>
-            jQuery(function($) {
-                $(document).on('wct_delivery_method_changed', function(e, method) {
-                    if (method === 'pickup') {
-                        $('.checkout-toolkit-time-window-wrapper').slideUp(200);
-                    } else {
-                        $('.checkout-toolkit-time-window-wrapper').slideDown(200);
-                    }
-                });
-            });
-            </script>
-            <?php
-        }
-
         do_action('checkout_toolkit_after_time_window_field');
     }
 

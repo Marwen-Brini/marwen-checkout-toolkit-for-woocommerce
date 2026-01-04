@@ -10,36 +10,6 @@
 defined('ABSPATH') || exit;
 ?>
 
-<style>
-.wct-preset-options-wrapper {
-    border: 1px solid #c3c4c7;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 4px;
-    margin-top: 10px;
-}
-.wct-preset-option-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-}
-.wct-preset-option-row input {
-    flex: 1;
-}
-.wct-preset-option-row .button-link-delete {
-    color: #b32d2e;
-    text-decoration: none;
-}
-.wct-preset-option-row .button-link-delete:hover {
-    color: #a00;
-}
-.wct-field-options-disabled {
-    opacity: 0.5;
-    pointer-events: none;
-}
-</style>
-
 <div class="wct-settings-section">
     <h2><?php esc_html_e('Delivery Instructions', 'checkout-toolkit-for-woo'); ?></h2>
     <p class="description">
@@ -282,59 +252,3 @@ defined('ABSPATH') || exit;
         </div>
     </div>
 </div>
-
-<script>
-jQuery(document).ready(function($) {
-    // Enable/disable options based on enabled checkbox
-    $('#wct-di-enabled').on('change', function() {
-        if ($(this).is(':checked')) {
-            $('#wct-di-options').removeClass('wct-field-options-disabled');
-        } else {
-            $('#wct-di-options').addClass('wct-field-options-disabled');
-        }
-    });
-
-    // Update preview when labels change
-    $('#wct_di_field_label').on('input', function() {
-        $('#wct-preview-field-label').text($(this).val() || 'Delivery Instructions');
-    });
-
-    $('#wct_di_preset_label').on('input', function() {
-        $('#wct-preview-preset-label').text($(this).val() || 'Common Instructions');
-    });
-
-    $('#wct_di_custom_label').on('input', function() {
-        $('#wct-preview-custom-label').text($(this).val() || 'Additional Instructions');
-    });
-
-    $('#wct_di_custom_placeholder').on('input', function() {
-        $('#wct-preview-custom-textarea').attr('placeholder', $(this).val() || 'Any other delivery instructions...');
-    });
-
-    // Add preset option
-    $('#wct-add-preset-option').on('click', function(e) {
-        e.preventDefault();
-        var wrapper = $('.wct-preset-options-list');
-        var index = wrapper.find('.wct-preset-option-row').length;
-
-        var newRow = '<div class="wct-preset-option-row">' +
-            '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="<?php echo esc_js(__('Label (shown to customer)', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
-            '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="<?php echo esc_js(__('Value (stored)', 'checkout-toolkit-for-woo')); ?>" class="regular-text">' +
-            '<a href="#" class="button-link-delete wct-remove-preset-option" title="<?php echo esc_js(__('Remove', 'checkout-toolkit-for-woo')); ?>">&times;</a>' +
-            '</div>';
-
-        wrapper.append(newRow);
-    });
-
-    // Remove preset option
-    $(document).on('click', '.wct-remove-preset-option', function(e) {
-        e.preventDefault();
-        var wrapper = $(this).closest('.wct-preset-options-list');
-
-        // Keep at least one option row
-        if (wrapper.find('.wct-preset-option-row').length > 1) {
-            $(this).closest('.wct-preset-option-row').remove();
-        }
-    });
-});
-</script>

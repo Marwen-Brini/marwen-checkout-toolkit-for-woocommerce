@@ -184,12 +184,12 @@ class Settings
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
             'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? $defaults['checkbox_label']),
-            'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
+            'select_options' => $this->sanitize_select_options(is_array($input['select_options'] ?? null) ? $input['select_options'] : []),
             'visibility_type' => in_array($input['visibility_type'] ?? '', ['always', 'products', 'categories'], true)
                 ? $input['visibility_type']
                 : $defaults['visibility_type'],
-            'visibility_products' => $this->sanitize_visibility_ids($input['visibility_products'] ?? []),
-            'visibility_categories' => $this->sanitize_visibility_ids($input['visibility_categories'] ?? []),
+            'visibility_products' => $this->sanitize_visibility_ids(is_array($input['visibility_products'] ?? null) ? $input['visibility_products'] : []),
+            'visibility_categories' => $this->sanitize_visibility_ids(is_array($input['visibility_categories'] ?? null) ? $input['visibility_categories'] : []),
             'visibility_mode' => in_array($input['visibility_mode'] ?? '', ['show', 'hide'], true)
                 ? $input['visibility_mode']
                 : $defaults['visibility_mode'],
@@ -326,7 +326,7 @@ class Settings
             'required' => !empty($input['required']),
             'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
             'preset_label' => sanitize_text_field($input['preset_label'] ?? $defaults['preset_label']),
-            'preset_options' => $this->sanitize_select_options($input['preset_options'] ?? $defaults['preset_options']),
+            'preset_options' => $this->sanitize_select_options(is_array($input['preset_options'] ?? null) ? $input['preset_options'] : $defaults['preset_options']),
             'custom_label' => sanitize_text_field($input['custom_label'] ?? $defaults['custom_label']),
             'custom_placeholder' => sanitize_text_field($input['custom_placeholder'] ?? $defaults['custom_placeholder']),
             'max_length' => absint($input['max_length'] ?? $defaults['max_length']),
@@ -376,7 +376,7 @@ class Settings
             'enabled' => !empty($input['enabled']),
             'required' => !empty($input['required']),
             'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
-            'time_slots' => $this->sanitize_select_options($input['time_slots'] ?? $defaults['time_slots']),
+            'time_slots' => $this->sanitize_select_options(is_array($input['time_slots'] ?? null) ? $input['time_slots'] : $defaults['time_slots']),
             'show_only_with_delivery' => !empty($input['show_only_with_delivery']),
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
@@ -419,7 +419,7 @@ class Settings
             'enabled' => !empty($input['enabled']),
             'required' => !empty($input['required']),
             'field_label' => sanitize_text_field($input['field_label'] ?? $defaults['field_label']),
-            'locations' => $this->sanitize_store_locations($input['locations'] ?? []),
+            'locations' => $this->sanitize_store_locations(is_array($input['locations'] ?? null) ? $input['locations'] : []),
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
         ];
@@ -487,8 +487,8 @@ class Settings
             'field_position' => sanitize_key($input['field_position'] ?? $defaults['field_position']),
             'min_lead_days' => absint($input['min_lead_days'] ?? $defaults['min_lead_days']),
             'max_future_days' => absint($input['max_future_days'] ?? $defaults['max_future_days']),
-            'disabled_weekdays' => array_map('absint', $input['disabled_weekdays'] ?? []),
-            'blocked_dates' => $this->sanitize_blocked_dates($input['blocked_dates'] ?? []),
+            'disabled_weekdays' => array_map('absint', is_array($input['disabled_weekdays'] ?? null) ? $input['disabled_weekdays'] : []),
+            'blocked_dates' => $this->sanitize_blocked_dates(is_array($input['blocked_dates'] ?? null) ? $input['blocked_dates'] : []),
             'date_format' => sanitize_text_field($input['date_format'] ?? $defaults['date_format']),
             'first_day_of_week' => absint($input['first_day_of_week'] ?? $defaults['first_day_of_week']),
             'show_in_emails' => !empty($input['show_in_emails']),
@@ -529,12 +529,12 @@ class Settings
             'show_in_emails' => !empty($input['show_in_emails']),
             'show_in_admin' => !empty($input['show_in_admin']),
             'checkbox_label' => sanitize_text_field($input['checkbox_label'] ?? ($defaults['checkbox_label'] ?? '')),
-            'select_options' => $this->sanitize_select_options($input['select_options'] ?? []),
+            'select_options' => $this->sanitize_select_options(is_array($input['select_options'] ?? null) ? $input['select_options'] : []),
             'visibility_type' => in_array($input['visibility_type'] ?? '', ['always', 'products', 'categories'], true)
                 ? $input['visibility_type']
                 : $defaults['visibility_type'],
-            'visibility_products' => $this->sanitize_visibility_ids($input['visibility_products'] ?? []),
-            'visibility_categories' => $this->sanitize_visibility_ids($input['visibility_categories'] ?? []),
+            'visibility_products' => $this->sanitize_visibility_ids(is_array($input['visibility_products'] ?? null) ? $input['visibility_products'] : []),
+            'visibility_categories' => $this->sanitize_visibility_ids(is_array($input['visibility_categories'] ?? null) ? $input['visibility_categories'] : []),
             'visibility_mode' => in_array($input['visibility_mode'] ?? '', ['show', 'hide'], true)
                 ? $input['visibility_mode']
                 : $defaults['visibility_mode'],

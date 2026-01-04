@@ -189,35 +189,3 @@ defined('ABSPATH') || exit;
         </div>
     </div>
 </div>
-
-<script>
-jQuery(document).ready(function($) {
-    // Update preview when labels change
-    $('#checkout_toolkit_dm_field_label').on('input', function() {
-        $('#wct-preview-label').text($(this).val() || 'Fulfillment Method');
-    });
-
-    $('#checkout_toolkit_dm_delivery_label').on('input', function() {
-        var label = $(this).val() || 'Delivery';
-        $('#wct-preview-delivery-toggle').text(label);
-        $('#wct-preview-delivery-radio').text(label);
-    });
-
-    $('#checkout_toolkit_dm_pickup_label').on('input', function() {
-        var label = $(this).val() || 'Pickup';
-        $('#wct-preview-pickup-toggle').text(label);
-        $('#wct-preview-pickup-radio').text(label);
-    });
-
-    // Toggle between toggle/radio preview
-    $('input[name="checkout_toolkit_delivery_method_settings[show_as]"]').on('change', function() {
-        if ($(this).val() === 'toggle') {
-            $('#wct-preview-toggle').show();
-            $('#wct-preview-radio').hide();
-        } else {
-            $('#wct-preview-toggle').hide();
-            $('#wct-preview-radio').show();
-        }
-    });
-});
-</script>
