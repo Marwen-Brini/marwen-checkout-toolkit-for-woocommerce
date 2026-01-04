@@ -27,14 +27,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
 
 <!-- Custom Field 1 -->
 <div class="wct-settings-section">
-    <h2><?php esc_html_e('Custom Field 1', 'checkout-toolkit-for-woo'); ?></h2>
+    <h2><?php esc_html_e('Custom Field 1', 'marwen-checkout-toolkit-for-woocommerce'); ?></h2>
 
     <table class="form-table wct-settings-table">
         <tbody>
             <!-- Enable Custom Field -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Enable Field', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Enable Field', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label>
@@ -43,7 +43,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                id="wct-field-1-enabled"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_settings['enabled'])); ?>>
-                        <?php esc_html_e('Show this field on checkout', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Show this field on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -52,7 +52,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Field Type -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Field Type', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Field Type', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
@@ -62,7 +62,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="1"
                                <?php checked(($checkout_toolkit_field_settings['field_type'] ?? 'textarea') === 'text'); ?>>
-                        <?php esc_html_e('Single line text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Single line text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
@@ -71,7 +71,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="1"
                                <?php checked(($checkout_toolkit_field_settings['field_type'] ?? 'textarea') === 'textarea'); ?>>
-                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Multi-line textarea', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
@@ -80,7 +80,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="1"
                                <?php checked(($checkout_toolkit_field_settings['field_type'] ?? 'textarea') === 'checkbox'); ?>>
-                        <?php esc_html_e('Checkbox', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Checkbox', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
@@ -89,7 +89,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="1"
                                <?php checked(($checkout_toolkit_field_settings['field_type'] ?? 'textarea') === 'select'); ?>>
-                        <?php esc_html_e('Dropdown select', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Dropdown select', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -98,7 +98,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr>
                 <th scope="row">
                     <label for="checkout_toolkit_field_label">
-                        <?php esc_html_e('Field Label', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Field Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -114,7 +114,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-1-checkbox <?php echo ($checkout_toolkit_field_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_checkbox_label">
-                        <?php esc_html_e('Checkbox Text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Checkbox Text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -124,7 +124,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                            value="<?php echo esc_attr($checkout_toolkit_field_settings['checkbox_label'] ?? ''); ?>"
                            class="regular-text">
                     <p class="description">
-                        <?php esc_html_e('Text displayed next to the checkbox.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Text displayed next to the checkbox.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -132,7 +132,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Select Options (conditional) -->
             <tr class="wct-conditional-field wct-field-1-select <?php echo ($checkout_toolkit_field_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
                 <th scope="row">
-                    <?php esc_html_e('Dropdown Options', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Dropdown Options', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <div class="wct-select-options-wrapper" id="wct-field-1-options">
@@ -148,19 +148,19 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                 <input type="text"
                                        name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
                                 <input type="text"
                                        name="checkout_toolkit_field_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
-                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
+                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>">&times;</a>
                             </div>
                             <?php endforeach; ?>
                         </div>
                         <button type="button" class="button wct-add-option" data-field="1">
-                            <?php esc_html_e('Add Option', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Add Option', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </button>
                     </div>
                 </td>
@@ -170,7 +170,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea wct-field-1-select <?php echo in_array($checkout_toolkit_field_settings['field_type'] ?? 'textarea', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_placeholder">
-                        <?php esc_html_e('Placeholder Text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Placeholder Text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -185,7 +185,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Required -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Required', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label>
@@ -193,7 +193,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                name="checkout_toolkit_field_settings[required]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_settings['required'])); ?>>
-                        <?php esc_html_e('Make field required', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Make field required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -202,7 +202,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea <?php echo in_array($checkout_toolkit_field_settings['field_type'] ?? 'textarea', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_max_length">
-                        <?php esc_html_e('Maximum Characters', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Maximum Characters', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -214,7 +214,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                            max="10000"
                            class="small-text">
                     <p class="description">
-                        <?php esc_html_e('Set to 0 for unlimited.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Set to 0 for unlimited.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -223,7 +223,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr>
                 <th scope="row">
                     <label for="checkout_toolkit_field_position">
-                        <?php esc_html_e('Field Position', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Field Position', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -241,7 +241,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Display Options -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Display Options', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Display Options', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
@@ -249,14 +249,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                name="checkout_toolkit_field_settings[show_in_admin]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_settings['show_in_admin'])); ?>>
-                        <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="checkbox"
                                name="checkout_toolkit_field_settings[show_in_emails]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_settings['show_in_emails'])); ?>>
-                        <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Include in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -264,7 +264,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Visibility Settings -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Field Visibility', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Field Visibility', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <div class="wct-visibility-options">
@@ -275,7 +275,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'always'); ?>>
-                            <?php esc_html_e('Always show', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Always show', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                         <label style="display: block; margin-bottom: 8px;">
                             <input type="radio"
@@ -284,7 +284,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'products'); ?>>
-                            <?php esc_html_e('Show for specific products', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show for specific products', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                         <label style="display: block;">
                             <input type="radio"
@@ -293,16 +293,16 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($checkout_toolkit_field_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
-                            <?php esc_html_e('Show for specific categories', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show for specific categories', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
 
                         <!-- Product Selection -->
                         <div class="wct-visibility-products wct-visibility-1-products <?php echo ($checkout_toolkit_field_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
-                            <label><?php esc_html_e('Select Products:', 'checkout-toolkit-for-woo'); ?></label>
+                            <label><?php esc_html_e('Select Products:', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                             <select class="wc-product-search"
                                     multiple="multiple"
                                     style="width: 100%;"
-                                    data-placeholder="<?php esc_attr_e('Search for products...', 'checkout-toolkit-for-woo'); ?>"
+                                    data-placeholder="<?php esc_attr_e('Search for products...', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                     data-action="woocommerce_json_search_products"
                                     name="checkout_toolkit_field_settings[visibility_products][]">
                                 <?php
@@ -320,7 +320,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
 
                         <!-- Category Selection -->
                         <div class="wct-visibility-categories wct-visibility-1-categories <?php echo ($checkout_toolkit_field_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
-                            <label><?php esc_html_e('Select Categories:', 'checkout-toolkit-for-woo'); ?></label>
+                            <label><?php esc_html_e('Select Categories:', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                             <div class="wct-category-checkboxes">
                                 <?php
                                 $checkout_toolkit_selected_cats_1 = $checkout_toolkit_field_settings['visibility_categories'] ?? [];
@@ -344,14 +344,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                        name="checkout_toolkit_field_settings[visibility_mode]"
                                        value="show"
                                        <?php checked(($checkout_toolkit_field_settings['visibility_mode'] ?? 'show') === 'show'); ?>>
-                                <?php esc_html_e('Show field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                                <?php esc_html_e('Show field when product/category is in cart', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                             </label>
                             <label style="display: block;">
                                 <input type="radio"
                                        name="checkout_toolkit_field_settings[visibility_mode]"
                                        value="hide"
                                        <?php checked(($checkout_toolkit_field_settings['visibility_mode'] ?? 'show') === 'hide'); ?>>
-                                <?php esc_html_e('Hide field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                                <?php esc_html_e('Hide field when product/category is in cart', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                             </label>
                         </div>
                     </div>
@@ -363,14 +363,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
 
 <!-- Custom Field 2 -->
 <div class="wct-settings-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #c3c4c7;">
-    <h2><?php esc_html_e('Custom Field 2', 'checkout-toolkit-for-woo'); ?></h2>
+    <h2><?php esc_html_e('Custom Field 2', 'marwen-checkout-toolkit-for-woocommerce'); ?></h2>
 
     <table class="form-table wct-settings-table">
         <tbody>
             <!-- Enable Custom Field 2 -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Enable Field', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Enable Field', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label>
@@ -379,7 +379,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                id="wct-field-2-enabled"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_2_settings['enabled'])); ?>>
-                        <?php esc_html_e('Show this field on checkout', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Show this field on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -388,7 +388,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Field Type 2 -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Field Type', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Field Type', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
@@ -398,7 +398,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="2"
                                <?php checked(($checkout_toolkit_field_2_settings['field_type'] ?? 'text') === 'text'); ?>>
-                        <?php esc_html_e('Single line text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Single line text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
@@ -407,7 +407,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="2"
                                <?php checked(($checkout_toolkit_field_2_settings['field_type'] ?? 'text') === 'textarea'); ?>>
-                        <?php esc_html_e('Multi-line textarea', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Multi-line textarea', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
@@ -416,7 +416,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="2"
                                <?php checked(($checkout_toolkit_field_2_settings['field_type'] ?? 'text') === 'checkbox'); ?>>
-                        <?php esc_html_e('Checkbox', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Checkbox', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
@@ -425,7 +425,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                class="wct-field-type-radio"
                                data-field="2"
                                <?php checked(($checkout_toolkit_field_2_settings['field_type'] ?? 'text') === 'select'); ?>>
-                        <?php esc_html_e('Dropdown select', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Dropdown select', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -434,7 +434,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr>
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_label">
-                        <?php esc_html_e('Field Label', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Field Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -450,7 +450,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-2-checkbox <?php echo ($checkout_toolkit_field_2_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_checkbox_label">
-                        <?php esc_html_e('Checkbox Text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Checkbox Text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -460,7 +460,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                            value="<?php echo esc_attr($checkout_toolkit_field_2_settings['checkbox_label'] ?? ''); ?>"
                            class="regular-text">
                     <p class="description">
-                        <?php esc_html_e('Text displayed next to the checkbox.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Text displayed next to the checkbox.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -468,7 +468,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Select Options 2 (conditional) -->
             <tr class="wct-conditional-field wct-field-2-select <?php echo ($checkout_toolkit_field_2_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
                 <th scope="row">
-                    <?php esc_html_e('Dropdown Options', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Dropdown Options', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <div class="wct-select-options-wrapper" id="wct-field-2-options">
@@ -484,19 +484,19 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                 <input type="text"
                                        name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Label', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
                                 <input type="text"
                                        name="checkout_toolkit_field_2_settings[select_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
                                        value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Value', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Value', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
-                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'checkout-toolkit-for-woo'); ?>">&times;</a>
+                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>">&times;</a>
                             </div>
                             <?php endforeach; ?>
                         </div>
                         <button type="button" class="button wct-add-option" data-field="2">
-                            <?php esc_html_e('Add Option', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Add Option', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </button>
                     </div>
                 </td>
@@ -506,7 +506,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea wct-field-2-select <?php echo in_array($checkout_toolkit_field_2_settings['field_type'] ?? 'text', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_placeholder">
-                        <?php esc_html_e('Placeholder Text', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Placeholder Text', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -521,7 +521,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Required 2 -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Required', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label>
@@ -529,7 +529,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                name="checkout_toolkit_field_2_settings[required]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_2_settings['required'])); ?>>
-                        <?php esc_html_e('Make field required', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Make field required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -538,7 +538,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea <?php echo in_array($checkout_toolkit_field_2_settings['field_type'] ?? 'text', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_max_length">
-                        <?php esc_html_e('Maximum Characters', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Maximum Characters', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -550,7 +550,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                            max="10000"
                            class="small-text">
                     <p class="description">
-                        <?php esc_html_e('Set to 0 for unlimited.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Set to 0 for unlimited.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -559,7 +559,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <tr>
                 <th scope="row">
                     <label for="checkout_toolkit_field_2_position">
-                        <?php esc_html_e('Field Position', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Field Position', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
@@ -577,7 +577,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Display Options 2 -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Display Options', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Display Options', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
@@ -585,14 +585,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                name="checkout_toolkit_field_2_settings[show_in_admin]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_2_settings['show_in_admin'])); ?>>
-                        <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="checkbox"
                                name="checkout_toolkit_field_2_settings[show_in_emails]"
                                value="1"
                                <?php checked(!empty($checkout_toolkit_field_2_settings['show_in_emails'])); ?>>
-                        <?php esc_html_e('Include in order emails', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Include in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -600,7 +600,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
             <!-- Visibility Settings 2 -->
             <tr>
                 <th scope="row">
-                    <?php esc_html_e('Field Visibility', 'checkout-toolkit-for-woo'); ?>
+                    <?php esc_html_e('Field Visibility', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </th>
                 <td>
                     <div class="wct-visibility-options">
@@ -611,7 +611,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'always'); ?>>
-                            <?php esc_html_e('Always show', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Always show', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                         <label style="display: block; margin-bottom: 8px;">
                             <input type="radio"
@@ -620,7 +620,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'products'); ?>>
-                            <?php esc_html_e('Show for specific products', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show for specific products', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                         <label style="display: block;">
                             <input type="radio"
@@ -629,16 +629,16 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                    class="wct-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($checkout_toolkit_field_2_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
-                            <?php esc_html_e('Show for specific categories', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show for specific categories', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
 
                         <!-- Product Selection 2 -->
                         <div class="wct-visibility-products wct-visibility-2-products <?php echo ($checkout_toolkit_field_2_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
-                            <label><?php esc_html_e('Select Products:', 'checkout-toolkit-for-woo'); ?></label>
+                            <label><?php esc_html_e('Select Products:', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                             <select class="wc-product-search"
                                     multiple="multiple"
                                     style="width: 100%;"
-                                    data-placeholder="<?php esc_attr_e('Search for products...', 'checkout-toolkit-for-woo'); ?>"
+                                    data-placeholder="<?php esc_attr_e('Search for products...', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                     data-action="woocommerce_json_search_products"
                                     name="checkout_toolkit_field_2_settings[visibility_products][]">
                                 <?php
@@ -656,7 +656,7 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
 
                         <!-- Category Selection 2 -->
                         <div class="wct-visibility-categories wct-visibility-2-categories <?php echo ($checkout_toolkit_field_2_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
-                            <label><?php esc_html_e('Select Categories:', 'checkout-toolkit-for-woo'); ?></label>
+                            <label><?php esc_html_e('Select Categories:', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                             <div class="wct-category-checkboxes">
                                 <?php
                                 $checkout_toolkit_selected_cats_2 = $checkout_toolkit_field_2_settings['visibility_categories'] ?? [];
@@ -680,14 +680,14 @@ if (is_wp_error($checkout_toolkit_product_categories)) {
                                        name="checkout_toolkit_field_2_settings[visibility_mode]"
                                        value="show"
                                        <?php checked(($checkout_toolkit_field_2_settings['visibility_mode'] ?? 'show') === 'show'); ?>>
-                                <?php esc_html_e('Show field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                                <?php esc_html_e('Show field when product/category is in cart', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                             </label>
                             <label style="display: block;">
                                 <input type="radio"
                                        name="checkout_toolkit_field_2_settings[visibility_mode]"
                                        value="hide"
                                        <?php checked(($checkout_toolkit_field_2_settings['visibility_mode'] ?? 'show') === 'hide'); ?>>
-                                <?php esc_html_e('Hide field when product/category is in cart', 'checkout-toolkit-for-woo'); ?>
+                                <?php esc_html_e('Hide field when product/category is in cart', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                             </label>
                         </div>
                     </div>

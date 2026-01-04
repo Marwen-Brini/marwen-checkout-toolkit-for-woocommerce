@@ -3,7 +3,7 @@
  * Delivery date display in admin order
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/checkout-toolkit-for-woo/order/delivery-date-display.php
+ * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/order/delivery-date-display.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0

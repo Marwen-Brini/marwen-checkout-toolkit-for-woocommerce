@@ -11,9 +11,9 @@ defined('ABSPATH') || exit;
 ?>
 
 <div class="wct-settings-section">
-    <h2><?php esc_html_e('Time Window Selection', 'checkout-toolkit-for-woo'); ?></h2>
+    <h2><?php esc_html_e('Time Window Selection', 'marwen-checkout-toolkit-for-woocommerce'); ?></h2>
     <p class="description">
-        <?php esc_html_e('Allow customers to select a preferred delivery time window (Morning, Afternoon, Evening) or custom time slots.', 'checkout-toolkit-for-woo'); ?>
+        <?php esc_html_e('Allow customers to select a preferred delivery time window (Morning, Afternoon, Evening) or custom time slots.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
     </p>
 
     <table class="form-table" role="presentation">
@@ -21,7 +21,7 @@ defined('ABSPATH') || exit;
             <!-- Enable/Disable -->
             <tr>
                 <th scope="row">
-                    <label for="time_window_enabled"><?php esc_html_e('Enable Time Window', 'checkout-toolkit-for-woo'); ?></label>
+                    <label for="time_window_enabled"><?php esc_html_e('Enable Time Window', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                 </th>
                 <td>
                     <label class="wct-toggle">
@@ -33,7 +33,7 @@ defined('ABSPATH') || exit;
                         <span class="wct-toggle-slider"></span>
                     </label>
                     <p class="description">
-                        <?php esc_html_e('Show a time window selection dropdown on checkout.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Show a time window selection dropdown on checkout.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -41,7 +41,7 @@ defined('ABSPATH') || exit;
             <!-- Required -->
             <tr>
                 <th scope="row">
-                    <label for="time_window_required"><?php esc_html_e('Required Field', 'checkout-toolkit-for-woo'); ?></label>
+                    <label for="time_window_required"><?php esc_html_e('Required Field', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                 </th>
                 <td>
                     <label>
@@ -51,7 +51,7 @@ defined('ABSPATH') || exit;
                                value="1"
                                <?php checked(!empty($checkout_toolkit_time_window_settings['required'])); ?>
                                <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                        <?php esc_html_e('Make time window selection required', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Make time window selection required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
             </tr>
@@ -59,7 +59,7 @@ defined('ABSPATH') || exit;
             <!-- Field Label -->
             <tr>
                 <th scope="row">
-                    <label for="time_window_field_label"><?php esc_html_e('Field Label', 'checkout-toolkit-for-woo'); ?></label>
+                    <label for="time_window_field_label"><?php esc_html_e('Field Label', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                 </th>
                 <td>
                     <input type="text"
@@ -74,7 +74,7 @@ defined('ABSPATH') || exit;
             <!-- Time Slots -->
             <tr>
                 <th scope="row">
-                    <label><?php esc_html_e('Time Slots', 'checkout-toolkit-for-woo'); ?></label>
+                    <label><?php esc_html_e('Time Slots', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                 </th>
                 <td>
                     <div id="time-slots-container">
@@ -89,28 +89,28 @@ defined('ABSPATH') || exit;
                                 <input type="text"
                                        name="checkout_toolkit_time_window_settings[time_slots][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
                                        value="<?php echo esc_attr($checkout_toolkit_slot['value'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Value (e.g., morning)', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Value (e.g., morning)', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text"
                                        style="width: 200px;"
                                        <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
                                 <input type="text"
                                        name="checkout_toolkit_time_window_settings[time_slots][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
                                        value="<?php echo esc_attr($checkout_toolkit_slot['label'] ?? ''); ?>"
-                                       placeholder="<?php esc_attr_e('Label (e.g., Morning 9am-12pm)', 'checkout-toolkit-for-woo'); ?>"
+                                       placeholder="<?php esc_attr_e('Label (e.g., Morning 9am-12pm)', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text"
                                        style="width: 300px;"
                                        <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
                                 <button type="button" class="button remove-time-slot" <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                                    <?php esc_html_e('Remove', 'checkout-toolkit-for-woo'); ?>
+                                    <?php esc_html_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                                 </button>
                             </div>
                         <?php endforeach; ?>
                     </div>
                     <button type="button" id="add-time-slot" class="button" <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                        <?php esc_html_e('+ Add Time Slot', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('+ Add Time Slot', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </button>
                     <p class="description">
-                        <?php esc_html_e('Define the time slots customers can choose from. Value is stored internally, Label is shown to customers.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Define the time slots customers can choose from. Value is stored internally, Label is shown to customers.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
@@ -118,7 +118,7 @@ defined('ABSPATH') || exit;
             <!-- Show Only With Delivery -->
             <tr>
                 <th scope="row">
-                    <label for="time_window_show_only_with_delivery"><?php esc_html_e('Delivery Only', 'checkout-toolkit-for-woo'); ?></label>
+                    <label for="time_window_show_only_with_delivery"><?php esc_html_e('Delivery Only', 'marwen-checkout-toolkit-for-woocommerce'); ?></label>
                 </th>
                 <td>
                     <label>
@@ -128,17 +128,17 @@ defined('ABSPATH') || exit;
                                value="1"
                                <?php checked(!empty($checkout_toolkit_time_window_settings['show_only_with_delivery'])); ?>
                                <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                        <?php esc_html_e('Only show when Delivery is selected (hide for Pickup)', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Only show when Delivery is selected (hide for Pickup)', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <p class="description">
-                        <?php esc_html_e('When enabled, the time window field will be hidden if the customer selects Pickup.', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('When enabled, the time window field will be hidden if the customer selects Pickup.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </p>
                 </td>
             </tr>
 
             <!-- Display Options -->
             <tr>
-                <th scope="row"><?php esc_html_e('Display Options', 'checkout-toolkit-for-woo'); ?></th>
+                <th scope="row"><?php esc_html_e('Display Options', 'marwen-checkout-toolkit-for-woocommerce'); ?></th>
                 <td>
                     <fieldset>
                         <label>
@@ -147,7 +147,7 @@ defined('ABSPATH') || exit;
                                    value="1"
                                    <?php checked(!empty($checkout_toolkit_time_window_settings['show_in_admin'])); ?>
                                    <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                            <?php esc_html_e('Show in admin order details', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                         <br>
                         <label>
@@ -156,7 +156,7 @@ defined('ABSPATH') || exit;
                                    value="1"
                                    <?php checked(!empty($checkout_toolkit_time_window_settings['show_in_emails'])); ?>
                                    <?php disabled(empty($checkout_toolkit_time_window_settings['enabled'])); ?>>
-                            <?php esc_html_e('Show in order emails', 'checkout-toolkit-for-woo'); ?>
+                            <?php esc_html_e('Show in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                         </label>
                     </fieldset>
                 </td>
@@ -166,7 +166,7 @@ defined('ABSPATH') || exit;
 
     <!-- Preview Section -->
     <div class="wct-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
-        <h3 style="margin-top: 0;"><?php esc_html_e('Preview', 'checkout-toolkit-for-woo'); ?></h3>
+        <h3 style="margin-top: 0;"><?php esc_html_e('Preview', 'marwen-checkout-toolkit-for-woocommerce'); ?></h3>
         <div class="wct-preview-field">
             <label id="preview-time-window-label" style="display: block; margin-bottom: 5px; font-weight: 600;">
                 <?php echo esc_html($checkout_toolkit_time_window_settings['field_label']); ?>
@@ -175,7 +175,7 @@ defined('ABSPATH') || exit;
                 <?php endif; ?>
             </label>
             <select id="preview-time-window-select" style="width: 100%; max-width: 400px; padding: 10px;">
-                <option value=""><?php esc_html_e('Select a time...', 'checkout-toolkit-for-woo'); ?></option>
+                <option value=""><?php esc_html_e('Select a time...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
                 <?php foreach ($checkout_toolkit_time_window_settings['time_slots'] as $checkout_toolkit_slot) : ?>
                     <?php if (!empty($checkout_toolkit_slot['label'])) : ?>
                         <option value="<?php echo esc_attr($checkout_toolkit_slot['value']); ?>">

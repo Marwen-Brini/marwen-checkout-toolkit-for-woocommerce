@@ -23,36 +23,36 @@ $checkout_toolkit_store_locations_settings = get_option('checkout_toolkit_store_
 ?>
 
 <div class="wrap wct-settings-wrap">
-    <h1><?php esc_html_e('Checkout Toolkit for WooCommerce', 'checkout-toolkit-for-woo'); ?></h1>
+    <h1><?php esc_html_e('Checkout Toolkit for WooCommerce', 'marwen-checkout-toolkit-for-woocommerce'); ?></h1>
 
     <nav class="nav-tab-wrapper wct-nav-tabs">
         <a href="?page=wct-settings&tab=delivery-method"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-method' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Pickup/Delivery', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Pickup/Delivery', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=store-locations"
            class="nav-tab <?php echo esc_attr($active_tab === 'store-locations' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Store Locations', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Store Locations', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=delivery-instructions"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-instructions' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Delivery Instructions', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Delivery Instructions', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=time-windows"
            class="nav-tab <?php echo esc_attr($active_tab === 'time-windows' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Time Windows', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Time Windows', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=delivery"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Delivery Date', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Delivery Date', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=fields"
            class="nav-tab <?php echo esc_attr($active_tab === 'fields' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Custom Fields', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Custom Fields', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
         <a href="?page=wct-settings&tab=order-notes"
            class="nav-tab <?php echo esc_attr($active_tab === 'order-notes' ? 'nav-tab-active' : ''); ?>">
-            <?php esc_html_e('Order Notes', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Order Notes', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </a>
     </nav>
 

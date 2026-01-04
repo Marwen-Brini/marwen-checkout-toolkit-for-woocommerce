@@ -3,7 +3,7 @@
  * Custom field in order emails
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/checkout-toolkit-for-woo/emails/custom-field.php
+ * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/emails/custom-field.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0

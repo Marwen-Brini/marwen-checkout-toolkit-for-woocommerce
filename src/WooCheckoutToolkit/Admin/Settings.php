@@ -36,8 +36,8 @@ class Settings
     {
         add_submenu_page(
             'woocommerce',
-            __('Checkout Toolkit', 'checkout-toolkit-for-woo'),
-            __('Checkout Toolkit', 'checkout-toolkit-for-woo'),
+            __('Checkout Toolkit', 'marwen-checkout-toolkit-for-woocommerce'),
+            __('Checkout Toolkit', 'marwen-checkout-toolkit-for-woocommerce'),
             'manage_woocommerce',
             'wct-settings',
             [$this, 'render_settings_page']
@@ -637,7 +637,7 @@ class Settings
     public function render_settings_page(): void
     {
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(esc_html__('You do not have permission to access this page.', 'checkout-toolkit-for-woo'));
+            wp_die(esc_html__('You do not have permission to access this page.', 'marwen-checkout-toolkit-for-woocommerce'));
         }
 
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation, no data processing.
@@ -652,18 +652,18 @@ class Settings
     public function get_field_positions(): array
     {
         return [
-            'woocommerce_before_checkout_billing_form' => __('Before billing fields', 'checkout-toolkit-for-woo'),
-            'woocommerce_after_checkout_billing_form' => __('After billing fields', 'checkout-toolkit-for-woo'),
-            'woocommerce_before_checkout_shipping_form' => __('Before shipping fields', 'checkout-toolkit-for-woo'),
-            'woocommerce_after_checkout_shipping_form' => __('After shipping fields', 'checkout-toolkit-for-woo'),
-            'woocommerce_before_order_notes' => __('Before order notes', 'checkout-toolkit-for-woo'),
-            'woocommerce_after_order_notes' => __('After order notes', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_before_cart_contents' => __('Before order review', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_after_cart_contents' => __('After order review items', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_before_shipping' => __('Before shipping in review', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_after_shipping' => __('After shipping in review', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_before_order_total' => __('Before order total', 'checkout-toolkit-for-woo'),
-            'woocommerce_review_order_before_submit' => __('Before Place Order button', 'checkout-toolkit-for-woo'),
+            'woocommerce_before_checkout_billing_form' => __('Before billing fields', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_after_checkout_billing_form' => __('After billing fields', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_before_checkout_shipping_form' => __('Before shipping fields', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_after_checkout_shipping_form' => __('After shipping fields', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_before_order_notes' => __('Before order notes', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_after_order_notes' => __('After order notes', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_before_cart_contents' => __('Before order review', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_after_cart_contents' => __('After order review items', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_before_shipping' => __('Before shipping in review', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_after_shipping' => __('After shipping in review', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_before_order_total' => __('Before order total', 'marwen-checkout-toolkit-for-woocommerce'),
+            'woocommerce_review_order_before_submit' => __('Before Place Order button', 'marwen-checkout-toolkit-for-woocommerce'),
         ];
     }
 

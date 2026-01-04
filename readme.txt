@@ -1,4 +1,4 @@
-=== Checkout Toolkit for WooCommerce ===
+=== Marwen Checkout Toolkit for WooCommerce ===
 Contributors: marwenbrini
 Tags: checkout, delivery date, custom fields, order notes, woocommerce
 Requires at least: 5.8
@@ -12,7 +12,7 @@ A comprehensive checkout enhancement plugin combining delivery scheduling and cu
 
 == Description ==
 
-Checkout Toolkit for WooCommerce brings together the essential checkout customization features that store owners need most:
+Marwen Checkout Toolkit for WooCommerce brings together the essential checkout customization features that store owners need most:
 
 1. **Delivery Date Picker** - Let customers choose their preferred delivery date
 2. **Custom Order Fields** - Add special instructions, notes, and custom fields to checkout

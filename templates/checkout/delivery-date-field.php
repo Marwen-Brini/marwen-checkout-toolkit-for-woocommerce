@@ -3,7 +3,7 @@
  * Delivery date field template
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/checkout-toolkit-for-woo/checkout/delivery-date-field.php
+ * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/checkout/delivery-date-field.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0

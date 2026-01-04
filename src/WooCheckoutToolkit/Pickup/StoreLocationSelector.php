@@ -98,21 +98,21 @@ class StoreLocationSelector
 
         $required = !empty($settings['required']);
         $required_attr = $required ? ' required' : '';
-        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'checkout-toolkit-for-woo') . '">*</abbr>' : '';
+        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-checkout-toolkit-for-woocommerce') . '">*</abbr>' : '';
 
         do_action('checkout_toolkit_before_store_location');
         ?>
         <div class="wct-store-location-wrapper" id="wct-store-location-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <p class="form-row form-row-wide">
                 <label for="checkout_toolkit_store_location">
-                    <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'checkout-toolkit-for-woo')); ?>
+                    <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce')); ?>
                     <?php echo wp_kses_post($required_mark); ?>
                 </label>
                 <select name="checkout_toolkit_store_location"
                         id="checkout_toolkit_store_location"
                         class="wct-store-location-select"
                         <?php echo esc_attr($required_attr); ?>>
-                    <option value=""><?php esc_html_e('Select a location...', 'checkout-toolkit-for-woo'); ?></option>
+                    <option value=""><?php esc_html_e('Select a location...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
                     <?php foreach ($locations as $location) : ?>
                         <?php if (!empty($location['name'])) : ?>
                             <option value="<?php echo esc_attr($location['id'] ?? ''); ?>"
@@ -130,15 +130,15 @@ class StoreLocationSelector
             <!-- Location Details Preview -->
             <div id="wct-store-location-details" class="wct-store-location-details" style="display: none;">
                 <div class="wct-location-detail wct-location-address">
-                    <strong><?php esc_html_e('Address:', 'checkout-toolkit-for-woo'); ?></strong>
+                    <strong><?php esc_html_e('Address:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="wct-detail-value"></span>
                 </div>
                 <div class="wct-location-detail wct-location-phone">
-                    <strong><?php esc_html_e('Phone:', 'checkout-toolkit-for-woo'); ?></strong>
+                    <strong><?php esc_html_e('Phone:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="wct-detail-value"></span>
                 </div>
                 <div class="wct-location-detail wct-location-hours">
-                    <strong><?php esc_html_e('Hours:', 'checkout-toolkit-for-woo'); ?></strong>
+                    <strong><?php esc_html_e('Hours:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="wct-detail-value"></span>
                 </div>
             </div>
@@ -173,7 +173,7 @@ class StoreLocationSelector
 
         if (empty($store_location)) {
             wc_add_notice(
-                __('Please select a pickup location.', 'checkout-toolkit-for-woo'),
+                __('Please select a pickup location.', 'marwen-checkout-toolkit-for-woocommerce'),
                 'error'
             );
         }

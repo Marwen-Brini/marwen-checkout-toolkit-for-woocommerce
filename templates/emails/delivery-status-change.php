@@ -32,7 +32,7 @@ if ($checkout_toolkit_delivery_date) {
         <?php
         printf(
             /* translators: %s: Customer first name */
-            esc_html__('Hi %s,', 'checkout-toolkit-for-woo'),
+            esc_html__('Hi %s,', 'marwen-checkout-toolkit-for-woocommerce'),
             esc_html($checkout_toolkit_order->get_billing_first_name())
         );
         ?>
@@ -45,13 +45,13 @@ if ($checkout_toolkit_delivery_date) {
 
 <div style="background: #f7f7f7; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
     <h3 style="margin: 0 0 10px; font-size: 16px;">
-        <?php esc_html_e('Delivery Details', 'checkout-toolkit-for-woo'); ?>
+        <?php esc_html_e('Delivery Details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
     </h3>
 
     <table style="width: 100%; border-collapse: collapse;">
         <tr>
             <td style="padding: 5px 0; color: #666;">
-                <?php esc_html_e('Order Number:', 'checkout-toolkit-for-woo'); ?>
+                <?php esc_html_e('Order Number:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
                 #<?php echo esc_html($checkout_toolkit_order->get_order_number()); ?>
@@ -60,7 +60,7 @@ if ($checkout_toolkit_delivery_date) {
         <?php if ($checkout_toolkit_formatted_date) : ?>
         <tr>
             <td style="padding: 5px 0; color: #666;">
-                <?php esc_html_e('Delivery Date:', 'checkout-toolkit-for-woo'); ?>
+                <?php esc_html_e('Delivery Date:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
                 <?php echo esc_html($checkout_toolkit_formatted_date); ?>
@@ -69,7 +69,7 @@ if ($checkout_toolkit_delivery_date) {
         <?php endif; ?>
         <tr>
             <td style="padding: 5px 0; color: #666;">
-                <?php esc_html_e('Delivery Status:', 'checkout-toolkit-for-woo'); ?>
+                <?php esc_html_e('Delivery Status:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
                 <?php echo esc_html($checkout_toolkit_status_label); ?>
@@ -77,7 +77,7 @@ if ($checkout_toolkit_delivery_date) {
         </tr>
         <tr>
             <td style="padding: 5px 0; color: #666;">
-                <?php esc_html_e('Delivery Address:', 'checkout-toolkit-for-woo'); ?>
+                <?php esc_html_e('Delivery Address:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0;">
                 <?php echo wp_kses_post($checkout_toolkit_order->get_formatted_shipping_address() ?: $checkout_toolkit_order->get_formatted_billing_address()); ?>
@@ -87,9 +87,9 @@ if ($checkout_toolkit_delivery_date) {
 </div>
 
 <p style="margin: 0 0 16px; color: #666; font-size: 13px;">
-    <?php esc_html_e('If you have any questions about your delivery, please contact us.', 'checkout-toolkit-for-woo'); ?>
+    <?php esc_html_e('If you have any questions about your delivery, please contact us.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
 </p>
 
 <p style="margin: 0;">
-    <?php esc_html_e('Thank you for your order!', 'checkout-toolkit-for-woo'); ?>
+    <?php esc_html_e('Thank you for your order!', 'marwen-checkout-toolkit-for-woocommerce'); ?>
 </p>

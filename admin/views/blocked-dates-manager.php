@@ -15,16 +15,16 @@ $checkout_toolkit_blocked_dates = $checkout_toolkit_delivery_settings['blocked_d
         <input type="text"
                id="checkout_toolkit_add_blocked_date"
                class="wct-datepicker-admin"
-               placeholder="<?php esc_attr_e('Select date to block', 'checkout-toolkit-for-woo'); ?>"
+               placeholder="<?php esc_attr_e('Select date to block', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                readonly>
         <button type="button" id="checkout_toolkit_add_date_btn" class="button">
-            <?php esc_html_e('Add Date', 'checkout-toolkit-for-woo'); ?>
+            <?php esc_html_e('Add Date', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </button>
     </div>
 
     <div id="checkout_toolkit_blocked_dates_list" class="wct-blocked-dates-list">
         <?php if (empty($checkout_toolkit_blocked_dates)) : ?>
-            <p class="wct-no-dates"><?php esc_html_e('No dates blocked.', 'checkout-toolkit-for-woo'); ?></p>
+            <p class="wct-no-dates"><?php esc_html_e('No dates blocked.', 'marwen-checkout-toolkit-for-woocommerce'); ?></p>
         <?php else : ?>
             <?php foreach ($checkout_toolkit_blocked_dates as $checkout_toolkit_date) : ?>
                 <div class="wct-blocked-date-item" data-date="<?php echo esc_attr($checkout_toolkit_date); ?>">
@@ -35,7 +35,7 @@ $checkout_toolkit_blocked_dates = $checkout_toolkit_delivery_settings['blocked_d
                            name="checkout_toolkit_delivery_settings[blocked_dates][]"
                            value="<?php echo esc_attr($checkout_toolkit_date); ?>">
                     <button type="button" class="wct-remove-date button-link button-link-delete">
-                        <?php esc_html_e('Remove', 'checkout-toolkit-for-woo'); ?>
+                        <?php esc_html_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </button>
                 </div>
             <?php endforeach; ?>
@@ -43,6 +43,6 @@ $checkout_toolkit_blocked_dates = $checkout_toolkit_delivery_settings['blocked_d
     </div>
 
     <p class="description">
-        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'checkout-toolkit-for-woo'); ?>
+        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'marwen-checkout-toolkit-for-woocommerce'); ?>
     </p>
 </div>

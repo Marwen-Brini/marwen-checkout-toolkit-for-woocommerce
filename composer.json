@@ -1,5 +1,5 @@
 {
-    "name": "marwen-brini/checkout-toolkit-for-woo",
+    "name": "marwen-brini/marwen-checkout-toolkit-for-woocommerce",
     "description": "A comprehensive checkout enhancement plugin for WooCommerce with delivery scheduling and custom order fields",
     "type": "wordpress-plugin",
     "keywords": ["wordpress", "woocommerce", "checkout", "delivery", "date-picker", "custom-fields"],

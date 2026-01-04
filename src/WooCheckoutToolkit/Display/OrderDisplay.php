@@ -62,9 +62,9 @@ class OrderDisplay
         // Display delivery method
         if (!empty($delivery_method) && !empty($delivery_method_settings['show_in_admin'])) {
             $method_label = $delivery_method === 'pickup'
-                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
-                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
-            echo '<p><strong>' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'marwen-checkout-toolkit-for-woocommerce'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'marwen-checkout-toolkit-for-woocommerce'));
+            echo '<p><strong>' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo esc_html($method_label) . '</p>';
         }
 
@@ -72,16 +72,16 @@ class OrderDisplay
         if (!empty($store_location) && !empty($store_locations_settings['show_in_admin'])) {
             $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
             if ($location) {
-                echo '<p><strong>' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+                echo '<p><strong>' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
                 echo '<strong>' . esc_html($location['name']) . '</strong><br>';
                 if (!empty($location['address'])) {
                     echo esc_html($location['address']) . '<br>';
                 }
                 if (!empty($location['phone'])) {
-                    echo esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['phone']) . '<br>';
+                    echo esc_html__('Phone:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['phone']) . '<br>';
                 }
                 if (!empty($location['hours'])) {
-                    echo esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['hours']);
+                    echo esc_html__('Hours:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['hours']);
                 }
                 echo '</p>';
             }
@@ -89,7 +89,7 @@ class OrderDisplay
 
         // Display delivery instructions
         if ((!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) && !empty($delivery_instructions_settings['show_in_admin'])) {
-            echo '<p><strong>' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo '<p><strong>' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
 
             if (!empty($delivery_instructions_preset)) {
                 $preset_label = $this->get_preset_label($delivery_instructions_preset, $delivery_instructions_settings);
@@ -106,14 +106,14 @@ class OrderDisplay
         // Display time window
         if (!empty($time_window) && !empty($time_window_settings['show_in_admin'])) {
             $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
-            echo '<p><strong>' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo '<p><strong>' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo esc_html($time_label) . '</p>';
         }
 
         // Display delivery date
         if (!empty($delivery_date) && !empty($delivery_settings['show_in_admin'])) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
-            echo '<p><strong>' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo '<p><strong>' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo esc_html($formatted_date) . '</p>';
         }
 
@@ -121,7 +121,7 @@ class OrderDisplay
         if ($custom_field !== '' && !empty($field_settings['show_in_admin'])) {
             $output = $this->format_field_value($custom_field, $field_settings);
             $output = apply_filters('checkout_toolkit_display_custom_field', $output, $order);
-            echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
 
@@ -129,7 +129,7 @@ class OrderDisplay
         if ($custom_field_2 !== '' && !empty($field_2_settings['show_in_admin'])) {
             $output = $this->format_field_value($custom_field_2, $field_2_settings);
             $output = apply_filters('checkout_toolkit_display_custom_field_2', $output, $order);
-            echo '<p><strong>' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . ':</strong><br>';
+            echo '<p><strong>' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
 
@@ -148,7 +148,7 @@ class OrderDisplay
 
         add_meta_box(
             'checkout_toolkit_order_details',
-            __('Checkout Toolkit Details', 'checkout-toolkit-for-woo'),
+            __('Checkout Toolkit Details', 'marwen-checkout-toolkit-for-woocommerce'),
             [$this, 'render_meta_box'],
             $screen,
             'side',
@@ -177,7 +177,7 @@ class OrderDisplay
         $custom_field_2 = $order->get_meta('_wct_custom_field_2');
 
         if (empty($delivery_method) && empty($delivery_instructions_preset) && empty($delivery_instructions_custom) && empty($time_window) && empty($store_location) && empty($delivery_date) && empty($custom_field) && empty($custom_field_2)) {
-            echo '<p>' . esc_html__('No additional checkout data.', 'checkout-toolkit-for-woo') . '</p>';
+            echo '<p>' . esc_html__('No additional checkout data.', 'marwen-checkout-toolkit-for-woocommerce') . '</p>';
             return;
         }
 
@@ -194,10 +194,10 @@ class OrderDisplay
         // Display delivery method
         if (!empty($delivery_method)) {
             $method_label = $delivery_method === 'pickup'
-                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'checkout-toolkit-for-woo'))
-                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'checkout-toolkit-for-woo'));
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'marwen-checkout-toolkit-for-woocommerce'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'marwen-checkout-toolkit-for-woocommerce'));
             echo '<div class="delivery-row">';
-            echo '<span class="delivery-label">' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value">' . esc_html($method_label) . '</span>';
             echo '</div>';
         }
@@ -207,17 +207,17 @@ class OrderDisplay
             $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
             if ($location) {
                 echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
-                echo '<span class="delivery-label">' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'checkout-toolkit-for-woo')) . '</span>';
+                echo '<span class="delivery-label">' . esc_html($store_locations_settings['field_label'] ?? __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
                 echo '<span class="delivery-value" style="margin-top: 5px;">';
                 echo '<strong>' . esc_html($location['name']) . '</strong><br>';
                 if (!empty($location['address'])) {
                     echo esc_html($location['address']) . '<br>';
                 }
                 if (!empty($location['phone'])) {
-                    echo esc_html__('Phone:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['phone']) . '<br>';
+                    echo esc_html__('Phone:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['phone']) . '<br>';
                 }
                 if (!empty($location['hours'])) {
-                    echo esc_html__('Hours:', 'checkout-toolkit-for-woo') . ' ' . esc_html($location['hours']);
+                    echo esc_html__('Hours:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['hours']);
                 }
                 echo '</span>';
                 echo '</div>';
@@ -227,7 +227,7 @@ class OrderDisplay
         // Display delivery instructions
         if (!empty($delivery_instructions_preset) || !empty($delivery_instructions_custom)) {
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
-            echo '<span class="delivery-label">' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value" style="margin-top: 5px;">';
 
             if (!empty($delivery_instructions_preset)) {
@@ -247,7 +247,7 @@ class OrderDisplay
         if (!empty($time_window)) {
             $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
             echo '<div class="delivery-row">';
-            echo '<span class="delivery-label">' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($time_window_settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value">' . esc_html($time_label) . '</span>';
             echo '</div>';
         }
@@ -256,14 +256,14 @@ class OrderDisplay
         if (!empty($delivery_date)) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
             echo '<div class="delivery-row">';
-            echo '<span class="delivery-label">' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($delivery_settings['field_label'] ?? __('Delivery Date', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value">' . esc_html($formatted_date) . '</span>';
             echo '</div>';
 
             // Display delivery status with dropdown
             $delivery_status = $order->get_meta(DeliveryManager::META_STATUS) ?: DeliveryStatus::PENDING;
             echo '<div class="delivery-row">';
-            echo '<span class="delivery-label">' . esc_html__('Status', 'checkout-toolkit-for-woo') . '</span>';
+            echo '<span class="delivery-label">' . esc_html__('Status', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
             echo '<span class="delivery-value">';
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Badge HTML is escaped in get_badge_html
             echo DeliveryStatus::get_badge_html($delivery_status);
@@ -283,7 +283,7 @@ class OrderDisplay
         if ($custom_field !== '') {
             $formatted_value = $this->format_field_value($custom_field, $field_settings);
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
-            echo '<span class="delivery-label">' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($formatted_value)) . '</span>';
             echo '</div>';
         }
@@ -292,7 +292,7 @@ class OrderDisplay
         if ($custom_field_2 !== '') {
             $formatted_value = $this->format_field_value($custom_field_2, $field_2_settings);
             echo '<div class="delivery-row" style="flex-direction: column; align-items: flex-start;">';
-            echo '<span class="delivery-label">' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'checkout-toolkit-for-woo')) . '</span>';
+            echo '<span class="delivery-label">' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
             echo '<span class="delivery-value" style="margin-top: 5px;">' . nl2br(esc_html($formatted_value)) . '</span>';
             echo '</div>';
         }
@@ -315,7 +315,7 @@ class OrderDisplay
         $history = array_reverse($history);
 
         echo '<div class="wct-delivery-history">';
-        echo '<h4>' . esc_html__('Status History', 'checkout-toolkit-for-woo') . '</h4>';
+        echo '<h4>' . esc_html__('Status History', 'marwen-checkout-toolkit-for-woocommerce') . '</h4>';
         echo '<ul>';
 
         foreach (array_slice($history, 0, 5) as $entry) {
@@ -335,7 +335,7 @@ class OrderDisplay
                 echo '<br><span class="history-date">' . esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), $timestamp));
                 if ($user_name) {
                     /* translators: %s: User name */
-                    echo ' ' . sprintf(esc_html__('by %s', 'checkout-toolkit-for-woo'), esc_html($user_name));
+                    echo ' ' . sprintf(esc_html__('by %s', 'marwen-checkout-toolkit-for-woocommerce'), esc_html($user_name));
                 }
                 echo '</span>';
             }
@@ -373,8 +373,8 @@ class OrderDisplay
         switch ($field_type) {
             case 'checkbox':
                 return $value === '1'
-                    ? __('Yes', 'checkout-toolkit-for-woo')
-                    : __('No', 'checkout-toolkit-for-woo');
+                    ? __('Yes', 'marwen-checkout-toolkit-for-woocommerce')
+                    : __('No', 'marwen-checkout-toolkit-for-woocommerce');
 
             case 'select':
                 $options = $settings['select_options'] ?? [];

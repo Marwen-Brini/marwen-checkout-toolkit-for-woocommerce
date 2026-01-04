@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Checkout Toolkit for WooCommerce
- * Plugin URI:        https://github.com/Marwen-Brini/checkout-toolkit-for-woo
+ * Plugin Name:       Marwen Checkout Toolkit for WooCommerce
+ * Plugin URI:        https://github.com/Marwen-Brini/marwen-checkout-toolkit-for-woocommerce
  * Description:       A comprehensive checkout enhancement plugin combining delivery scheduling and custom order fields into one powerful solution.
  * Version:           1.0.0
  * Requires at least: 5.8
@@ -10,7 +10,7 @@
  * Author URI:        https://github.com/Marwen-Brini
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       checkout-toolkit-for-woo
+ * Text Domain:       marwen-checkout-toolkit-for-woocommerce
  * Domain Path:       /languages
  * Requires Plugins:  woocommerce
  * WC requires at least: 7.0
@@ -61,7 +61,7 @@ function wct_woocommerce_missing_notice(): void
                 /* translators: 1: Plugin name, 2: WooCommerce */
                 esc_html__(
                     '%1$s requires %2$s to be installed and active.',
-                    'checkout-toolkit-for-woo'
+                    'marwen-checkout-toolkit-for-woocommerce'
                 ),
                 '<strong>Checkout Toolkit for WooCommerce</strong>',
                 '<strong>WooCommerce</strong>'

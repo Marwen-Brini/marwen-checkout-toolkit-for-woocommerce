@@ -73,13 +73,13 @@ class DeliveryMethod
             $current_value = $settings['default_method'] ?? 'delivery';
         }
 
-        $delivery_label = $settings['delivery_label'] ?: __('Delivery', 'checkout-toolkit-for-woo');
-        $pickup_label = $settings['pickup_label'] ?: __('Pickup', 'checkout-toolkit-for-woo');
+        $delivery_label = $settings['delivery_label'] ?: __('Delivery', 'marwen-checkout-toolkit-for-woocommerce');
+        $pickup_label = $settings['pickup_label'] ?: __('Pickup', 'marwen-checkout-toolkit-for-woocommerce');
 
         do_action('checkout_toolkit_before_delivery_method');
         ?>
         <div class="wct-delivery-method-wrapper" id="wct-delivery-method-wrapper">
-            <h3><?php echo esc_html($settings['field_label'] ?: __('Fulfillment Method', 'checkout-toolkit-for-woo')); ?></h3>
+            <h3><?php echo esc_html($settings['field_label'] ?: __('Fulfillment Method', 'marwen-checkout-toolkit-for-woocommerce')); ?></h3>
 
             <?php if ($settings['show_as'] === 'toggle') : ?>
                 <div class="wct-delivery-method-toggle">
@@ -141,7 +141,7 @@ class DeliveryMethod
         // Ensure a valid value is selected
         if (!in_array($value, ['delivery', 'pickup'], true)) {
             wc_add_notice(
-                __('Please select a fulfillment method.', 'checkout-toolkit-for-woo'),
+                __('Please select a fulfillment method.', 'marwen-checkout-toolkit-for-woocommerce'),
                 'error'
             );
         }

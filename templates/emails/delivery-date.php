@@ -3,7 +3,7 @@
  * Delivery date in order emails
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/checkout-toolkit-for-woo/emails/delivery-date.php
+ * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/emails/delivery-date.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0
