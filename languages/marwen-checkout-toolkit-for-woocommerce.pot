@@ -15,28 +15,28 @@ msgstr ""
 "X-Domain: marwen-checkout-toolkit-for-woocommerce\n"
 
 #. Plugin Name of the plugin
-#: checkout-toolkit-for-woo.php
+#: marwen-checkout-toolkit-for-woocommerce.php
 #: admin/views/settings-page.php:17
 msgid "Checkout Toolkit for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: checkout-toolkit-for-woo.php
+#: marwen-checkout-toolkit-for-woocommerce.php
 msgid "https://github.com/Marwen-Brini/checkout-toolkit-for-woo"
 msgstr ""
 
 #. Description of the plugin
-#: checkout-toolkit-for-woo.php
+#: marwen-checkout-toolkit-for-woocommerce.php
 msgid "A comprehensive checkout enhancement plugin combining delivery scheduling and custom order fields into one powerful solution."
 msgstr ""
 
 #. Author of the plugin
-#: checkout-toolkit-for-woo.php
+#: marwen-checkout-toolkit-for-woocommerce.php
 msgid "Marwen Brini"
 msgstr ""
 
 #. Author URI of the plugin
-#: checkout-toolkit-for-woo.php
+#: marwen-checkout-toolkit-for-woocommerce.php
 msgid "https://github.com/Marwen-Brini"
 msgstr ""
 
@@ -220,7 +220,7 @@ msgid "Custom Field"
 msgstr ""
 
 #. translators: 1: Plugin name, 2: WooCommerce
-#: checkout-toolkit-for-woo.php:61
+#: marwen-checkout-toolkit-for-woocommerce.php:61
 #, php-format
 msgid "%1$s requires %2$s to be installed and active."
 msgstr ""
