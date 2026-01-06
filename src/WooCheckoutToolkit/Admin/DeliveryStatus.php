@@ -145,7 +145,7 @@ class DeliveryStatus
         $color = self::get_color($status);
 
         return sprintf(
-            '<span class="wct-delivery-status-badge wct-status-%s" style="background-color: %s; color: %s; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: 500;">%s</span>',
+            '<span class="marwchto-delivery-status-badge marwchto-status-%s" style="background-color: %s; color: %s; padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: 500;">%s</span>',
             esc_attr($status),
             esc_attr($color['bg']),
             esc_attr($color['text']),
@@ -167,7 +167,7 @@ class DeliveryStatus
         $id = $id ?: $name;
 
         $html = sprintf(
-            '<select name="%s" id="%s" class="wct-delivery-status-select">',
+            '<select name="%s" id="%s" class="marwchto-delivery-status-select">',
             esc_attr($name),
             esc_attr($id)
         );
@@ -241,7 +241,7 @@ class DeliveryStatus
      */
     public static function get_email_message(string $status, \WC_Order $order): string
     {
-        $delivery_date = $order->get_meta('_wct_delivery_date');
+        $delivery_date = $order->get_meta('_marwchto_delivery_date');
         $formatted_date = '';
 
         if ($delivery_date) {

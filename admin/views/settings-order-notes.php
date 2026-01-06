@@ -10,7 +10,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="wct-settings-section">
+<div class="marwchto-settings-section">
     <h2><?php esc_html_e('Order Notes Customization', 'marwen-marwchto-for-woocommerce'); ?></h2>
     <p class="description">
         <?php esc_html_e('Customize the default WooCommerce order notes field that appears at checkout.', 'marwen-marwchto-for-woocommerce'); ?>
@@ -35,11 +35,11 @@ defined('ABSPATH') || exit;
 
         <tr>
             <th scope="row">
-                <label for="wct_order_notes_label"><?php esc_html_e('Custom Label', 'marwen-marwchto-for-woocommerce'); ?></label>
+                <label for="marwchto_order_notes_label"><?php esc_html_e('Custom Label', 'marwen-marwchto-for-woocommerce'); ?></label>
             </th>
             <td>
                 <input type="text"
-                       id="wct_order_notes_label"
+                       id="marwchto_order_notes_label"
                        name="marwchto_order_notes_settings[custom_label]"
                        value="<?php echo esc_attr($marwchto_order_notes_settings['custom_label'] ?? ''); ?>"
                        class="regular-text">
@@ -51,10 +51,10 @@ defined('ABSPATH') || exit;
 
         <tr>
             <th scope="row">
-                <label for="wct_order_notes_placeholder"><?php esc_html_e('Custom Placeholder', 'marwen-marwchto-for-woocommerce'); ?></label>
+                <label for="marwchto_order_notes_placeholder"><?php esc_html_e('Custom Placeholder', 'marwen-marwchto-for-woocommerce'); ?></label>
             </th>
             <td>
-                <textarea id="wct_order_notes_placeholder"
+                <textarea id="marwchto_order_notes_placeholder"
                           name="marwchto_order_notes_settings[custom_placeholder]"
                           rows="3"
                           class="large-text"><?php echo esc_textarea($marwchto_order_notes_settings['custom_placeholder'] ?? ''); ?></textarea>
@@ -66,11 +66,11 @@ defined('ABSPATH') || exit;
     </table>
 </div>
 
-<div class="wct-settings-section wct-preview-section">
+<div class="marwchto-settings-section marwchto-preview-section">
     <h3><?php esc_html_e('Preview', 'marwen-marwchto-for-woocommerce'); ?></h3>
     <p class="description"><?php esc_html_e('This is how the order notes field will appear on checkout:', 'marwen-marwchto-for-woocommerce'); ?></p>
 
-    <div class="wct-field-preview" style="max-width: 500px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
+    <div class="marwchto-field-preview" style="max-width: 500px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
         <label for="marwchto_preview_notes" style="display: block; margin-bottom: 8px; font-weight: 600;">
             <?php
             $marwchto_preview_label = !empty($marwchto_order_notes_settings['custom_label'])

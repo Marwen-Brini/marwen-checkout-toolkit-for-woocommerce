@@ -198,7 +198,7 @@ class TimeWindow
             : '';
 
         if (!empty($time_window)) {
-            $order->update_meta_data('_wct_time_window', $time_window);
+            $order->update_meta_data('_marwchto_time_window', $time_window);
 
             /**
              * Action fired after time window is saved.

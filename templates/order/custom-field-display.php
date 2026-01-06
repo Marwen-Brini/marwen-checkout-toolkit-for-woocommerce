@@ -16,7 +16,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<p class="form-field form-field-wide wct-custom-field-display">
+<p class="form-field form-field-wide marwchto-custom-field-display">
     <strong><?php echo esc_html($label); ?>:</strong><br>
     <?php echo nl2br(esc_html($value)); ?>
 </p>

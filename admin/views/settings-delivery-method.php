@@ -10,13 +10,13 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="wct-settings-section">
+<div class="marwchto-settings-section">
     <h2><?php esc_html_e('Pickup vs Delivery Toggle', 'marwen-marwchto-for-woocommerce'); ?></h2>
     <p class="description">
         <?php esc_html_e('Allow customers to choose between pickup and delivery at checkout.', 'marwen-marwchto-for-woocommerce'); ?>
     </p>
 
-    <table class="form-table wct-settings-table">
+    <table class="form-table marwchto-settings-table">
         <tbody>
             <!-- Enable Feature -->
             <tr>
@@ -160,30 +160,30 @@ defined('ABSPATH') || exit;
     </table>
 
     <!-- Preview Section -->
-    <div class="wct-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+    <div class="marwchto-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
         <h3 style="margin-top: 0;"><?php esc_html_e('Preview', 'marwen-marwchto-for-woocommerce'); ?></h3>
         <p class="description"><?php esc_html_e('This is how the toggle will appear on checkout.', 'marwen-marwchto-for-woocommerce'); ?></p>
 
-        <div class="wct-preview-content" style="margin-top: 15px;">
-            <h4 id="wct-preview-label"><?php echo esc_html($marwchto_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?></h4>
+        <div class="marwchto-preview-content" style="margin-top: 15px;">
+            <h4 id="marwchto-preview-label"><?php echo esc_html($marwchto_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?></h4>
 
-            <div id="wct-preview-toggle" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') !== 'toggle' ? 'display:none;' : ''; ?>">
+            <div id="marwchto-preview-toggle" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') !== 'toggle' ? 'display:none;' : ''; ?>">
                 <div style="display: flex; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; max-width: 300px;">
-                    <span style="flex: 1; text-align: center; padding: 12px 20px; background: #2271b1; color: #fff; font-weight: 500;" id="wct-preview-delivery-toggle">
+                    <span style="flex: 1; text-align: center; padding: 12px 20px; background: #2271b1; color: #fff; font-weight: 500;" id="marwchto-preview-delivery-toggle">
                         <?php echo esc_html($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?>
                     </span>
-                    <span style="flex: 1; text-align: center; padding: 12px 20px; background: #f9f9f9; border-left: 1px solid #ddd; font-weight: 500;" id="wct-preview-pickup-toggle">
+                    <span style="flex: 1; text-align: center; padding: 12px 20px; background: #f9f9f9; border-left: 1px solid #ddd; font-weight: 500;" id="marwchto-preview-pickup-toggle">
                         <?php echo esc_html($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?>
                     </span>
                 </div>
             </div>
 
-            <div id="wct-preview-radio" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle' ? 'display:none;' : ''; ?>">
+            <div id="marwchto-preview-radio" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle' ? 'display:none;' : ''; ?>">
                 <p style="margin: 5px 0;">
-                    <label><input type="radio" name="wct-preview-method" checked> <span id="wct-preview-delivery-radio"><?php echo esc_html($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?></span></label>
+                    <label><input type="radio" name="marwchto-preview-method" checked> <span id="marwchto-preview-delivery-radio"><?php echo esc_html($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?></span></label>
                 </p>
                 <p style="margin: 5px 0;">
-                    <label><input type="radio" name="wct-preview-method"> <span id="wct-preview-pickup-radio"><?php echo esc_html($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?></span></label>
+                    <label><input type="radio" name="marwchto-preview-method"> <span id="marwchto-preview-pickup-radio"><?php echo esc_html($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?></span></label>
                 </p>
             </div>
         </div>

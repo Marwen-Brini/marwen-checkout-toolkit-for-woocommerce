@@ -60,8 +60,8 @@ function marwchto_delete_order_meta(): void
     $wpdb->query(
         $wpdb->prepare(
             "DELETE FROM {$wpdb->postmeta} WHERE meta_key IN (%s, %s)",
-            '_wct_delivery_date',
-            '_wct_custom_field'
+            '_marwchto_delivery_date',
+            '_marwchto_custom_field'
         )
     );
 
@@ -75,8 +75,8 @@ function marwchto_delete_order_meta(): void
             $wpdb->prepare(
                 // Safely constructed table name using $wpdb->prefix.
                 "DELETE FROM {$orders_meta_table} WHERE meta_key IN (%s, %s)",
-                '_wct_delivery_date',
-                '_wct_custom_field'
+                '_marwchto_delivery_date',
+                '_marwchto_custom_field'
             )
         );
         // phpcs:enable

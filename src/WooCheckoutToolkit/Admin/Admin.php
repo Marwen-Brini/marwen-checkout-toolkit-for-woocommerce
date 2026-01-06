@@ -41,7 +41,7 @@ class Admin
     public function enqueue_assets(string $hook): void
     {
         // Load CSS on settings page and dashboard (for widget)
-        if (in_array($hook, ['woocommerce_page_wct-settings', 'index.php'], true)) {
+        if (in_array($hook, ['woocommerce_page_marwchto-settings', 'index.php'], true)) {
             wp_enqueue_style(
                 'marwchto-admin',
                 MARWCHTO_PLUGIN_URL . 'admin/css/admin.css',
@@ -51,7 +51,7 @@ class Admin
         }
 
         // Only load full JS on our settings page
-        if ($hook !== 'woocommerce_page_wct-settings') {
+        if ($hook !== 'woocommerce_page_marwchto-settings') {
             return;
         }
 
@@ -128,7 +128,7 @@ class Admin
     {
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
-            admin_url('admin.php?page=wct-settings'),
+            admin_url('admin.php?page=marwchto-settings'),
             __('Settings', 'marwen-marwchto-for-woocommerce')
         );
 

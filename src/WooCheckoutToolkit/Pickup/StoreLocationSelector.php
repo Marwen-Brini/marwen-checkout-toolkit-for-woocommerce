@@ -102,7 +102,7 @@ class StoreLocationSelector
 
         do_action('marwchto_before_store_location');
         ?>
-        <div class="wct-store-location-wrapper" id="wct-store-location-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
+        <div class="marwchto-store-location-wrapper" id="marwchto-store-location-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <p class="form-row form-row-wide">
                 <label for="marwchto_store_location">
                     <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'marwen-marwchto-for-woocommerce')); ?>
@@ -110,7 +110,7 @@ class StoreLocationSelector
                 </label>
                 <select name="marwchto_store_location"
                         id="marwchto_store_location"
-                        class="wct-store-location-select"
+                        class="marwchto-store-location-select"
                         <?php echo esc_attr($required_attr); ?>>
                     <option value=""><?php esc_html_e('Select a location...', 'marwen-marwchto-for-woocommerce'); ?></option>
                     <?php foreach ($locations as $location) : ?>
@@ -128,18 +128,18 @@ class StoreLocationSelector
             </p>
 
             <!-- Location Details Preview -->
-            <div id="wct-store-location-details" class="wct-store-location-details" style="display: none;">
-                <div class="wct-location-detail wct-location-address">
+            <div id="marwchto-store-location-details" class="marwchto-store-location-details" style="display: none;">
+                <div class="marwchto-location-detail marwchto-location-address">
                     <strong><?php esc_html_e('Address:', 'marwen-marwchto-for-woocommerce'); ?></strong>
-                    <span class="wct-detail-value"></span>
+                    <span class="marwchto-detail-value"></span>
                 </div>
-                <div class="wct-location-detail wct-location-phone">
+                <div class="marwchto-location-detail marwchto-location-phone">
                     <strong><?php esc_html_e('Phone:', 'marwen-marwchto-for-woocommerce'); ?></strong>
-                    <span class="wct-detail-value"></span>
+                    <span class="marwchto-detail-value"></span>
                 </div>
-                <div class="wct-location-detail wct-location-hours">
+                <div class="marwchto-location-detail marwchto-location-hours">
                     <strong><?php esc_html_e('Hours:', 'marwen-marwchto-for-woocommerce'); ?></strong>
-                    <span class="wct-detail-value"></span>
+                    <span class="marwchto-detail-value"></span>
                 </div>
             </div>
         </div>
@@ -257,7 +257,7 @@ class StoreLocationSelector
         $store_location = $this->get_posted_store_location();
 
         if (!empty($store_location)) {
-            $order->update_meta_data('_wct_store_location', $store_location);
+            $order->update_meta_data('_marwchto_store_location', $store_location);
             do_action('marwchto_store_location_saved', $order->get_id(), $store_location);
         }
     }

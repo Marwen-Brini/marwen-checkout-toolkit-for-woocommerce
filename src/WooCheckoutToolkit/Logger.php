@@ -55,7 +55,7 @@ class Logger
     {
         if (self::$log_file === null) {
             $upload_dir = wp_upload_dir();
-            $log_dir = $upload_dir['basedir'] . '/wct-logs';
+            $log_dir = $upload_dir['basedir'] . '/marwchto-logs';
 
             if (!file_exists($log_dir)) {
                 wp_mkdir_p($log_dir);
@@ -63,7 +63,7 @@ class Logger
                 file_put_contents($log_dir . '/index.php', '<?php // Silence is golden.');
             }
 
-            self::$log_file = $log_dir . '/wct-debug-' . gmdate('Y-m-d') . '.log';
+            self::$log_file = $log_dir . '/marwchto-debug-' . gmdate('Y-m-d') . '.log';
         }
 
         return self::$log_file;
@@ -148,13 +148,13 @@ class Logger
     public static function cleanup(): void
     {
         $upload_dir = wp_upload_dir();
-        $log_dir = $upload_dir['basedir'] . '/wct-logs';
+        $log_dir = $upload_dir['basedir'] . '/marwchto-logs';
 
         if (!is_dir($log_dir)) {
             return;
         }
 
-        $files = glob($log_dir . '/wct-debug-*.log');
+        $files = glob($log_dir . '/marwchto-debug-*.log');
         $cutoff = strtotime('-7 days');
 
         foreach ($files as $file) {

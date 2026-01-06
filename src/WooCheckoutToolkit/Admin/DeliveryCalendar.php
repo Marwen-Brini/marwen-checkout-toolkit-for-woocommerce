@@ -34,7 +34,7 @@ class DeliveryCalendar
         $orders = wc_get_orders([
             'meta_query' => [
                 [
-                    'key' => '_wct_delivery_date',
+                    'key' => '_marwchto_delivery_date',
                     'value' => [$start_date, $end_date],
                     'compare' => 'BETWEEN',
                     'type' => 'DATE',
@@ -48,7 +48,7 @@ class DeliveryCalendar
         $days = [];
 
         foreach ($orders as $order) {
-            $date = $order->get_meta('_wct_delivery_date');
+            $date = $order->get_meta('_marwchto_delivery_date');
             $status = $order->get_meta(DeliveryManager::META_STATUS) ?: DeliveryStatus::PENDING;
 
             if (!isset($days[$date])) {
@@ -96,7 +96,7 @@ class DeliveryCalendar
 
         // Get all orders with delivery dates
         $all_orders = wc_get_orders([
-            'meta_key' => '_wct_delivery_date',
+            'meta_key' => '_marwchto_delivery_date',
             'meta_compare' => 'EXISTS',
             'limit' => -1,
             'status' => ['processing', 'on-hold', 'pending', 'completed'],
@@ -130,7 +130,7 @@ class DeliveryCalendar
         ];
 
         foreach ($all_orders as $order) {
-            $date = $order->get_meta('_wct_delivery_date');
+            $date = $order->get_meta('_marwchto_delivery_date');
             $status = $order->get_meta(DeliveryManager::META_STATUS) ?: DeliveryStatus::PENDING;
 
             if ($date === $today) {
@@ -183,20 +183,20 @@ class DeliveryCalendar
             $next_year++;
         }
 
-        $base_url = admin_url('admin.php?page=wct-deliveries&tab=calendar');
+        $base_url = admin_url('admin.php?page=marwchto-deliveries&tab=calendar');
         ?>
-        <div class="wct-calendar-wrapper">
-            <div class="wct-calendar-header">
-                <a href="<?php echo esc_url(add_query_arg(['year' => $prev_year, 'month' => $prev_month], $base_url)); ?>" class="wct-calendar-nav prev">
+        <div class="marwchto-calendar-wrapper">
+            <div class="marwchto-calendar-header">
+                <a href="<?php echo esc_url(add_query_arg(['year' => $prev_year, 'month' => $prev_month], $base_url)); ?>" class="marwchto-calendar-nav prev">
                     &laquo; <?php esc_html_e('Previous', 'marwen-marwchto-for-woocommerce'); ?>
                 </a>
-                <h2 class="wct-calendar-title"><?php echo esc_html($data['month_name']); ?></h2>
-                <a href="<?php echo esc_url(add_query_arg(['year' => $next_year, 'month' => $next_month], $base_url)); ?>" class="wct-calendar-nav next">
+                <h2 class="marwchto-calendar-title"><?php echo esc_html($data['month_name']); ?></h2>
+                <a href="<?php echo esc_url(add_query_arg(['year' => $next_year, 'month' => $next_month], $base_url)); ?>" class="marwchto-calendar-nav next">
                     <?php esc_html_e('Next', 'marwen-marwchto-for-woocommerce'); ?> &raquo;
                 </a>
             </div>
 
-            <table class="wct-calendar">
+            <table class="marwchto-calendar">
                 <thead>
                     <tr>
                         <?php
@@ -233,7 +233,7 @@ class DeliveryCalendar
                             }
 
                             if (!$started || $day > $data['days_in_month']) {
-                                echo '<td class="wct-calendar-empty"></td>';
+                                echo '<td class="marwchto-calendar-empty"></td>';
                             } else {
                                 $date_str = sprintf('%04d-%02d-%02d', $year, $month, $day);
                                 $day_data = $data['days'][$date_str] ?? null;
@@ -255,14 +255,14 @@ class DeliveryCalendar
                                 echo '<span class="day-number">' . esc_html($day) . '</span>';
 
                                 if ($day_data) {
-                                    $list_url = admin_url('admin.php?page=wct-deliveries&tab=list&filter_date=' . $date_str);
-                                    echo '<a href="' . esc_url($list_url) . '" class="wct-calendar-count">';
+                                    $list_url = admin_url('admin.php?page=marwchto-deliveries&tab=list&filter_date=' . $date_str);
+                                    echo '<a href="' . esc_url($list_url) . '" class="marwchto-calendar-count">';
                                     echo '<span class="count">' . esc_html($day_data['total']) . '</span>';
                                     echo '<span class="label">' . esc_html(_n('delivery', 'deliveries', $day_data['total'], 'marwen-marwchto-for-woocommerce')) . '</span>';
                                     echo '</a>';
 
                                     // Status breakdown dots
-                                    echo '<div class="wct-calendar-statuses">';
+                                    echo '<div class="marwchto-calendar-statuses">';
                                     foreach ($day_data['statuses'] as $status => $count) {
                                         $color = $data['status_colors'][$status] ?? ['bg' => '#ccc'];
                                         echo '<span class="status-dot" style="background-color: ' . esc_attr($color['bg']) . ';" title="' . esc_attr($count . ' ' . ($data['status_labels'][$status] ?? $status)) . '"></span>';
@@ -281,7 +281,7 @@ class DeliveryCalendar
                 </tbody>
             </table>
 
-            <div class="wct-calendar-legend">
+            <div class="marwchto-calendar-legend">
                 <span class="legend-title"><?php esc_html_e('Status:', 'marwen-marwchto-for-woocommerce'); ?></span>
                 <?php foreach ($data['status_colors'] as $status => $colors) : ?>
                     <span class="legend-item">

@@ -97,7 +97,7 @@ class DeliveryDate
                 'input_class' => ['marwchto-datepicker'],
                 'custom_attributes' => [
                     'readonly' => 'readonly',
-                    'data-wct-datepicker' => 'true',
+                    'data-marwchto-datepicker' => 'true',
                 ],
             ]),
             WC()->checkout->get_value('marwchto_delivery_date')
@@ -198,7 +198,7 @@ class DeliveryDate
             : '';
 
         if (!empty($date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
-            $order->update_meta_data('_wct_delivery_date', $date);
+            $order->update_meta_data('_marwchto_delivery_date', $date);
 
             Logger::info('Delivery date saved to order', [
                 'order_id' => $order->get_id(),
@@ -247,7 +247,7 @@ class DeliveryDate
 
         $message = str_replace('{date}', $formatted_date, $message);
 
-        echo '<p class="wct-estimated-delivery-message">' . esc_html($message) . '</p>';
+        echo '<p class="marwchto-estimated-delivery-message">' . esc_html($message) . '</p>';
     }
 
     /**

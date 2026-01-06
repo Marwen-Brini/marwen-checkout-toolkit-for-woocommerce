@@ -45,7 +45,7 @@ if (file_exists(MARWCHTO_PLUGIN_DIR . 'vendor/autoload.php')) {
 /**
  * Check if WooCommerce is active
  */
-function wct_is_woocommerce_active(): bool
+function marwchto_is_woocommerce_active(): bool
 {
     return class_exists('WooCommerce');
 }
@@ -53,7 +53,7 @@ function wct_is_woocommerce_active(): bool
 /**
  * Admin notice for missing WooCommerce
  */
-function wct_woocommerce_missing_notice(): void
+function marwchto_woocommerce_missing_notice(): void
 {
     ?>
     <div class="notice notice-error">
@@ -77,11 +77,11 @@ function wct_woocommerce_missing_notice(): void
 /**
  * Initialize the plugin
  */
-function wct_init(): void
+function marwchto_init(): void
 {
     // Check WooCommerce dependency
-    if (!wct_is_woocommerce_active()) {
-        add_action('admin_notices', __NAMESPACE__ . '\\wct_woocommerce_missing_notice');
+    if (!marwchto_is_woocommerce_active()) {
+        add_action('admin_notices', __NAMESPACE__ . '\\marwchto_woocommerce_missing_notice');
         return;
     }
 
@@ -92,25 +92,25 @@ function wct_init(): void
         $plugin->init();
     }, 5);
 }
-add_action('plugins_loaded', __NAMESPACE__ . '\\wct_init');
+add_action('plugins_loaded', __NAMESPACE__ . '\\marwchto_init');
 
 /**
  * Activation hook
  */
-function wct_activate(): void
+function marwchto_activate(): void
 {
     Activator::activate();
 }
-register_activation_hook(__FILE__, __NAMESPACE__ . '\\wct_activate');
+register_activation_hook(__FILE__, __NAMESPACE__ . '\\marwchto_activate');
 
 /**
  * Deactivation hook
  */
-function wct_deactivate(): void
+function marwchto_deactivate(): void
 {
     Deactivator::deactivate();
 }
-register_deactivation_hook(__FILE__, __NAMESPACE__ . '\\wct_deactivate');
+register_deactivation_hook(__FILE__, __NAMESPACE__ . '\\marwchto_deactivate');
 
 /**
  * Declare HPOS compatibility

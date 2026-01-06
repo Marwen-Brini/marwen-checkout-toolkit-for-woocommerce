@@ -25,22 +25,22 @@ if ($marwchto_calendar_month < 1 || $marwchto_calendar_month > 12) {
 }
 ?>
 
-<div class="wrap wct-delivery-dashboard">
+<div class="wrap marwchto-delivery-dashboard">
     <h1 class="wp-heading-inline"><?php esc_html_e('Delivery Management', 'marwen-marwchto-for-woocommerce'); ?></h1>
     <hr class="wp-header-end">
 
-    <nav class="nav-tab-wrapper wct-delivery-tabs">
-        <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=list')); ?>"
+    <nav class="nav-tab-wrapper marwchto-delivery-tabs">
+        <a href="<?php echo esc_url(admin_url('admin.php?page=marwchto-deliveries&tab=list')); ?>"
            class="nav-tab <?php echo $marwchto_active_tab === 'list' ? 'nav-tab-active' : ''; ?>">
             <?php esc_html_e('Deliveries', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=calendar')); ?>"
+        <a href="<?php echo esc_url(admin_url('admin.php?page=marwchto-deliveries&tab=calendar')); ?>"
            class="nav-tab <?php echo $marwchto_active_tab === 'calendar' ? 'nav-tab-active' : ''; ?>">
             <?php esc_html_e('Calendar', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
     </nav>
 
-    <div class="wct-delivery-content">
+    <div class="marwchto-delivery-content">
         <?php if ($marwchto_active_tab === 'list') : ?>
             <?php
             $marwchto_list_table = new DeliveryList();
@@ -48,7 +48,7 @@ if ($marwchto_calendar_month < 1 || $marwchto_calendar_month > 12) {
             ?>
 
             <form method="get">
-                <input type="hidden" name="page" value="wct-deliveries" />
+                <input type="hidden" name="page" value="marwchto-deliveries" />
                 <input type="hidden" name="tab" value="list" />
                 <?php $marwchto_list_table->display(); ?>
             </form>

@@ -22,41 +22,41 @@ $marwchto_time_window_settings = get_option('marwchto_time_window_settings', $ma
 $marwchto_store_locations_settings = get_option('marwchto_store_locations_settings', $marwchto_settings_obj->get_default_store_locations_settings());
 ?>
 
-<div class="wrap wct-settings-wrap">
+<div class="wrap marwchto-settings-wrap">
     <h1><?php esc_html_e('Checkout Toolkit for WooCommerce', 'marwen-marwchto-for-woocommerce'); ?></h1>
 
-    <nav class="nav-tab-wrapper wct-nav-tabs">
-        <a href="?page=wct-settings&tab=delivery-method"
+    <nav class="nav-tab-wrapper marwchto-nav-tabs">
+        <a href="?page=marwchto-settings&tab=delivery-method"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-method' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Pickup/Delivery', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=store-locations"
+        <a href="?page=marwchto-settings&tab=store-locations"
            class="nav-tab <?php echo esc_attr($active_tab === 'store-locations' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Store Locations', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=delivery-instructions"
+        <a href="?page=marwchto-settings&tab=delivery-instructions"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery-instructions' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Delivery Instructions', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=time-windows"
+        <a href="?page=marwchto-settings&tab=time-windows"
            class="nav-tab <?php echo esc_attr($active_tab === 'time-windows' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Time Windows', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=delivery"
+        <a href="?page=marwchto-settings&tab=delivery"
            class="nav-tab <?php echo esc_attr($active_tab === 'delivery' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Delivery Date', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=fields"
+        <a href="?page=marwchto-settings&tab=fields"
            class="nav-tab <?php echo esc_attr($active_tab === 'fields' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Custom Fields', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
-        <a href="?page=wct-settings&tab=order-notes"
+        <a href="?page=marwchto-settings&tab=order-notes"
            class="nav-tab <?php echo esc_attr($active_tab === 'order-notes' ? 'nav-tab-active' : ''); ?>">
             <?php esc_html_e('Order Notes', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
     </nav>
 
-    <form method="post" action="options.php" class="wct-settings-form">
+    <form method="post" action="options.php" class="marwchto-settings-form">
         <?php settings_fields('marwchto_settings'); ?>
 
         <?php if ($active_tab === 'delivery-method') : ?>

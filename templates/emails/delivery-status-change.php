@@ -12,7 +12,7 @@
 
 defined('ABSPATH') || exit;
 
-$marwchto_delivery_date = $marwchto_order->get_meta('_wct_delivery_date');
+$marwchto_delivery_date = $marwchto_order->get_meta('_marwchto_delivery_date');
 $marwchto_formatted_date = '';
 
 if ($marwchto_delivery_date) {

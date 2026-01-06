@@ -44,14 +44,14 @@ class EmailDisplay
         $field_settings = get_option('marwchto_field_settings', []);
         $field_2_settings = get_option('marwchto_field_2_settings', []);
 
-        $delivery_method = $order->get_meta('_wct_delivery_method');
-        $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
-        $delivery_instructions_custom = $order->get_meta('_wct_delivery_instructions_custom');
-        $time_window = $order->get_meta('_wct_time_window');
-        $store_location = $order->get_meta('_wct_store_location');
-        $delivery_date = $order->get_meta('_wct_delivery_date');
-        $custom_field = $order->get_meta('_wct_custom_field');
-        $custom_field_2 = $order->get_meta('_wct_custom_field_2');
+        $delivery_method = $order->get_meta('_marwchto_delivery_method');
+        $delivery_instructions_preset = $order->get_meta('_marwchto_delivery_instructions_preset');
+        $delivery_instructions_custom = $order->get_meta('_marwchto_delivery_instructions_custom');
+        $time_window = $order->get_meta('_marwchto_time_window');
+        $store_location = $order->get_meta('_marwchto_store_location');
+        $delivery_date = $order->get_meta('_marwchto_delivery_date');
+        $custom_field = $order->get_meta('_marwchto_custom_field');
+        $custom_field_2 = $order->get_meta('_marwchto_custom_field_2');
 
         // Check if we should display in emails
         $show_delivery_method = !empty($delivery_method) && !empty($delivery_method_settings['show_in_emails']);

@@ -78,30 +78,30 @@ class DeliveryMethod
 
         do_action('marwchto_before_delivery_method');
         ?>
-        <div class="wct-delivery-method-wrapper" id="wct-delivery-method-wrapper">
+        <div class="marwchto-delivery-method-wrapper" id="marwchto-delivery-method-wrapper">
             <h3><?php echo esc_html($settings['field_label'] ?: __('Fulfillment Method', 'marwen-marwchto-for-woocommerce')); ?></h3>
 
             <?php if ($settings['show_as'] === 'toggle') : ?>
-                <div class="wct-delivery-method-toggle">
-                    <label class="wct-toggle-option <?php echo $current_value === 'delivery' ? 'active' : ''; ?>">
+                <div class="marwchto-delivery-method-toggle">
+                    <label class="marwchto-toggle-option <?php echo $current_value === 'delivery' ? 'active' : ''; ?>">
                         <input type="radio"
                                name="marwchto_delivery_method"
                                value="delivery"
                                <?php checked($current_value, 'delivery'); ?>>
-                        <span class="wct-toggle-label"><?php echo esc_html($delivery_label); ?></span>
+                        <span class="marwchto-toggle-label"><?php echo esc_html($delivery_label); ?></span>
                     </label>
-                    <label class="wct-toggle-option <?php echo $current_value === 'pickup' ? 'active' : ''; ?>">
+                    <label class="marwchto-toggle-option <?php echo $current_value === 'pickup' ? 'active' : ''; ?>">
                         <input type="radio"
                                name="marwchto_delivery_method"
                                value="pickup"
                                <?php checked($current_value, 'pickup'); ?>>
-                        <span class="wct-toggle-label"><?php echo esc_html($pickup_label); ?></span>
+                        <span class="marwchto-toggle-label"><?php echo esc_html($pickup_label); ?></span>
                     </label>
                 </div>
             <?php else : ?>
-                <div class="wct-delivery-method-radio">
+                <div class="marwchto-delivery-method-radio">
                     <p class="form-row">
-                        <label class="wct-radio-option">
+                        <label class="marwchto-radio-option">
                             <input type="radio"
                                    name="marwchto_delivery_method"
                                    value="delivery"
@@ -110,7 +110,7 @@ class DeliveryMethod
                         </label>
                     </p>
                     <p class="form-row">
-                        <label class="wct-radio-option">
+                        <label class="marwchto-radio-option">
                             <input type="radio"
                                    name="marwchto_delivery_method"
                                    value="pickup"
@@ -197,7 +197,7 @@ class DeliveryMethod
         $value = $this->get_posted_value();
 
         if (in_array($value, ['delivery', 'pickup'], true)) {
-            $order->update_meta_data('_wct_delivery_method', $value);
+            $order->update_meta_data('_marwchto_delivery_method', $value);
 
             do_action('marwchto_delivery_method_saved', $order->get_id(), $value);
         }

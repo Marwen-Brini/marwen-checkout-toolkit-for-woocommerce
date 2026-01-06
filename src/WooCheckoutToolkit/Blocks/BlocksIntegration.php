@@ -422,7 +422,7 @@ class BlocksIntegration implements IntegrationInterface
             $delivery_method = sanitize_key($data['delivery_method']);
             if (in_array($delivery_method, ['delivery', 'pickup'], true)) {
                 $current_delivery_method = $delivery_method;
-                $order->update_meta_data('_wct_delivery_method', $delivery_method);
+                $order->update_meta_data('_marwchto_delivery_method', $delivery_method);
 
                 /**
                  * Action fired after delivery method is saved from blocks checkout.
@@ -439,7 +439,7 @@ class BlocksIntegration implements IntegrationInterface
             // Save preset
             if (!empty($data['delivery_instructions_preset'])) {
                 $preset = sanitize_key($data['delivery_instructions_preset']);
-                $order->update_meta_data('_wct_delivery_instructions_preset', $preset);
+                $order->update_meta_data('_marwchto_delivery_instructions_preset', $preset);
                 do_action('marwchto_delivery_instructions_preset_saved', $order->get_id(), $preset);
             }
 
@@ -454,7 +454,7 @@ class BlocksIntegration implements IntegrationInterface
                     $custom = mb_substr($custom, 0, $max_length);
                 }
 
-                $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
+                $order->update_meta_data('_marwchto_delivery_instructions_custom', $custom);
                 do_action('marwchto_delivery_instructions_custom_saved', $order->get_id(), $custom);
             }
         }
@@ -471,7 +471,7 @@ class BlocksIntegration implements IntegrationInterface
                 // Validate against available options
                 $valid_values = array_column($time_window_settings['time_slots'] ?? [], 'value');
                 if (in_array($time_window, $valid_values, true)) {
-                    $order->update_meta_data('_wct_time_window', $time_window);
+                    $order->update_meta_data('_marwchto_time_window', $time_window);
                     do_action('marwchto_time_window_saved', $order->get_id(), $time_window);
                 }
             }
@@ -485,7 +485,7 @@ class BlocksIntegration implements IntegrationInterface
             // Validate against available locations
             $valid_locations = array_column($store_location_settings['locations'] ?? [], 'id');
             if (in_array($store_location, $valid_locations, true)) {
-                $order->update_meta_data('_wct_store_location', $store_location);
+                $order->update_meta_data('_marwchto_store_location', $store_location);
 
                 /**
                  * Action fired after store location is saved from blocks checkout.
@@ -502,7 +502,7 @@ class BlocksIntegration implements IntegrationInterface
             $delivery_date = sanitize_text_field($data['delivery_date']);
             // Validate date format (Y-m-d)
             if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $delivery_date)) {
-                $order->update_meta_data('_wct_delivery_date', $delivery_date);
+                $order->update_meta_data('_marwchto_delivery_date', $delivery_date);
 
                 /**
                  * Action fired after delivery date is saved from blocks checkout.
@@ -528,7 +528,7 @@ class BlocksIntegration implements IntegrationInterface
                 // Handle checkbox type
                 if ($field_type === 'checkbox') {
                     $value = !empty($data['custom_field']) ? '1' : '0';
-                    $order->update_meta_data('_wct_custom_field', $value);
+                    $order->update_meta_data('_marwchto_custom_field', $value);
                     do_action('marwchto_custom_field_saved', $order->get_id(), $value);
                 } else {
                     $value = sanitize_textarea_field($data['custom_field']);
@@ -543,7 +543,7 @@ class BlocksIntegration implements IntegrationInterface
                     $value = apply_filters('marwchto_sanitize_field_value', $value, $order);
 
                     if (!empty($value)) {
-                        $order->update_meta_data('_wct_custom_field', $value);
+                        $order->update_meta_data('_marwchto_custom_field', $value);
                         do_action('marwchto_custom_field_saved', $order->get_id(), $value);
                     }
                 }
@@ -563,7 +563,7 @@ class BlocksIntegration implements IntegrationInterface
                 // Handle checkbox type
                 if ($field_type === 'checkbox') {
                     $value = !empty($data['custom_field_2']) ? '1' : '0';
-                    $order->update_meta_data('_wct_custom_field_2', $value);
+                    $order->update_meta_data('_marwchto_custom_field_2', $value);
                     do_action('marwchto_custom_field_2_saved', $order->get_id(), $value);
                 } else {
                     $value = sanitize_textarea_field($data['custom_field_2']);
@@ -578,7 +578,7 @@ class BlocksIntegration implements IntegrationInterface
                     $value = apply_filters('marwchto_sanitize_field_2_value', $value, $order);
 
                     if (!empty($value)) {
-                        $order->update_meta_data('_wct_custom_field_2', $value);
+                        $order->update_meta_data('_marwchto_custom_field_2', $value);
                         do_action('marwchto_custom_field_2_saved', $order->get_id(), $value);
                     }
                 }

@@ -21,7 +21,7 @@ $marwchto_weekdays = [
 ];
 ?>
 
-<table class="form-table wct-settings-table">
+<table class="form-table marwchto-settings-table">
     <tbody>
         <!-- Enable Delivery Date -->
         <tr>
@@ -239,7 +239,7 @@ $marwchto_weekdays = [
     <?php esc_html_e('Display a message showing the earliest available delivery date based on your lead time settings.', 'marwen-marwchto-for-woocommerce'); ?>
 </p>
 
-<table class="form-table wct-settings-table">
+<table class="form-table marwchto-settings-table">
     <tbody>
         <!-- Enable Estimated Delivery -->
         <tr>

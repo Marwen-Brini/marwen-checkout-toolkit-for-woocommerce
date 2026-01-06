@@ -17,7 +17,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<p class="form-field form-field-wide wct-delivery-date-display">
+<p class="form-field form-field-wide marwchto-delivery-date-display">
     <strong><?php echo esc_html($label); ?>:</strong><br>
     <?php echo esc_html($formatted_date); ?>
 </p>

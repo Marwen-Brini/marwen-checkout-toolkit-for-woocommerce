@@ -23,12 +23,12 @@ class DeliveryManager
     /**
      * Order meta key for delivery status
      */
-    public const META_STATUS = '_wct_delivery_status';
+    public const META_STATUS = '_marwchto_delivery_status';
 
     /**
      * Order meta key for status history
      */
-    public const META_HISTORY = '_wct_delivery_status_history';
+    public const META_HISTORY = '_marwchto_delivery_status_history';
 
     /**
      * Initialize delivery manager
@@ -93,7 +93,7 @@ class DeliveryManager
     {
         // Only load on our pages and order pages
         $allowed_hooks = [
-            'woocommerce_page_wct-deliveries',
+            'woocommerce_page_marwchto-deliveries',
             'post.php',
             'woocommerce_page_wc-orders',
         ];
@@ -460,7 +460,7 @@ class DeliveryManager
             return;
         }
 
-        $delivery_date = $order->get_meta('_wct_delivery_date');
+        $delivery_date = $order->get_meta('_marwchto_delivery_date');
 
         if (!$delivery_date) {
             echo '&mdash;';
@@ -479,8 +479,8 @@ class DeliveryManager
             $formatted_date = $delivery_date;
         }
 
-        echo '<div class="wct-delivery-column">';
-        echo '<span class="wct-delivery-date">' . esc_html($formatted_date) . '</span><br>';
+        echo '<div class="marwchto-delivery-column">';
+        echo '<span class="marwchto-delivery-date">' . esc_html($formatted_date) . '</span><br>';
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Badge HTML is escaped in get_badge_html
         echo DeliveryStatus::get_badge_html($status);
         echo '</div>';
@@ -537,7 +537,7 @@ class DeliveryManager
     public function get_orders_by_date(string $date): array
     {
         return wc_get_orders([
-            'meta_key' => '_wct_delivery_date',
+            'meta_key' => '_marwchto_delivery_date',
             'meta_value' => $date,
             'limit' => -1,
             'status' => ['processing', 'on-hold', 'pending', 'completed'],
@@ -556,7 +556,7 @@ class DeliveryManager
         return wc_get_orders([
             'meta_query' => [
                 [
-                    'key' => '_wct_delivery_date',
+                    'key' => '_marwchto_delivery_date',
                     'value' => [$start_date, $end_date],
                     'compare' => 'BETWEEN',
                     'type' => 'DATE',

@@ -33,7 +33,7 @@
                 return;
             }
 
-            const $datepicker = $('[data-wct-datepicker="true"]');
+            const $datepicker = $('[data-marwchto-datepicker="true"]');
 
             if (!$datepicker.length || typeof flatpickr === 'undefined') {
                 return;
@@ -115,7 +115,7 @@
             }
 
             // Create counter element
-            const $counter = $('<span class="wct-char-counter"></span>');
+            const $counter = $('<span class="marwchto-char-counter"></span>');
             $field.after($counter);
 
             // Update counter function

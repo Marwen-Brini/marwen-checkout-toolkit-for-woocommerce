@@ -10,13 +10,13 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="wct-settings-section">
+<div class="marwchto-settings-section">
     <h2><?php esc_html_e('Delivery Instructions', 'marwen-marwchto-for-woocommerce'); ?></h2>
     <p class="description">
         <?php esc_html_e('Add a delivery instructions field with preset options and custom text. This field is only shown when "Delivery" is selected (hidden for Pickup).', 'marwen-marwchto-for-woocommerce'); ?>
     </p>
 
-    <table class="form-table wct-settings-table">
+    <table class="form-table marwchto-settings-table">
         <tbody>
             <!-- Enable Feature -->
             <tr>
@@ -27,7 +27,7 @@ defined('ABSPATH') || exit;
                     <label>
                         <input type="checkbox"
                                name="marwchto_delivery_instructions_settings[enabled]"
-                               id="wct-di-enabled"
+                               id="marwchto-di-enabled"
                                value="1"
                                <?php checked(!empty($marwchto_delivery_instructions_settings['enabled'])); ?>>
                         <?php esc_html_e('Show delivery instructions field on checkout', 'marwen-marwchto-for-woocommerce'); ?>
@@ -39,7 +39,7 @@ defined('ABSPATH') || exit;
             </tr>
         </tbody>
 
-        <tbody id="wct-di-options" class="<?php echo empty($marwchto_delivery_instructions_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
+        <tbody id="marwchto-di-options" class="<?php echo empty($marwchto_delivery_instructions_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Required -->
             <tr>
                 <th scope="row">
@@ -59,13 +59,13 @@ defined('ABSPATH') || exit;
             <!-- Field Label -->
             <tr>
                 <th scope="row">
-                    <label for="wct_di_field_label">
+                    <label for="marwchto_di_field_label">
                         <?php esc_html_e('Section Label', 'marwen-marwchto-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="wct_di_field_label"
+                           id="marwchto_di_field_label"
                            name="marwchto_delivery_instructions_settings[field_label]"
                            value="<?php echo esc_attr($marwchto_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?>"
                            class="regular-text">
@@ -78,13 +78,13 @@ defined('ABSPATH') || exit;
             <!-- Preset Options Label -->
             <tr>
                 <th scope="row">
-                    <label for="wct_di_preset_label">
+                    <label for="marwchto_di_preset_label">
                         <?php esc_html_e('Preset Dropdown Label', 'marwen-marwchto-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="wct_di_preset_label"
+                           id="marwchto_di_preset_label"
                            name="marwchto_delivery_instructions_settings[preset_label]"
                            value="<?php echo esc_attr($marwchto_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>"
                            class="regular-text">
@@ -100,8 +100,8 @@ defined('ABSPATH') || exit;
                     <p class="description" style="margin-bottom: 10px;">
                         <?php esc_html_e('Common delivery instructions customers can select from a dropdown.', 'marwen-marwchto-for-woocommerce'); ?>
                     </p>
-                    <div class="wct-preset-options-wrapper">
-                        <div class="wct-preset-options-list">
+                    <div class="marwchto-preset-options-wrapper">
+                        <div class="marwchto-preset-options-list">
                             <?php
                             $marwchto_preset_options = $marwchto_delivery_instructions_settings['preset_options'] ?? [];
                             if (empty($marwchto_preset_options)) {
@@ -109,7 +109,7 @@ defined('ABSPATH') || exit;
                             }
                             foreach ($marwchto_preset_options as $marwchto_index => $marwchto_option) :
                             ?>
-                            <div class="wct-preset-option-row">
+                            <div class="marwchto-preset-option-row">
                                 <input type="text"
                                        name="marwchto_delivery_instructions_settings[preset_options][<?php echo esc_attr($marwchto_index); ?>][label]"
                                        value="<?php echo esc_attr($marwchto_option['label'] ?? ''); ?>"
@@ -120,11 +120,11 @@ defined('ABSPATH') || exit;
                                        value="<?php echo esc_attr($marwchto_option['value'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Value (stored)', 'marwen-marwchto-for-woocommerce'); ?>"
                                        class="regular-text">
-                                <a href="#" class="button-link-delete wct-remove-preset-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
+                                <a href="#" class="button-link-delete marwchto-remove-preset-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <button type="button" class="button" id="wct-add-preset-option">
+                        <button type="button" class="button" id="marwchto-add-preset-option">
                             <?php esc_html_e('Add Option', 'marwen-marwchto-for-woocommerce'); ?>
                         </button>
                     </div>
@@ -134,13 +134,13 @@ defined('ABSPATH') || exit;
             <!-- Custom Text Label -->
             <tr>
                 <th scope="row">
-                    <label for="wct_di_custom_label">
+                    <label for="marwchto_di_custom_label">
                         <?php esc_html_e('Custom Text Label', 'marwen-marwchto-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="wct_di_custom_label"
+                           id="marwchto_di_custom_label"
                            name="marwchto_delivery_instructions_settings[custom_label]"
                            value="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>"
                            class="regular-text">
@@ -153,13 +153,13 @@ defined('ABSPATH') || exit;
             <!-- Custom Placeholder -->
             <tr>
                 <th scope="row">
-                    <label for="wct_di_custom_placeholder">
+                    <label for="marwchto_di_custom_placeholder">
                         <?php esc_html_e('Custom Text Placeholder', 'marwen-marwchto-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="wct_di_custom_placeholder"
+                           id="marwchto_di_custom_placeholder"
                            name="marwchto_delivery_instructions_settings[custom_placeholder]"
                            value="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"
                            class="regular-text">
@@ -169,13 +169,13 @@ defined('ABSPATH') || exit;
             <!-- Maximum Characters -->
             <tr>
                 <th scope="row">
-                    <label for="wct_di_max_length">
+                    <label for="marwchto_di_max_length">
                         <?php esc_html_e('Maximum Characters', 'marwen-marwchto-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="number"
-                           id="wct_di_max_length"
+                           id="marwchto_di_max_length"
                            name="marwchto_delivery_instructions_settings[max_length]"
                            value="<?php echo esc_attr($marwchto_delivery_instructions_settings['max_length'] ?? 500); ?>"
                            min="0"
@@ -213,18 +213,18 @@ defined('ABSPATH') || exit;
     </table>
 
     <!-- Preview Section -->
-    <div class="wct-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+    <div class="marwchto-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
         <h3 style="margin-top: 0;"><?php esc_html_e('Preview', 'marwen-marwchto-for-woocommerce'); ?></h3>
         <p class="description"><?php esc_html_e('This is how the delivery instructions will appear on checkout (when Delivery is selected).', 'marwen-marwchto-for-woocommerce'); ?></p>
 
-        <div class="wct-preview-content" style="margin-top: 15px; max-width: 400px;">
-            <h4 id="wct-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($marwchto_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
+        <div class="marwchto-preview-content" style="margin-top: 15px; max-width: 400px;">
+            <h4 id="marwchto-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($marwchto_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
 
             <div style="margin-bottom: 15px;">
-                <label id="wct-preview-preset-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
+                <label id="marwchto-preview-preset-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
                     <?php echo esc_html($marwchto_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>
                 </label>
-                <select style="width: 100%; padding: 8px;" id="wct-preview-preset-select">
+                <select style="width: 100%; padding: 8px;" id="marwchto-preview-preset-select">
                     <option value=""><?php esc_html_e('Select an option...', 'marwen-marwchto-for-woocommerce'); ?></option>
                     <?php
                     $marwchto_preview_options = $marwchto_delivery_instructions_settings['preset_options'] ?? [];
@@ -242,10 +242,10 @@ defined('ABSPATH') || exit;
             </div>
 
             <div>
-                <label id="wct-preview-custom-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
+                <label id="marwchto-preview-custom-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
                     <?php echo esc_html($marwchto_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>
                 </label>
-                <textarea id="wct-preview-custom-textarea"
+                <textarea id="marwchto-preview-custom-textarea"
                           style="width: 100%; padding: 8px; min-height: 80px;"
                           placeholder="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"></textarea>
             </div>

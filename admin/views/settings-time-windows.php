@@ -10,7 +10,7 @@
 defined('ABSPATH') || exit;
 ?>
 
-<div class="wct-settings-section">
+<div class="marwchto-settings-section">
     <h2><?php esc_html_e('Time Window Selection', 'marwen-marwchto-for-woocommerce'); ?></h2>
     <p class="description">
         <?php esc_html_e('Allow customers to select a preferred delivery time window (Morning, Afternoon, Evening) or custom time slots.', 'marwen-marwchto-for-woocommerce'); ?>
@@ -24,13 +24,13 @@ defined('ABSPATH') || exit;
                     <label for="time_window_enabled"><?php esc_html_e('Enable Time Window', 'marwen-marwchto-for-woocommerce'); ?></label>
                 </th>
                 <td>
-                    <label class="wct-toggle">
+                    <label class="marwchto-toggle">
                         <input type="checkbox"
                                id="time_window_enabled"
                                name="marwchto_time_window_settings[enabled]"
                                value="1"
                                <?php checked(!empty($marwchto_time_window_settings['enabled'])); ?>>
-                        <span class="wct-toggle-slider"></span>
+                        <span class="marwchto-toggle-slider"></span>
                     </label>
                     <p class="description">
                         <?php esc_html_e('Show a time window selection dropdown on checkout.', 'marwen-marwchto-for-woocommerce'); ?>
@@ -165,9 +165,9 @@ defined('ABSPATH') || exit;
     </table>
 
     <!-- Preview Section -->
-    <div class="wct-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+    <div class="marwchto-preview-section" style="margin-top: 30px; padding: 20px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
         <h3 style="margin-top: 0;"><?php esc_html_e('Preview', 'marwen-marwchto-for-woocommerce'); ?></h3>
-        <div class="wct-preview-field">
+        <div class="marwchto-preview-field">
             <label id="preview-time-window-label" style="display: block; margin-bottom: 5px; font-weight: 600;">
                 <?php echo esc_html($marwchto_time_window_settings['field_label']); ?>
                 <?php if (!empty($marwchto_time_window_settings['required'])) : ?>

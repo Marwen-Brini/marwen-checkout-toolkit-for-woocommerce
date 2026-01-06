@@ -196,7 +196,7 @@ class DeliveryList extends \WP_List_Table
         // Build query args
         $args = [
             'limit' => -1,
-            'meta_key' => '_wct_delivery_date',
+            'meta_key' => '_marwchto_delivery_date',
             'meta_compare' => 'EXISTS',
             'orderby' => 'meta_value',
             'order' => 'ASC',
@@ -208,7 +208,7 @@ class DeliveryList extends \WP_List_Table
             if ($date_range) {
                 $args['meta_query'] = [
                     [
-                        'key' => '_wct_delivery_date',
+                        'key' => '_marwchto_delivery_date',
                         'value' => $date_range,
                         'compare' => 'BETWEEN',
                         'type' => 'DATE',
@@ -258,8 +258,8 @@ class DeliveryList extends \WP_List_Table
                     $result = $a->get_id() - $b->get_id();
                     break;
                 case 'delivery_date':
-                    $date_a = $a->get_meta('_wct_delivery_date') ?: '';
-                    $date_b = $b->get_meta('_wct_delivery_date') ?: '';
+                    $date_a = $a->get_meta('_marwchto_delivery_date') ?: '';
+                    $date_b = $b->get_meta('_marwchto_delivery_date') ?: '';
                     $result = strcmp($date_a, $date_b);
                     break;
                 case 'order_status':
@@ -382,7 +382,7 @@ class DeliveryList extends \WP_List_Table
      */
     public function column_delivery_date(\WC_Order $order): string
     {
-        $delivery_date = $order->get_meta('_wct_delivery_date');
+        $delivery_date = $order->get_meta('_marwchto_delivery_date');
 
         if (!$delivery_date) {
             return '&mdash;';
@@ -403,13 +403,13 @@ class DeliveryList extends \WP_List_Table
 
             if ($date < $today) {
                 $class = 'marwchto-date-past';
-                $badge = '<span class="wct-date-badge past">' . esc_html__('Past', 'marwen-marwchto-for-woocommerce') . '</span>';
+                $badge = '<span class="marwchto-date-badge past">' . esc_html__('Past', 'marwen-marwchto-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $today->format('Y-m-d')) {
                 $class = 'marwchto-date-today';
-                $badge = '<span class="wct-date-badge today">' . esc_html__('Today', 'marwen-marwchto-for-woocommerce') . '</span>';
+                $badge = '<span class="marwchto-date-badge today">' . esc_html__('Today', 'marwen-marwchto-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $tomorrow->format('Y-m-d')) {
                 $class = 'marwchto-date-tomorrow';
-                $badge = '<span class="wct-date-badge tomorrow">' . esc_html__('Tomorrow', 'marwen-marwchto-for-woocommerce') . '</span>';
+                $badge = '<span class="marwchto-date-badge tomorrow">' . esc_html__('Tomorrow', 'marwen-marwchto-for-woocommerce') . '</span>';
             }
 
             return sprintf(
@@ -434,7 +434,7 @@ class DeliveryList extends \WP_List_Table
         $status = $order->get_meta(DeliveryManager::META_STATUS) ?: DeliveryStatus::PENDING;
 
         return sprintf(
-            '<div class="wct-status-wrapper" data-order-id="%d">%s %s</div>',
+            '<div class="marwchto-status-wrapper" data-order-id="%d">%s %s</div>',
             $order->get_id(),
             DeliveryStatus::get_badge_html($status),
             DeliveryStatus::get_dropdown_html($status, 'delivery_status_' . $order->get_id(), 'marwchto-quick-status-' . $order->get_id())

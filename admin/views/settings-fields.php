@@ -26,10 +26,10 @@ if (is_wp_error($marwchto_product_categories)) {
 ?>
 
 <!-- Custom Field 1 -->
-<div class="wct-settings-section">
+<div class="marwchto-settings-section">
     <h2><?php esc_html_e('Custom Field 1', 'marwen-marwchto-for-woocommerce'); ?></h2>
 
-    <table class="form-table wct-settings-table">
+    <table class="form-table marwchto-settings-table">
         <tbody>
             <!-- Enable Custom Field -->
             <tr>
@@ -40,7 +40,7 @@ if (is_wp_error($marwchto_product_categories)) {
                     <label>
                         <input type="checkbox"
                                name="marwchto_field_settings[enabled]"
-                               id="wct-field-1-enabled"
+                               id="marwchto-field-1-enabled"
                                value="1"
                                <?php checked(!empty($marwchto_field_settings['enabled'])); ?>>
                         <?php esc_html_e('Show this field on checkout', 'marwen-marwchto-for-woocommerce'); ?>
@@ -48,7 +48,7 @@ if (is_wp_error($marwchto_product_categories)) {
                 </td>
             </tr>
         </tbody>
-        <tbody id="wct-field-1-options" class="<?php echo empty($marwchto_field_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
+        <tbody id="marwchto-field-1-options" class="<?php echo empty($marwchto_field_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Field Type -->
             <tr>
                 <th scope="row">
@@ -59,7 +59,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_settings[field_type]"
                                value="text"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="1"
                                <?php checked(($marwchto_field_settings['field_type'] ?? 'textarea') === 'text'); ?>>
                         <?php esc_html_e('Single line text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -68,7 +68,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_settings[field_type]"
                                value="textarea"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="1"
                                <?php checked(($marwchto_field_settings['field_type'] ?? 'textarea') === 'textarea'); ?>>
                         <?php esc_html_e('Multi-line textarea', 'marwen-marwchto-for-woocommerce'); ?>
@@ -77,7 +77,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_settings[field_type]"
                                value="checkbox"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="1"
                                <?php checked(($marwchto_field_settings['field_type'] ?? 'textarea') === 'checkbox'); ?>>
                         <?php esc_html_e('Checkbox', 'marwen-marwchto-for-woocommerce'); ?>
@@ -86,7 +86,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_settings[field_type]"
                                value="select"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="1"
                                <?php checked(($marwchto_field_settings['field_type'] ?? 'textarea') === 'select'); ?>>
                         <?php esc_html_e('Dropdown select', 'marwen-marwchto-for-woocommerce'); ?>
@@ -111,7 +111,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Checkbox Label (conditional) -->
-            <tr class="wct-conditional-field wct-field-1-checkbox <?php echo ($marwchto_field_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-1-checkbox <?php echo ($marwchto_field_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_checkbox_label">
                         <?php esc_html_e('Checkbox Text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -130,13 +130,13 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Select Options (conditional) -->
-            <tr class="wct-conditional-field wct-field-1-select <?php echo ($marwchto_field_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-1-select <?php echo ($marwchto_field_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
                 <th scope="row">
                     <?php esc_html_e('Dropdown Options', 'marwen-marwchto-for-woocommerce'); ?>
                 </th>
                 <td>
-                    <div class="wct-select-options-wrapper" id="wct-field-1-options">
-                        <div class="wct-select-options-list">
+                    <div class="marwchto-select-options-wrapper" id="marwchto-field-1-options">
+                        <div class="marwchto-select-options-list">
                             <?php
                             $marwchto_options_1 = $marwchto_field_settings['select_options'] ?? [];
                             if (empty($marwchto_options_1)) {
@@ -144,7 +144,7 @@ if (is_wp_error($marwchto_product_categories)) {
                             }
                             foreach ($marwchto_options_1 as $marwchto_index => $marwchto_option) :
                             ?>
-                            <div class="wct-select-option-row">
+                            <div class="marwchto-select-option-row">
                                 <input type="text"
                                        name="marwchto_field_settings[select_options][<?php echo esc_attr($marwchto_index); ?>][label]"
                                        value="<?php echo esc_attr($marwchto_option['label'] ?? ''); ?>"
@@ -155,11 +155,11 @@ if (is_wp_error($marwchto_product_categories)) {
                                        value="<?php echo esc_attr($marwchto_option['value'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Value', 'marwen-marwchto-for-woocommerce'); ?>"
                                        class="regular-text">
-                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
+                                <a href="#" class="button-link-delete marwchto-remove-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <button type="button" class="button wct-add-option" data-field="1">
+                        <button type="button" class="button marwchto-add-option" data-field="1">
                             <?php esc_html_e('Add Option', 'marwen-marwchto-for-woocommerce'); ?>
                         </button>
                     </div>
@@ -167,7 +167,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Placeholder Text (conditional - not for checkbox) -->
-            <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea wct-field-1-select <?php echo in_array($marwchto_field_settings['field_type'] ?? 'textarea', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-1-text marwchto-field-1-textarea marwchto-field-1-select <?php echo in_array($marwchto_field_settings['field_type'] ?? 'textarea', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_field_placeholder">
                         <?php esc_html_e('Placeholder Text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -199,7 +199,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Maximum Characters (conditional - for text/textarea only) -->
-            <tr class="wct-conditional-field wct-field-1-text wct-field-1-textarea <?php echo in_array($marwchto_field_settings['field_type'] ?? 'textarea', ['text', 'textarea'], true) ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-1-text marwchto-field-1-textarea <?php echo in_array($marwchto_field_settings['field_type'] ?? 'textarea', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_max_length">
                         <?php esc_html_e('Maximum Characters', 'marwen-marwchto-for-woocommerce'); ?>
@@ -267,12 +267,12 @@ if (is_wp_error($marwchto_product_categories)) {
                     <?php esc_html_e('Field Visibility', 'marwen-marwchto-for-woocommerce'); ?>
                 </th>
                 <td>
-                    <div class="wct-visibility-options">
+                    <div class="marwchto-visibility-options">
                         <label style="display: block; margin-bottom: 8px;">
                             <input type="radio"
                                    name="marwchto_field_settings[visibility_type]"
                                    value="always"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($marwchto_field_settings['visibility_type'] ?? 'always') === 'always'); ?>>
                             <?php esc_html_e('Always show', 'marwen-marwchto-for-woocommerce'); ?>
@@ -281,7 +281,7 @@ if (is_wp_error($marwchto_product_categories)) {
                             <input type="radio"
                                    name="marwchto_field_settings[visibility_type]"
                                    value="products"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($marwchto_field_settings['visibility_type'] ?? 'always') === 'products'); ?>>
                             <?php esc_html_e('Show for specific products', 'marwen-marwchto-for-woocommerce'); ?>
@@ -290,14 +290,14 @@ if (is_wp_error($marwchto_product_categories)) {
                             <input type="radio"
                                    name="marwchto_field_settings[visibility_type]"
                                    value="categories"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="1"
                                    <?php checked(($marwchto_field_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
                             <?php esc_html_e('Show for specific categories', 'marwen-marwchto-for-woocommerce'); ?>
                         </label>
 
                         <!-- Product Selection -->
-                        <div class="wct-visibility-products wct-visibility-1-products <?php echo ($marwchto_field_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
+                        <div class="marwchto-visibility-products marwchto-visibility-1-products <?php echo ($marwchto_field_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
                             <label><?php esc_html_e('Select Products:', 'marwen-marwchto-for-woocommerce'); ?></label>
                             <select class="wc-product-search"
                                     multiple="multiple"
@@ -319,9 +319,9 @@ if (is_wp_error($marwchto_product_categories)) {
                         </div>
 
                         <!-- Category Selection -->
-                        <div class="wct-visibility-categories wct-visibility-1-categories <?php echo ($marwchto_field_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
+                        <div class="marwchto-visibility-categories marwchto-visibility-1-categories <?php echo ($marwchto_field_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
                             <label><?php esc_html_e('Select Categories:', 'marwen-marwchto-for-woocommerce'); ?></label>
-                            <div class="wct-category-checkboxes">
+                            <div class="marwchto-category-checkboxes">
                                 <?php
                                 $marwchto_selected_cats_1 = $marwchto_field_settings['visibility_categories'] ?? [];
                                 foreach ($marwchto_product_categories as $marwchto_cat) :
@@ -338,7 +338,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         </div>
 
                         <!-- Visibility Mode -->
-                        <div class="wct-visibility-mode wct-visibility-1-mode" style="<?php echo ($marwchto_field_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
+                        <div class="marwchto-visibility-mode marwchto-visibility-1-mode" style="<?php echo ($marwchto_field_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
                             <label style="display: block; margin-bottom: 8px;">
                                 <input type="radio"
                                        name="marwchto_field_settings[visibility_mode]"
@@ -362,10 +362,10 @@ if (is_wp_error($marwchto_product_categories)) {
 </div>
 
 <!-- Custom Field 2 -->
-<div class="wct-settings-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #c3c4c7;">
+<div class="marwchto-settings-section" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #c3c4c7;">
     <h2><?php esc_html_e('Custom Field 2', 'marwen-marwchto-for-woocommerce'); ?></h2>
 
-    <table class="form-table wct-settings-table">
+    <table class="form-table marwchto-settings-table">
         <tbody>
             <!-- Enable Custom Field 2 -->
             <tr>
@@ -376,7 +376,7 @@ if (is_wp_error($marwchto_product_categories)) {
                     <label>
                         <input type="checkbox"
                                name="marwchto_field_2_settings[enabled]"
-                               id="wct-field-2-enabled"
+                               id="marwchto-field-2-enabled"
                                value="1"
                                <?php checked(!empty($marwchto_field_2_settings['enabled'])); ?>>
                         <?php esc_html_e('Show this field on checkout', 'marwen-marwchto-for-woocommerce'); ?>
@@ -384,7 +384,7 @@ if (is_wp_error($marwchto_product_categories)) {
                 </td>
             </tr>
         </tbody>
-        <tbody id="wct-field-2-options" class="<?php echo empty($marwchto_field_2_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
+        <tbody id="marwchto-field-2-options" class="<?php echo empty($marwchto_field_2_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Field Type 2 -->
             <tr>
                 <th scope="row">
@@ -395,7 +395,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_2_settings[field_type]"
                                value="text"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="2"
                                <?php checked(($marwchto_field_2_settings['field_type'] ?? 'text') === 'text'); ?>>
                         <?php esc_html_e('Single line text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -404,7 +404,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_2_settings[field_type]"
                                value="textarea"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="2"
                                <?php checked(($marwchto_field_2_settings['field_type'] ?? 'text') === 'textarea'); ?>>
                         <?php esc_html_e('Multi-line textarea', 'marwen-marwchto-for-woocommerce'); ?>
@@ -413,7 +413,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_2_settings[field_type]"
                                value="checkbox"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="2"
                                <?php checked(($marwchto_field_2_settings['field_type'] ?? 'text') === 'checkbox'); ?>>
                         <?php esc_html_e('Checkbox', 'marwen-marwchto-for-woocommerce'); ?>
@@ -422,7 +422,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         <input type="radio"
                                name="marwchto_field_2_settings[field_type]"
                                value="select"
-                               class="wct-field-type-radio"
+                               class="marwchto-field-type-radio"
                                data-field="2"
                                <?php checked(($marwchto_field_2_settings['field_type'] ?? 'text') === 'select'); ?>>
                         <?php esc_html_e('Dropdown select', 'marwen-marwchto-for-woocommerce'); ?>
@@ -447,7 +447,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Checkbox Label 2 (conditional) -->
-            <tr class="wct-conditional-field wct-field-2-checkbox <?php echo ($marwchto_field_2_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-2-checkbox <?php echo ($marwchto_field_2_settings['field_type'] ?? '') === 'checkbox' ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_field_2_checkbox_label">
                         <?php esc_html_e('Checkbox Text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -466,13 +466,13 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Select Options 2 (conditional) -->
-            <tr class="wct-conditional-field wct-field-2-select <?php echo ($marwchto_field_2_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-2-select <?php echo ($marwchto_field_2_settings['field_type'] ?? '') === 'select' ? 'active' : ''; ?>">
                 <th scope="row">
                     <?php esc_html_e('Dropdown Options', 'marwen-marwchto-for-woocommerce'); ?>
                 </th>
                 <td>
-                    <div class="wct-select-options-wrapper" id="wct-field-2-options">
-                        <div class="wct-select-options-list">
+                    <div class="marwchto-select-options-wrapper" id="marwchto-field-2-options">
+                        <div class="marwchto-select-options-list">
                             <?php
                             $marwchto_options_2 = $marwchto_field_2_settings['select_options'] ?? [];
                             if (empty($marwchto_options_2)) {
@@ -480,7 +480,7 @@ if (is_wp_error($marwchto_product_categories)) {
                             }
                             foreach ($marwchto_options_2 as $marwchto_index => $marwchto_option) :
                             ?>
-                            <div class="wct-select-option-row">
+                            <div class="marwchto-select-option-row">
                                 <input type="text"
                                        name="marwchto_field_2_settings[select_options][<?php echo esc_attr($marwchto_index); ?>][label]"
                                        value="<?php echo esc_attr($marwchto_option['label'] ?? ''); ?>"
@@ -491,11 +491,11 @@ if (is_wp_error($marwchto_product_categories)) {
                                        value="<?php echo esc_attr($marwchto_option['value'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Value', 'marwen-marwchto-for-woocommerce'); ?>"
                                        class="regular-text">
-                                <a href="#" class="button-link-delete wct-remove-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
+                                <a href="#" class="button-link-delete marwchto-remove-option" title="<?php esc_attr_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>">&times;</a>
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <button type="button" class="button wct-add-option" data-field="2">
+                        <button type="button" class="button marwchto-add-option" data-field="2">
                             <?php esc_html_e('Add Option', 'marwen-marwchto-for-woocommerce'); ?>
                         </button>
                     </div>
@@ -503,7 +503,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Placeholder Text 2 (conditional - not for checkbox) -->
-            <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea wct-field-2-select <?php echo in_array($marwchto_field_2_settings['field_type'] ?? 'text', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-2-text marwchto-field-2-textarea marwchto-field-2-select <?php echo in_array($marwchto_field_2_settings['field_type'] ?? 'text', ['text', 'textarea', 'select'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_field_2_placeholder">
                         <?php esc_html_e('Placeholder Text', 'marwen-marwchto-for-woocommerce'); ?>
@@ -535,7 +535,7 @@ if (is_wp_error($marwchto_product_categories)) {
             </tr>
 
             <!-- Maximum Characters 2 (conditional - for text/textarea only) -->
-            <tr class="wct-conditional-field wct-field-2-text wct-field-2-textarea <?php echo in_array($marwchto_field_2_settings['field_type'] ?? 'text', ['text', 'textarea'], true) ? 'active' : ''; ?>">
+            <tr class="marwchto-conditional-field marwchto-field-2-text marwchto-field-2-textarea <?php echo in_array($marwchto_field_2_settings['field_type'] ?? 'text', ['text', 'textarea'], true) ? 'active' : ''; ?>">
                 <th scope="row">
                     <label for="marwchto_field_2_max_length">
                         <?php esc_html_e('Maximum Characters', 'marwen-marwchto-for-woocommerce'); ?>
@@ -603,12 +603,12 @@ if (is_wp_error($marwchto_product_categories)) {
                     <?php esc_html_e('Field Visibility', 'marwen-marwchto-for-woocommerce'); ?>
                 </th>
                 <td>
-                    <div class="wct-visibility-options">
+                    <div class="marwchto-visibility-options">
                         <label style="display: block; margin-bottom: 8px;">
                             <input type="radio"
                                    name="marwchto_field_2_settings[visibility_type]"
                                    value="always"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($marwchto_field_2_settings['visibility_type'] ?? 'always') === 'always'); ?>>
                             <?php esc_html_e('Always show', 'marwen-marwchto-for-woocommerce'); ?>
@@ -617,7 +617,7 @@ if (is_wp_error($marwchto_product_categories)) {
                             <input type="radio"
                                    name="marwchto_field_2_settings[visibility_type]"
                                    value="products"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($marwchto_field_2_settings['visibility_type'] ?? 'always') === 'products'); ?>>
                             <?php esc_html_e('Show for specific products', 'marwen-marwchto-for-woocommerce'); ?>
@@ -626,14 +626,14 @@ if (is_wp_error($marwchto_product_categories)) {
                             <input type="radio"
                                    name="marwchto_field_2_settings[visibility_type]"
                                    value="categories"
-                                   class="wct-visibility-type-radio"
+                                   class="marwchto-visibility-type-radio"
                                    data-field="2"
                                    <?php checked(($marwchto_field_2_settings['visibility_type'] ?? 'always') === 'categories'); ?>>
                             <?php esc_html_e('Show for specific categories', 'marwen-marwchto-for-woocommerce'); ?>
                         </label>
 
                         <!-- Product Selection 2 -->
-                        <div class="wct-visibility-products wct-visibility-2-products <?php echo ($marwchto_field_2_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
+                        <div class="marwchto-visibility-products marwchto-visibility-2-products <?php echo ($marwchto_field_2_settings['visibility_type'] ?? '') === 'products' ? 'active' : ''; ?>">
                             <label><?php esc_html_e('Select Products:', 'marwen-marwchto-for-woocommerce'); ?></label>
                             <select class="wc-product-search"
                                     multiple="multiple"
@@ -655,9 +655,9 @@ if (is_wp_error($marwchto_product_categories)) {
                         </div>
 
                         <!-- Category Selection 2 -->
-                        <div class="wct-visibility-categories wct-visibility-2-categories <?php echo ($marwchto_field_2_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
+                        <div class="marwchto-visibility-categories marwchto-visibility-2-categories <?php echo ($marwchto_field_2_settings['visibility_type'] ?? '') === 'categories' ? 'active' : ''; ?>">
                             <label><?php esc_html_e('Select Categories:', 'marwen-marwchto-for-woocommerce'); ?></label>
-                            <div class="wct-category-checkboxes">
+                            <div class="marwchto-category-checkboxes">
                                 <?php
                                 $marwchto_selected_cats_2 = $marwchto_field_2_settings['visibility_categories'] ?? [];
                                 foreach ($marwchto_product_categories as $marwchto_cat) :
@@ -674,7 +674,7 @@ if (is_wp_error($marwchto_product_categories)) {
                         </div>
 
                         <!-- Visibility Mode 2 -->
-                        <div class="wct-visibility-mode wct-visibility-2-mode" style="<?php echo ($marwchto_field_2_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
+                        <div class="marwchto-visibility-mode marwchto-visibility-2-mode" style="<?php echo ($marwchto_field_2_settings['visibility_type'] ?? 'always') === 'always' ? 'display:none;' : ''; ?>">
                             <label style="display: block; margin-bottom: 8px;">
                                 <input type="radio"
                                        name="marwchto_field_2_settings[visibility_mode]"

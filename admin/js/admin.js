@@ -97,10 +97,10 @@
             const displayDate = this.formatDateForDisplay(date);
 
             const $item = $(`
-                <div class="wct-blocked-date-item" data-date="${date}">
-                    <span class="wct-date-display">${displayDate}</span>
+                <div class="marwchto-blocked-date-item" data-date="${date}">
+                    <span class="marwchto-date-display">${displayDate}</span>
                     <input type="hidden" name="marwchto_delivery_settings[blocked_dates][]" value="${date}">
-                    <button type="button" class="wct-remove-date button-link button-link-delete">
+                    <button type="button" class="marwchto-remove-date button-link button-link-delete">
                         Remove
                     </button>
                 </div>
@@ -126,7 +126,7 @@
             const $list = $('#marwchto_blocked_dates_list');
 
             if ($list.find('.marwchto-blocked-date-item').length === 0) {
-                $list.html('<p class="wct-no-dates">No dates blocked.</p>');
+                $list.html('<p class="marwchto-no-dates">No dates blocked.</p>');
             }
         },
 
@@ -165,10 +165,10 @@
                 var optionName = fieldNum === 1 ? 'marwchto_field_settings' : 'marwchto_field_2_settings';
                 var index = wrapper.find('.marwchto-select-option-row').length;
 
-                var newRow = '<div class="wct-select-option-row">' +
+                var newRow = '<div class="marwchto-select-option-row">' +
                     '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.label || 'Label') + '" class="regular-text">' +
                     '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.value || 'Value') + '" class="regular-text">' +
-                    '<a href="#" class="button-link-delete wct-remove-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
+                    '<a href="#" class="button-link-delete marwchto-remove-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
                     '</div>';
 
                 wrapper.append(newRow);
@@ -314,19 +314,19 @@
             });
 
             // Update preview when labels change
-            $('#wct_di_field_label').on('input', function() {
+            $('#marwchto_di_field_label').on('input', function() {
                 $('#marwchto-preview-field-label').text($(this).val() || 'Delivery Instructions');
             });
 
-            $('#wct_di_preset_label').on('input', function() {
+            $('#marwchto_di_preset_label').on('input', function() {
                 $('#marwchto-preview-preset-label').text($(this).val() || 'Common Instructions');
             });
 
-            $('#wct_di_custom_label').on('input', function() {
+            $('#marwchto_di_custom_label').on('input', function() {
                 $('#marwchto-preview-custom-label').text($(this).val() || 'Additional Instructions');
             });
 
-            $('#wct_di_custom_placeholder').on('input', function() {
+            $('#marwchto_di_custom_placeholder').on('input', function() {
                 $('#marwchto-preview-custom-textarea').attr('placeholder', $(this).val() || 'Any other delivery instructions...');
             });
 
@@ -336,10 +336,10 @@
                 var wrapper = $('.marwchto-preset-options-list');
                 var index = wrapper.find('.marwchto-preset-option-row').length;
 
-                var newRow = '<div class="wct-preset-option-row">' +
+                var newRow = '<div class="marwchto-preset-option-row">' +
                     '<input type="text" name="marwchto_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
                     '<input type="text" name="marwchto_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.valueStored || 'Value (stored)') + '" class="regular-text">' +
-                    '<a href="#" class="button-link-delete wct-remove-preset-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
+                    '<a href="#" class="button-link-delete marwchto-remove-preset-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
                     '</div>';
 
                 wrapper.append(newRow);
@@ -373,7 +373,7 @@
             });
 
             // Update preview when field label changes
-            $('#wct_sl_field_label').on('input', function() {
+            $('#marwchto_sl_field_label').on('input', function() {
                 $('#marwchto-preview-field-label').text($(this).val() || 'Pickup Location');
             });
 
@@ -388,31 +388,31 @@
                 var wrapper = $('.marwchto-locations-list');
                 var index = wrapper.find('.marwchto-location-row').length;
 
-                var newRow = '<div class="wct-location-row">' +
-                    '<div class="wct-location-header">' +
-                        '<h4>' + (marwchtoAdmin.i18n.location || 'Location') + ' <span class="wct-location-number">' + (index + 1) + '</span></h4>' +
-                        '<a href="#" class="button-link-delete wct-remove-location" title="' + (marwchtoAdmin.i18n.removeLocation || 'Remove location') + '">' +
+                var newRow = '<div class="marwchto-location-row">' +
+                    '<div class="marwchto-location-header">' +
+                        '<h4>' + (marwchtoAdmin.i18n.location || 'Location') + ' <span class="marwchto-location-number">' + (index + 1) + '</span></h4>' +
+                        '<a href="#" class="button-link-delete marwchto-remove-location" title="' + (marwchtoAdmin.i18n.removeLocation || 'Remove location') + '">' +
                             (marwchtoAdmin.i18n.remove || 'Remove') +
                         '</a>' +
                     '</div>' +
-                    '<div class="wct-location-fields">' +
-                        '<div class="wct-location-field">' +
+                    '<div class="marwchto-location-fields">' +
+                        '<div class="marwchto-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.locationId || 'Location ID') + '</label>' +
                             '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][id]" value="" placeholder="' + (marwchtoAdmin.i18n.locationIdPlaceholder || 'e.g., main-store (auto-generated if empty)') + '">' +
                         '</div>' +
-                        '<div class="wct-location-field">' +
+                        '<div class="marwchto-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.storeName || 'Store Name') + ' <span style="color: #d63638;">*</span></label>' +
-                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (marwchtoAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="wct-location-name">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (marwchtoAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="marwchto-location-name">' +
                         '</div>' +
-                        '<div class="wct-location-field full-width">' +
+                        '<div class="marwchto-location-field full-width">' +
                             '<label>' + (marwchtoAdmin.i18n.address || 'Address') + '</label>' +
                             '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][address]" value="" placeholder="' + (marwchtoAdmin.i18n.fullAddress || 'Full address') + '">' +
                         '</div>' +
-                        '<div class="wct-location-field">' +
+                        '<div class="marwchto-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.phone || 'Phone') + '</label>' +
                             '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][phone]" value="" placeholder="' + (marwchtoAdmin.i18n.phoneNumber || 'Phone number') + '">' +
                         '</div>' +
-                        '<div class="wct-location-field">' +
+                        '<div class="marwchto-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.hours || 'Hours') + '</label>' +
                             '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][hours]" value="" placeholder="' + (marwchtoAdmin.i18n.hoursPlaceholder || 'e.g., Mon-Fri: 9am-6pm') + '">' +
                         '</div>' +

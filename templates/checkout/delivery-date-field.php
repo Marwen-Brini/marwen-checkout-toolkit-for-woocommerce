@@ -29,7 +29,7 @@ do_action('marwchto_before_delivery_date_field');
             'input_class' => ['marwchto-datepicker'],
             'custom_attributes' => [
                 'readonly' => 'readonly',
-                'data-wct-datepicker' => 'true',
+                'data-marwchto-datepicker' => 'true',
             ],
         ]),
         $field_value

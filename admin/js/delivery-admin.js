@@ -26,7 +26,7 @@
             $(document).on('change', '.marwchto-delivery-status-select', this.handleStatusChange.bind(this));
 
             // Status change from order meta box
-            $(document).on('change', '#wct_delivery_status', this.handleMetaBoxStatusChange.bind(this));
+            $(document).on('change', '#marwchto_delivery_status', this.handleMetaBoxStatusChange.bind(this));
         },
 
         /**
@@ -164,7 +164,7 @@
                 var date = $(this).data('date');
                 if (date) {
                     window.location.href = marwchtoDelivery.ajaxUrl.replace('admin-ajax.php', 'admin.php') +
-                        '?page=wct-deliveries&tab=list&filter_date=' + date;
+                        '?page=marwchto-deliveries&tab=list&filter_date=' + date;
                 }
             });
         }

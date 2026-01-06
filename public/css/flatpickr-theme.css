@@ -118,10 +118,10 @@
 
 /* Animation */
 .flatpickr-calendar.open {
-    animation: wct-fadeIn 0.2s ease-out;
+    animation: marwchto-fadeIn 0.2s ease-out;
 }
 
-@keyframes wct-fadeIn {
+@keyframes marwchto-fadeIn {
     from {
         opacity: 0;
         transform: translateY(-10px);

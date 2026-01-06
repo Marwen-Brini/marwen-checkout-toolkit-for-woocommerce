@@ -98,7 +98,7 @@ class DeliveryInstructions
 
         do_action('marwchto_before_delivery_instructions');
         ?>
-        <div class="wct-delivery-instructions-wrapper" id="wct-delivery-instructions-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
+        <div class="marwchto-delivery-instructions-wrapper" id="marwchto-delivery-instructions-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <h3>
                 <?php echo esc_html($settings['field_label'] ?: __('Delivery Instructions', 'marwen-marwchto-for-woocommerce')); ?>
                 <?php echo wp_kses_post($required_mark); ?>
@@ -111,7 +111,7 @@ class DeliveryInstructions
                 </label>
                 <select name="marwchto_delivery_instructions_preset"
                         id="marwchto_delivery_instructions_preset"
-                        class="wct-delivery-instructions-preset"
+                        class="marwchto-delivery-instructions-preset"
                         <?php echo esc_attr($required_attr); ?>>
                     <option value=""><?php esc_html_e('Select an option...', 'marwen-marwchto-for-woocommerce'); ?></option>
                     <?php foreach ($preset_options as $option) : ?>
@@ -132,7 +132,7 @@ class DeliveryInstructions
                 </label>
                 <textarea name="marwchto_delivery_instructions_custom"
                           id="marwchto_delivery_instructions_custom"
-                          class="wct-delivery-instructions-custom"
+                          class="marwchto-delivery-instructions-custom"
                           placeholder="<?php echo esc_attr($settings['custom_placeholder'] ?: ''); ?>"
                           rows="3"
                           <?php if (!empty($settings['max_length'])) : ?>
@@ -140,7 +140,7 @@ class DeliveryInstructions
                           <?php endif; ?>
                 ><?php echo esc_textarea($current_custom); ?></textarea>
                 <?php if (!empty($settings['max_length'])) : ?>
-                    <span class="wct-char-counter wct-di-char-counter"></span>
+                    <span class="marwchto-char-counter marwchto-di-char-counter"></span>
                 <?php endif; ?>
             </p>
         </div>
@@ -292,13 +292,13 @@ class DeliveryInstructions
 
         // Save preset value
         if (!empty($preset)) {
-            $order->update_meta_data('_wct_delivery_instructions_preset', $preset);
+            $order->update_meta_data('_marwchto_delivery_instructions_preset', $preset);
             do_action('marwchto_delivery_instructions_preset_saved', $order->get_id(), $preset);
         }
 
         // Save custom value
         if (!empty($custom)) {
-            $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
+            $order->update_meta_data('_marwchto_delivery_instructions_custom', $custom);
             do_action('marwchto_delivery_instructions_custom_saved', $order->get_id(), $custom);
         }
     }

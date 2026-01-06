@@ -103,7 +103,7 @@ class OrderFields2
                 if (!empty($settings['max_length']) && $settings['max_length'] > 0) {
                     $args['custom_attributes'] = [
                         'maxlength' => $settings['max_length'],
-                        'data-wct-maxlength' => $settings['max_length'],
+                        'data-marwchto-maxlength' => $settings['max_length'],
                     ];
                 }
                 break;
@@ -114,7 +114,7 @@ class OrderFields2
                 if (!empty($settings['max_length']) && $settings['max_length'] > 0) {
                     $args['custom_attributes'] = [
                         'maxlength' => $settings['max_length'],
-                        'data-wct-maxlength' => $settings['max_length'],
+                        'data-marwchto-maxlength' => $settings['max_length'],
                     ];
                 }
                 break;
@@ -270,14 +270,14 @@ class OrderFields2
         // Handle checkbox type - always save (even unchecked as '0')
         if ($field_type === 'checkbox') {
             $value = !empty($value) ? '1' : '0';
-            $order->update_meta_data('_wct_custom_field_2', $value);
+            $order->update_meta_data('_marwchto_custom_field_2', $value);
             do_action('marwchto_custom_field_2_saved', $order->get_id(), $value);
             return;
         }
 
         if (!empty($value)) {
             $value = apply_filters('marwchto_sanitize_field_2_value', $value);
-            $order->update_meta_data('_wct_custom_field_2', $value);
+            $order->update_meta_data('_marwchto_custom_field_2', $value);
             do_action('marwchto_custom_field_2_saved', $order->get_id(), $value);
         }
     }

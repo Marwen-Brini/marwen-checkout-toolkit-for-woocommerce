@@ -10,11 +10,11 @@ defined('ABSPATH') || exit;
 $marwchto_blocked_dates = $marwchto_delivery_settings['blocked_dates'] ?? [];
 ?>
 
-<div class="wct-blocked-dates-manager">
-    <div class="wct-add-date-row">
+<div class="marwchto-blocked-dates-manager">
+    <div class="marwchto-add-date-row">
         <input type="text"
                id="marwchto_add_blocked_date"
-               class="wct-datepicker-admin"
+               class="marwchto-datepicker-admin"
                placeholder="<?php esc_attr_e('Select date to block', 'marwen-marwchto-for-woocommerce'); ?>"
                readonly>
         <button type="button" id="marwchto_add_date_btn" class="button">
@@ -22,19 +22,19 @@ $marwchto_blocked_dates = $marwchto_delivery_settings['blocked_dates'] ?? [];
         </button>
     </div>
 
-    <div id="marwchto_blocked_dates_list" class="wct-blocked-dates-list">
+    <div id="marwchto_blocked_dates_list" class="marwchto-blocked-dates-list">
         <?php if (empty($marwchto_blocked_dates)) : ?>
-            <p class="wct-no-dates"><?php esc_html_e('No dates blocked.', 'marwen-marwchto-for-woocommerce'); ?></p>
+            <p class="marwchto-no-dates"><?php esc_html_e('No dates blocked.', 'marwen-marwchto-for-woocommerce'); ?></p>
         <?php else : ?>
             <?php foreach ($marwchto_blocked_dates as $marwchto_date) : ?>
-                <div class="wct-blocked-date-item" data-date="<?php echo esc_attr($marwchto_date); ?>">
-                    <span class="wct-date-display">
+                <div class="marwchto-blocked-date-item" data-date="<?php echo esc_attr($marwchto_date); ?>">
+                    <span class="marwchto-date-display">
                         <?php echo esc_html(date_i18n(get_option('date_format'), strtotime($marwchto_date))); ?>
                     </span>
                     <input type="hidden"
                            name="marwchto_delivery_settings[blocked_dates][]"
                            value="<?php echo esc_attr($marwchto_date); ?>">
-                    <button type="button" class="wct-remove-date button-link button-link-delete">
+                    <button type="button" class="marwchto-remove-date button-link button-link-delete">
                         <?php esc_html_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>
                     </button>
                 </div>
