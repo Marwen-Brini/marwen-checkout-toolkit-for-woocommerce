@@ -25,7 +25,7 @@
          * Initialize Flatpickr for admin date picker
          */
         initDatepicker: function() {
-            const $datepicker = $('#checkout_toolkit_add_blocked_date');
+            const $datepicker = $('#marwchto_add_blocked_date');
 
             if ($datepicker.length && typeof flatpickr !== 'undefined') {
                 flatpickr($datepicker[0], {
@@ -48,8 +48,8 @@
             const self = this;
 
             // Add date button
-            $('#checkout_toolkit_add_date_btn').on('click', function() {
-                const $input = $('#checkout_toolkit_add_blocked_date');
+            $('#marwchto_add_date_btn').on('click', function() {
+                const $input = $('#marwchto_add_blocked_date');
                 const date = $input.data('selected-date') || $input.val();
 
                 if (!date) {
@@ -58,7 +58,7 @@
                 }
 
                 // Check if date already exists
-                if ($('#checkout_toolkit_blocked_dates_list').find('[data-date="' + date + '"]').length) {
+                if ($('#marwchto_blocked_dates_list').find('[data-date="' + date + '"]').length) {
                     alert('This date is already blocked.');
                     return;
                 }
@@ -74,7 +74,7 @@
             });
 
             // Remove date button
-            $('#checkout_toolkit_blocked_dates_list').on('click', '.marwchto-remove-date', function() {
+            $('#marwchto_blocked_dates_list').on('click', '.marwchto-remove-date', function() {
                 if (confirm(marwchtoAdmin.i18n.confirmRemove || 'Are you sure?')) {
                     $(this).closest('.marwchto-blocked-date-item').fadeOut(200, function() {
                         $(this).remove();
@@ -88,7 +88,7 @@
          * Add a blocked date to the list
          */
         addBlockedDate: function(date) {
-            const $list = $('#checkout_toolkit_blocked_dates_list');
+            const $list = $('#marwchto_blocked_dates_list');
 
             // Remove "no dates" message if present
             $list.find('.marwchto-no-dates').remove();
@@ -99,7 +99,7 @@
             const $item = $(`
                 <div class="wct-blocked-date-item" data-date="${date}">
                     <span class="wct-date-display">${displayDate}</span>
-                    <input type="hidden" name="checkout_toolkit_delivery_settings[blocked_dates][]" value="${date}">
+                    <input type="hidden" name="marwchto_delivery_settings[blocked_dates][]" value="${date}">
                     <button type="button" class="wct-remove-date button-link button-link-delete">
                         Remove
                     </button>
@@ -123,7 +123,7 @@
          * Update "no dates" message visibility
          */
         updateNoDateMessage: function() {
-            const $list = $('#checkout_toolkit_blocked_dates_list');
+            const $list = $('#marwchto_blocked_dates_list');
 
             if ($list.find('.marwchto-blocked-date-item').length === 0) {
                 $list.html('<p class="wct-no-dates">No dates blocked.</p>');
@@ -162,7 +162,7 @@
                 e.preventDefault();
                 var fieldNum = $(this).data('field');
                 var wrapper = $(this).closest('.marwchto-select-options-wrapper').find('.marwchto-select-options-list');
-                var optionName = fieldNum === 1 ? 'checkout_toolkit_field_settings' : 'checkout_toolkit_field_2_settings';
+                var optionName = fieldNum === 1 ? 'marwchto_field_settings' : 'marwchto_field_2_settings';
                 var index = wrapper.find('.marwchto-select-option-row').length;
 
                 var newRow = '<div class="wct-select-option-row">' +
@@ -272,24 +272,24 @@
          */
         initDeliveryMethodSettings: function() {
             // Update preview when labels change
-            $('#checkout_toolkit_dm_field_label').on('input', function() {
+            $('#marwchto_dm_field_label').on('input', function() {
                 $('#marwchto-preview-label').text($(this).val() || 'Fulfillment Method');
             });
 
-            $('#checkout_toolkit_dm_delivery_label').on('input', function() {
+            $('#marwchto_dm_delivery_label').on('input', function() {
                 var label = $(this).val() || 'Delivery';
                 $('#marwchto-preview-delivery-toggle').text(label);
                 $('#marwchto-preview-delivery-radio').text(label);
             });
 
-            $('#checkout_toolkit_dm_pickup_label').on('input', function() {
+            $('#marwchto_dm_pickup_label').on('input', function() {
                 var label = $(this).val() || 'Pickup';
                 $('#marwchto-preview-pickup-toggle').text(label);
                 $('#marwchto-preview-pickup-radio').text(label);
             });
 
             // Toggle between toggle/radio preview
-            $('input[name="checkout_toolkit_delivery_method_settings[show_as]"]').on('change', function() {
+            $('input[name="marwchto_delivery_method_settings[show_as]"]').on('change', function() {
                 if ($(this).val() === 'toggle') {
                     $('#marwchto-preview-toggle').show();
                     $('#marwchto-preview-radio').hide();
@@ -337,8 +337,8 @@
                 var index = wrapper.find('.marwchto-preset-option-row').length;
 
                 var newRow = '<div class="wct-preset-option-row">' +
-                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
-                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.valueStored || 'Value (stored)') + '" class="regular-text">' +
+                    '<input type="text" name="marwchto_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
+                    '<input type="text" name="marwchto_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.valueStored || 'Value (stored)') + '" class="regular-text">' +
                     '<a href="#" class="button-link-delete wct-remove-preset-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
                     '</div>';
 
@@ -398,23 +398,23 @@
                     '<div class="wct-location-fields">' +
                         '<div class="wct-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.locationId || 'Location ID') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][id]" value="" placeholder="' + (marwchtoAdmin.i18n.locationIdPlaceholder || 'e.g., main-store (auto-generated if empty)') + '">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][id]" value="" placeholder="' + (marwchtoAdmin.i18n.locationIdPlaceholder || 'e.g., main-store (auto-generated if empty)') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.storeName || 'Store Name') + ' <span style="color: #d63638;">*</span></label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (marwchtoAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="wct-location-name">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (marwchtoAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="wct-location-name">' +
                         '</div>' +
                         '<div class="wct-location-field full-width">' +
                             '<label>' + (marwchtoAdmin.i18n.address || 'Address') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][address]" value="" placeholder="' + (marwchtoAdmin.i18n.fullAddress || 'Full address') + '">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][address]" value="" placeholder="' + (marwchtoAdmin.i18n.fullAddress || 'Full address') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.phone || 'Phone') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][phone]" value="" placeholder="' + (marwchtoAdmin.i18n.phoneNumber || 'Phone number') + '">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][phone]" value="" placeholder="' + (marwchtoAdmin.i18n.phoneNumber || 'Phone number') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
                             '<label>' + (marwchtoAdmin.i18n.hours || 'Hours') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][hours]" value="" placeholder="' + (marwchtoAdmin.i18n.hoursPlaceholder || 'e.g., Mon-Fri: 9am-6pm') + '">' +
+                            '<input type="text" name="marwchto_store_locations_settings[locations][' + index + '][hours]" value="" placeholder="' + (marwchtoAdmin.i18n.hoursPlaceholder || 'e.g., Mon-Fri: 9am-6pm') + '">' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -494,9 +494,9 @@
             // Add new time slot
             $('#add-time-slot').on('click', function() {
                 var html = '<div class="time-slot-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
-                    '<input type="text" name="checkout_toolkit_time_window_settings[time_slots][' + slotIndex + '][value]" ' +
+                    '<input type="text" name="marwchto_time_window_settings[time_slots][' + slotIndex + '][value]" ' +
                     'placeholder="' + (marwchtoAdmin.i18n.timeSlotValuePlaceholder || 'Value (e.g., morning)') + '" class="regular-text" style="width: 200px;">' +
-                    '<input type="text" name="checkout_toolkit_time_window_settings[time_slots][' + slotIndex + '][label]" ' +
+                    '<input type="text" name="marwchto_time_window_settings[time_slots][' + slotIndex + '][label]" ' +
                     'placeholder="' + (marwchtoAdmin.i18n.timeSlotLabelPlaceholder || 'Label (e.g., Morning 9am-12pm)') + '" class="regular-text" style="width: 300px;">' +
                     '<button type="button" class="button remove-time-slot">' + (marwchtoAdmin.i18n.remove || 'Remove') + '</button>' +
                     '</div>';

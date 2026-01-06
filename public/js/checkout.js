@@ -62,7 +62,7 @@
                 ],
                 onChange: function(selectedDates, dateStr) {
                     // Update hidden field with Y-m-d format
-                    $('#checkout_toolkit_delivery_date_value').val(dateStr);
+                    $('#marwchto_delivery_date_value').val(dateStr);
 
                     // Trigger WooCommerce update if needed
                     $(document.body).trigger('update_checkout');
@@ -107,7 +107,7 @@
                 return;
             }
 
-            const $field = $('#checkout_toolkit_custom_field');
+            const $field = $('#marwchto_custom_field');
             const maxLength = marwchtoConfig.field.maxLength;
 
             if (!$field.length || !maxLength || maxLength <= 0) {
@@ -178,7 +178,7 @@
          * Initialize delivery instructions character counter
          */
         initDeliveryInstructionsCounter: function() {
-            var $customField = $('#checkout_toolkit_delivery_instructions_custom');
+            var $customField = $('#marwchto_delivery_instructions_custom');
             var $counter = $('.marwchto-di-char-counter');
 
             if (!$customField.length || !$counter.length) {
@@ -221,7 +221,7 @@
             });
 
             // Show location details when a location is selected
-            var $select = $('#checkout_toolkit_store_location');
+            var $select = $('#marwchto_store_location');
             var $details = $('#marwchto-store-location-details');
 
             $select.off('change.wct').on('change.wct', function() {

@@ -309,7 +309,7 @@
                     el('label', { style: { marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' } },
                         el('input', {
                             type: 'radio',
-                            name: 'checkout_toolkit_delivery_method',
+                            name: 'marwchto_delivery_method',
                             value: 'delivery',
                             checked: selectedMethod === 'delivery',
                             onChange: () => handleChange('delivery')
@@ -319,7 +319,7 @@
                     el('label', { style: { display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' } },
                         el('input', {
                             type: 'radio',
-                            name: 'checkout_toolkit_delivery_method',
+                            name: 'marwchto_delivery_method',
                             value: 'pickup',
                             checked: selectedMethod === 'pickup',
                             onChange: () => handleChange('pickup')

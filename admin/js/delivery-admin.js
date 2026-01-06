@@ -82,7 +82,7 @@
                 url: marwchtoDelivery.ajaxUrl,
                 type: 'POST',
                 data: {
-                    action: 'checkout_toolkit_update_delivery_status',
+                    action: 'marwchto_update_delivery_status',
                     nonce: marwchtoDelivery.nonce,
                     order_id: orderId,
                     status: status
