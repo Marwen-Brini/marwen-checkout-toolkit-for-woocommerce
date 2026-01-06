@@ -157,22 +157,22 @@ class BlocksIntegration implements IntegrationInterface
             ],
             'cart' => $this->get_cart_visibility_data(),
             'i18n' => [
-                'selectDate' => __('Select a date', 'marwen-marwchto-for-woocommerce'),
-                'selectOption' => __('Select an option...', 'marwen-marwchto-for-woocommerce'),
-                'charactersRemaining' => __('characters remaining', 'marwen-marwchto-for-woocommerce'),
+                'selectDate' => __('Select a date', 'marwen-checkout-toolkit-for-woocommerce'),
+                'selectOption' => __('Select an option...', 'marwen-checkout-toolkit-for-woocommerce'),
+                'charactersRemaining' => __('characters remaining', 'marwen-checkout-toolkit-for-woocommerce'),
                 'deliveryDateRequired' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
                     $delivery_settings['field_label']
                 ),
                 'customFieldRequired' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
                     $field_settings['field_label']
                 ),
                 'customField2Required' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
                     $field_2_settings['field_label']
                 ),
             ],
@@ -350,49 +350,49 @@ class BlocksIntegration implements IntegrationInterface
     {
         return [
             'delivery_method' => [
-                'description' => __('Delivery method (delivery or pickup)', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Delivery method (delivery or pickup)', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_instructions_preset' => [
-                'description' => __('Delivery instructions preset option', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Delivery instructions preset option', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_instructions_custom' => [
-                'description' => __('Custom delivery instructions', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Custom delivery instructions', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'time_window' => [
-                'description' => __('Preferred time window', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Preferred time window', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'store_location' => [
-                'description' => __('Pickup store location', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Pickup store location', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_date' => [
-                'description' => __('Preferred delivery date', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Preferred delivery date', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'custom_field' => [
-                'description' => __('Custom order field', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Custom order field', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'custom_field_2' => [
-                'description' => __('Second custom order field', 'marwen-marwchto-for-woocommerce'),
+                'description' => __('Second custom order field', 'marwen-checkout-toolkit-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',

@@ -21,13 +21,13 @@ class TemplateLoader
     /**
      * Template path in theme
      */
-    private const THEME_TEMPLATE_PATH = 'woocommerce/marwen-marwchto-for-woocommerce/';
+    private const THEME_TEMPLATE_PATH = 'woocommerce/marwen-checkout-toolkit-for-woocommerce/';
 
     /**
      * Get template part
      *
      * Looks for template in:
-     * 1. yourtheme/woocommerce/marwen-marwchto-for-woocommerce/$template_name
+     * 1. yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/$template_name
      * 2. plugin/templates/$template_name
      *
      * @param string $template_name Template name (e.g., 'checkout/delivery-date-field.php')

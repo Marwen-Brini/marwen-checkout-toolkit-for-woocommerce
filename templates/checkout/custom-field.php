@@ -3,7 +3,7 @@
  * Custom field template
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/marwen-marwchto-for-woocommerce/checkout/custom-field.php
+ * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/checkout/custom-field.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0

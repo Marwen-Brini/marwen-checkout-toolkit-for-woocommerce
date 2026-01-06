@@ -98,21 +98,21 @@ class StoreLocationSelector
 
         $required = !empty($settings['required']);
         $required_attr = $required ? ' required' : '';
-        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-marwchto-for-woocommerce') . '">*</abbr>' : '';
+        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-checkout-toolkit-for-woocommerce') . '">*</abbr>' : '';
 
         do_action('marwchto_before_store_location');
         ?>
         <div class="marwchto-store-location-wrapper" id="marwchto-store-location-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <p class="form-row form-row-wide">
                 <label for="marwchto_store_location">
-                    <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'marwen-marwchto-for-woocommerce')); ?>
+                    <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce')); ?>
                     <?php echo wp_kses_post($required_mark); ?>
                 </label>
                 <select name="marwchto_store_location"
                         id="marwchto_store_location"
                         class="marwchto-store-location-select"
                         <?php echo esc_attr($required_attr); ?>>
-                    <option value=""><?php esc_html_e('Select a location...', 'marwen-marwchto-for-woocommerce'); ?></option>
+                    <option value=""><?php esc_html_e('Select a location...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
                     <?php foreach ($locations as $location) : ?>
                         <?php if (!empty($location['name'])) : ?>
                             <option value="<?php echo esc_attr($location['id'] ?? ''); ?>"
@@ -130,15 +130,15 @@ class StoreLocationSelector
             <!-- Location Details Preview -->
             <div id="marwchto-store-location-details" class="marwchto-store-location-details" style="display: none;">
                 <div class="marwchto-location-detail marwchto-location-address">
-                    <strong><?php esc_html_e('Address:', 'marwen-marwchto-for-woocommerce'); ?></strong>
+                    <strong><?php esc_html_e('Address:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="marwchto-detail-value"></span>
                 </div>
                 <div class="marwchto-location-detail marwchto-location-phone">
-                    <strong><?php esc_html_e('Phone:', 'marwen-marwchto-for-woocommerce'); ?></strong>
+                    <strong><?php esc_html_e('Phone:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="marwchto-detail-value"></span>
                 </div>
                 <div class="marwchto-location-detail marwchto-location-hours">
-                    <strong><?php esc_html_e('Hours:', 'marwen-marwchto-for-woocommerce'); ?></strong>
+                    <strong><?php esc_html_e('Hours:', 'marwen-checkout-toolkit-for-woocommerce'); ?></strong>
                     <span class="marwchto-detail-value"></span>
                 </div>
             </div>
@@ -173,7 +173,7 @@ class StoreLocationSelector
 
         if (empty($store_location)) {
             wc_add_notice(
-                __('Please select a pickup location.', 'marwen-marwchto-for-woocommerce'),
+                __('Please select a pickup location.', 'marwen-checkout-toolkit-for-woocommerce'),
                 'error'
             );
         }

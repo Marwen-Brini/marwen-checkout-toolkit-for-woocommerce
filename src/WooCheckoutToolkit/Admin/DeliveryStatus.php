@@ -35,11 +35,11 @@ class DeliveryStatus
     public static function get_statuses(): array
     {
         $statuses = [
-            self::PENDING => __('Pending', 'marwen-marwchto-for-woocommerce'),
-            self::CONFIRMED => __('Confirmed', 'marwen-marwchto-for-woocommerce'),
-            self::OUT_FOR_DELIVERY => __('Out for Delivery', 'marwen-marwchto-for-woocommerce'),
-            self::DELIVERED => __('Delivered', 'marwen-marwchto-for-woocommerce'),
-            self::FAILED => __('Failed', 'marwen-marwchto-for-woocommerce'),
+            self::PENDING => __('Pending', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::CONFIRMED => __('Confirmed', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::OUT_FOR_DELIVERY => __('Out for Delivery', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::DELIVERED => __('Delivered', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::FAILED => __('Failed', 'marwen-checkout-toolkit-for-woocommerce'),
         ];
 
         /**
@@ -200,34 +200,34 @@ class DeliveryStatus
         $subjects = [
             self::PENDING => sprintf(
                 /* translators: %s: Order number */
-                __('Your order #%s is awaiting delivery confirmation', 'marwen-marwchto-for-woocommerce'),
+                __('Your order #%s is awaiting delivery confirmation', 'marwen-checkout-toolkit-for-woocommerce'),
                 $order_number
             ),
             self::CONFIRMED => sprintf(
                 /* translators: %s: Order number */
-                __('Delivery confirmed for order #%s', 'marwen-marwchto-for-woocommerce'),
+                __('Delivery confirmed for order #%s', 'marwen-checkout-toolkit-for-woocommerce'),
                 $order_number
             ),
             self::OUT_FOR_DELIVERY => sprintf(
                 /* translators: %s: Order number */
-                __('Your order #%s is out for delivery', 'marwen-marwchto-for-woocommerce'),
+                __('Your order #%s is out for delivery', 'marwen-checkout-toolkit-for-woocommerce'),
                 $order_number
             ),
             self::DELIVERED => sprintf(
                 /* translators: %s: Order number */
-                __('Your order #%s has been delivered', 'marwen-marwchto-for-woocommerce'),
+                __('Your order #%s has been delivered', 'marwen-checkout-toolkit-for-woocommerce'),
                 $order_number
             ),
             self::FAILED => sprintf(
                 /* translators: %s: Order number */
-                __('Delivery attempt failed for order #%s', 'marwen-marwchto-for-woocommerce'),
+                __('Delivery attempt failed for order #%s', 'marwen-checkout-toolkit-for-woocommerce'),
                 $order_number
             ),
         ];
 
         return $subjects[$status] ?? sprintf(
             /* translators: %s: Order number */
-            __('Delivery update for order #%s', 'marwen-marwchto-for-woocommerce'),
+            __('Delivery update for order #%s', 'marwen-checkout-toolkit-for-woocommerce'),
             $order_number
         );
     }
@@ -256,17 +256,17 @@ class DeliveryStatus
         }
 
         $messages = [
-            self::PENDING => __('We have received your order and are preparing it for delivery.', 'marwen-marwchto-for-woocommerce'),
+            self::PENDING => __('We have received your order and are preparing it for delivery.', 'marwen-checkout-toolkit-for-woocommerce'),
             self::CONFIRMED => sprintf(
                 /* translators: %s: Delivery date */
-                __('Great news! Your delivery has been confirmed for %s.', 'marwen-marwchto-for-woocommerce'),
+                __('Great news! Your delivery has been confirmed for %s.', 'marwen-checkout-toolkit-for-woocommerce'),
                 $formatted_date
             ),
-            self::OUT_FOR_DELIVERY => __('Your order is now out for delivery and will arrive soon.', 'marwen-marwchto-for-woocommerce'),
-            self::DELIVERED => __('Your order has been successfully delivered. Thank you for your purchase!', 'marwen-marwchto-for-woocommerce'),
-            self::FAILED => __('Unfortunately, the delivery attempt was unsuccessful. We will contact you to arrange a new delivery time.', 'marwen-marwchto-for-woocommerce'),
+            self::OUT_FOR_DELIVERY => __('Your order is now out for delivery and will arrive soon.', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::DELIVERED => __('Your order has been successfully delivered. Thank you for your purchase!', 'marwen-checkout-toolkit-for-woocommerce'),
+            self::FAILED => __('Unfortunately, the delivery attempt was unsuccessful. We will contact you to arrange a new delivery time.', 'marwen-checkout-toolkit-for-woocommerce'),
         ];
 
-        return $messages[$status] ?? __('There has been an update to your delivery status.', 'marwen-marwchto-for-woocommerce');
+        return $messages[$status] ?? __('There has been an update to your delivery status.', 'marwen-checkout-toolkit-for-woocommerce');
     }
 }

@@ -15,16 +15,16 @@ $marwchto_blocked_dates = $marwchto_delivery_settings['blocked_dates'] ?? [];
         <input type="text"
                id="marwchto_add_blocked_date"
                class="marwchto-datepicker-admin"
-               placeholder="<?php esc_attr_e('Select date to block', 'marwen-marwchto-for-woocommerce'); ?>"
+               placeholder="<?php esc_attr_e('Select date to block', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                readonly>
         <button type="button" id="marwchto_add_date_btn" class="button">
-            <?php esc_html_e('Add Date', 'marwen-marwchto-for-woocommerce'); ?>
+            <?php esc_html_e('Add Date', 'marwen-checkout-toolkit-for-woocommerce'); ?>
         </button>
     </div>
 
     <div id="marwchto_blocked_dates_list" class="marwchto-blocked-dates-list">
         <?php if (empty($marwchto_blocked_dates)) : ?>
-            <p class="marwchto-no-dates"><?php esc_html_e('No dates blocked.', 'marwen-marwchto-for-woocommerce'); ?></p>
+            <p class="marwchto-no-dates"><?php esc_html_e('No dates blocked.', 'marwen-checkout-toolkit-for-woocommerce'); ?></p>
         <?php else : ?>
             <?php foreach ($marwchto_blocked_dates as $marwchto_date) : ?>
                 <div class="marwchto-blocked-date-item" data-date="<?php echo esc_attr($marwchto_date); ?>">
@@ -35,7 +35,7 @@ $marwchto_blocked_dates = $marwchto_delivery_settings['blocked_dates'] ?? [];
                            name="marwchto_delivery_settings[blocked_dates][]"
                            value="<?php echo esc_attr($marwchto_date); ?>">
                     <button type="button" class="marwchto-remove-date button-link button-link-delete">
-                        <?php esc_html_e('Remove', 'marwen-marwchto-for-woocommerce'); ?>
+                        <?php esc_html_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </button>
                 </div>
             <?php endforeach; ?>
@@ -43,6 +43,6 @@ $marwchto_blocked_dates = $marwchto_delivery_settings['blocked_dates'] ?? [];
     </div>
 
     <p class="description">
-        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'marwen-marwchto-for-woocommerce'); ?>
+        <?php esc_html_e('Block specific dates when delivery is not available (e.g., holidays).', 'marwen-checkout-toolkit-for-woocommerce'); ?>
     </p>
 </div>

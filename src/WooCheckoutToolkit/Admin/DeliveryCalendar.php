@@ -188,11 +188,11 @@ class DeliveryCalendar
         <div class="marwchto-calendar-wrapper">
             <div class="marwchto-calendar-header">
                 <a href="<?php echo esc_url(add_query_arg(['year' => $prev_year, 'month' => $prev_month], $base_url)); ?>" class="marwchto-calendar-nav prev">
-                    &laquo; <?php esc_html_e('Previous', 'marwen-marwchto-for-woocommerce'); ?>
+                    &laquo; <?php esc_html_e('Previous', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </a>
                 <h2 class="marwchto-calendar-title"><?php echo esc_html($data['month_name']); ?></h2>
                 <a href="<?php echo esc_url(add_query_arg(['year' => $next_year, 'month' => $next_month], $base_url)); ?>" class="marwchto-calendar-nav next">
-                    <?php esc_html_e('Next', 'marwen-marwchto-for-woocommerce'); ?> &raquo;
+                    <?php esc_html_e('Next', 'marwen-checkout-toolkit-for-woocommerce'); ?> &raquo;
                 </a>
             </div>
 
@@ -201,13 +201,13 @@ class DeliveryCalendar
                     <tr>
                         <?php
                         $days_of_week = [
-                            __('Sun', 'marwen-marwchto-for-woocommerce'),
-                            __('Mon', 'marwen-marwchto-for-woocommerce'),
-                            __('Tue', 'marwen-marwchto-for-woocommerce'),
-                            __('Wed', 'marwen-marwchto-for-woocommerce'),
-                            __('Thu', 'marwen-marwchto-for-woocommerce'),
-                            __('Fri', 'marwen-marwchto-for-woocommerce'),
-                            __('Sat', 'marwen-marwchto-for-woocommerce'),
+                            __('Sun', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Mon', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Tue', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Wed', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Thu', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Fri', 'marwen-checkout-toolkit-for-woocommerce'),
+                            __('Sat', 'marwen-checkout-toolkit-for-woocommerce'),
                         ];
                         foreach ($days_of_week as $day_name) {
                             echo '<th>' . esc_html($day_name) . '</th>';
@@ -258,7 +258,7 @@ class DeliveryCalendar
                                     $list_url = admin_url('admin.php?page=marwchto-deliveries&tab=list&filter_date=' . $date_str);
                                     echo '<a href="' . esc_url($list_url) . '" class="marwchto-calendar-count">';
                                     echo '<span class="count">' . esc_html($day_data['total']) . '</span>';
-                                    echo '<span class="label">' . esc_html(_n('delivery', 'deliveries', $day_data['total'], 'marwen-marwchto-for-woocommerce')) . '</span>';
+                                    echo '<span class="label">' . esc_html(_n('delivery', 'deliveries', $day_data['total'], 'marwen-checkout-toolkit-for-woocommerce')) . '</span>';
                                     echo '</a>';
 
                                     // Status breakdown dots
@@ -282,7 +282,7 @@ class DeliveryCalendar
             </table>
 
             <div class="marwchto-calendar-legend">
-                <span class="legend-title"><?php esc_html_e('Status:', 'marwen-marwchto-for-woocommerce'); ?></span>
+                <span class="legend-title"><?php esc_html_e('Status:', 'marwen-checkout-toolkit-for-woocommerce'); ?></span>
                 <?php foreach ($data['status_colors'] as $status => $colors) : ?>
                     <span class="legend-item">
                         <span class="legend-dot" style="background-color: <?php echo esc_attr($colors['bg']); ?>;"></span>

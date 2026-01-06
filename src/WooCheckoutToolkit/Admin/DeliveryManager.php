@@ -66,8 +66,8 @@ class DeliveryManager
     {
         add_submenu_page(
             'woocommerce',
-            __('Deliveries', 'marwen-marwchto-for-woocommerce'),
-            __('Deliveries', 'marwen-marwchto-for-woocommerce'),
+            __('Deliveries', 'marwen-checkout-toolkit-for-woocommerce'),
+            __('Deliveries', 'marwen-checkout-toolkit-for-woocommerce'),
             'manage_woocommerce',
             'marwchto-deliveries',
             [$this, 'render_dashboard']
@@ -80,7 +80,7 @@ class DeliveryManager
     public function render_dashboard(): void
     {
         if (!current_user_can('manage_woocommerce')) {
-            wp_die(esc_html__('You do not have permission to access this page.', 'marwen-marwchto-for-woocommerce'));
+            wp_die(esc_html__('You do not have permission to access this page.', 'marwen-checkout-toolkit-for-woocommerce'));
         }
 
         include MARWCHTO_PLUGIN_DIR . 'admin/views/delivery-dashboard.php';
@@ -134,10 +134,10 @@ class DeliveryManager
             'statuses' => DeliveryStatus::get_statuses(),
             'colors' => DeliveryStatus::get_colors(),
             'i18n' => [
-                'confirmStatusChange' => __('Change delivery status?', 'marwen-marwchto-for-woocommerce'),
-                'statusUpdated' => __('Delivery status updated', 'marwen-marwchto-for-woocommerce'),
-                'error' => __('An error occurred', 'marwen-marwchto-for-woocommerce'),
-                'loading' => __('Updating...', 'marwen-marwchto-for-woocommerce'),
+                'confirmStatusChange' => __('Change delivery status?', 'marwen-checkout-toolkit-for-woocommerce'),
+                'statusUpdated' => __('Delivery status updated', 'marwen-checkout-toolkit-for-woocommerce'),
+                'error' => __('An error occurred', 'marwen-checkout-toolkit-for-woocommerce'),
+                'loading' => __('Updating...', 'marwen-checkout-toolkit-for-woocommerce'),
             ],
         ]);
     }
@@ -282,7 +282,7 @@ class DeliveryManager
                 DeliveryStatus::get_email_message($status, $order),
                 sprintf(
                     /* translators: %s: Order number */
-                    __('Order number: %s', 'marwen-marwchto-for-woocommerce'),
+                    __('Order number: %s', 'marwen-checkout-toolkit-for-woocommerce'),
                     $order->get_order_number()
                 )
             );
@@ -305,32 +305,32 @@ class DeliveryManager
         check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
-            wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Permission denied', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $order_id = isset($_POST['order_id']) ? absint($_POST['order_id']) : 0;
         $status = isset($_POST['status']) ? sanitize_key(wp_unslash($_POST['status'])) : '';
 
         if (!$order_id || !$status) {
-            wp_send_json_error(['message' => __('Invalid request', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Invalid request', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $order = wc_get_order($order_id);
 
         if (!$order) {
-            wp_send_json_error(['message' => __('Order not found', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Order not found', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $success = $this->update_status($order, $status);
 
         if ($success) {
             wp_send_json_success([
-                'message' => __('Delivery status updated', 'marwen-marwchto-for-woocommerce'),
+                'message' => __('Delivery status updated', 'marwen-checkout-toolkit-for-woocommerce'),
                 'status' => $status,
                 'badge' => DeliveryStatus::get_badge_html($status),
             ]);
         } else {
-            wp_send_json_error(['message' => __('Failed to update status', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Failed to update status', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
     }
 
@@ -342,14 +342,14 @@ class DeliveryManager
         check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
-            wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Permission denied', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $order_ids = isset($_POST['order_ids']) ? array_map('absint', (array) $_POST['order_ids']) : [];
         $status = isset($_POST['status']) ? sanitize_key(wp_unslash($_POST['status'])) : '';
 
         if (empty($order_ids) || !$status) {
-            wp_send_json_error(['message' => __('Invalid request', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Invalid request', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $updated = 0;
@@ -367,7 +367,7 @@ class DeliveryManager
         wp_send_json_success([
             'message' => sprintf(
                 /* translators: %d: Number of orders updated */
-                __('%d orders updated', 'marwen-marwchto-for-woocommerce'),
+                __('%d orders updated', 'marwen-checkout-toolkit-for-woocommerce'),
                 $updated
             ),
             'updated' => $updated,
@@ -383,7 +383,7 @@ class DeliveryManager
         check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
-            wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
+            wp_send_json_error(['message' => __('Permission denied', 'marwen-checkout-toolkit-for-woocommerce')]);
         }
 
         $month = isset($_GET['month']) ? absint($_GET['month']) : (int) gmdate('n');
@@ -410,7 +410,7 @@ class DeliveryManager
 
             // Add after order status column
             if ($key === 'order_status') {
-                $new_columns['marwchto_delivery'] = __('Delivery', 'marwen-marwchto-for-woocommerce');
+                $new_columns['marwchto_delivery'] = __('Delivery', 'marwen-checkout-toolkit-for-woocommerce');
             }
         }
 
@@ -497,7 +497,7 @@ class DeliveryManager
 
         wp_add_dashboard_widget(
             'marwchto_deliveries_widget',
-            __('Upcoming Deliveries', 'marwen-marwchto-for-woocommerce'),
+            __('Upcoming Deliveries', 'marwen-checkout-toolkit-for-woocommerce'),
             [$this, 'render_dashboard_widget']
         );
     }
