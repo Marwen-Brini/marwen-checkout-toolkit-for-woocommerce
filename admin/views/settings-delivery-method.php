@@ -4,7 +4,7 @@
  *
  * @package CheckoutToolkitForWoo
  *
- * @var array $checkout_toolkit_delivery_method_settings Delivery method settings array.
+ * @var array $marwchto_delivery_method_settings Delivery method settings array.
  */
 
 defined('ABSPATH') || exit;
@@ -26,9 +26,9 @@ defined('ABSPATH') || exit;
                 <td>
                     <label>
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_method_settings[enabled]"
+                               name="marwchto_delivery_method_settings[enabled]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_method_settings['enabled'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_method_settings['enabled'])); ?>>
                         <?php esc_html_e('Show pickup/delivery toggle on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
@@ -42,16 +42,16 @@ defined('ABSPATH') || exit;
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method_settings[default_method]"
+                               name="marwchto_delivery_method_settings[default_method]"
                                value="delivery"
-                               <?php checked(($checkout_toolkit_delivery_method_settings['default_method'] ?? 'delivery') === 'delivery'); ?>>
+                               <?php checked(($marwchto_delivery_method_settings['default_method'] ?? 'delivery') === 'delivery'); ?>>
                         <?php esc_html_e('Delivery', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method_settings[default_method]"
+                               name="marwchto_delivery_method_settings[default_method]"
                                value="pickup"
-                               <?php checked(($checkout_toolkit_delivery_method_settings['default_method'] ?? 'delivery') === 'pickup'); ?>>
+                               <?php checked(($marwchto_delivery_method_settings['default_method'] ?? 'delivery') === 'pickup'); ?>>
                         <?php esc_html_e('Pickup', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <p class="description">
@@ -63,15 +63,15 @@ defined('ABSPATH') || exit;
             <!-- Field Label -->
             <tr>
                 <th scope="row">
-                    <label for="checkout_toolkit_dm_field_label">
+                    <label for="marwchto_dm_field_label">
                         <?php esc_html_e('Field Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="checkout_toolkit_dm_field_label"
-                           name="checkout_toolkit_delivery_method_settings[field_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?>"
+                           id="marwchto_dm_field_label"
+                           name="marwchto_delivery_method_settings[field_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?>"
                            class="regular-text">
                     <p class="description">
                         <?php esc_html_e('Label shown above the toggle/radio options.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
@@ -82,15 +82,15 @@ defined('ABSPATH') || exit;
             <!-- Delivery Label -->
             <tr>
                 <th scope="row">
-                    <label for="checkout_toolkit_dm_delivery_label">
+                    <label for="marwchto_dm_delivery_label">
                         <?php esc_html_e('Delivery Option Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="checkout_toolkit_dm_delivery_label"
-                           name="checkout_toolkit_delivery_method_settings[delivery_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?>"
+                           id="marwchto_dm_delivery_label"
+                           name="marwchto_delivery_method_settings[delivery_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -98,15 +98,15 @@ defined('ABSPATH') || exit;
             <!-- Pickup Label -->
             <tr>
                 <th scope="row">
-                    <label for="checkout_toolkit_dm_pickup_label">
+                    <label for="marwchto_dm_pickup_label">
                         <?php esc_html_e('Pickup Option Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </th>
                 <td>
                     <input type="text"
-                           id="checkout_toolkit_dm_pickup_label"
-                           name="checkout_toolkit_delivery_method_settings[pickup_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?>"
+                           id="marwchto_dm_pickup_label"
+                           name="marwchto_delivery_method_settings[pickup_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -119,16 +119,16 @@ defined('ABSPATH') || exit;
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method_settings[show_as]"
+                               name="marwchto_delivery_method_settings[show_as]"
                                value="toggle"
-                               <?php checked(($checkout_toolkit_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle'); ?>>
+                               <?php checked(($marwchto_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle'); ?>>
                         <?php esc_html_e('Toggle buttons (side by side)', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method_settings[show_as]"
+                               name="marwchto_delivery_method_settings[show_as]"
                                value="radio"
-                               <?php checked(($checkout_toolkit_delivery_method_settings['show_as'] ?? 'toggle') === 'radio'); ?>>
+                               <?php checked(($marwchto_delivery_method_settings['show_as'] ?? 'toggle') === 'radio'); ?>>
                         <?php esc_html_e('Radio buttons (stacked)', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
@@ -142,16 +142,16 @@ defined('ABSPATH') || exit;
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_method_settings[show_in_admin]"
+                               name="marwchto_delivery_method_settings[show_in_admin]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_method_settings['show_in_admin'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_method_settings['show_in_admin'])); ?>>
                         <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_method_settings[show_in_emails]"
+                               name="marwchto_delivery_method_settings[show_in_emails]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_method_settings['show_in_emails'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_method_settings['show_in_emails'])); ?>>
                         <?php esc_html_e('Include in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
@@ -165,25 +165,25 @@ defined('ABSPATH') || exit;
         <p class="description"><?php esc_html_e('This is how the toggle will appear on checkout.', 'marwen-checkout-toolkit-for-woocommerce'); ?></p>
 
         <div class="wct-preview-content" style="margin-top: 15px;">
-            <h4 id="wct-preview-label"><?php echo esc_html($checkout_toolkit_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?></h4>
+            <h4 id="wct-preview-label"><?php echo esc_html($marwchto_delivery_method_settings['field_label'] ?? 'Fulfillment Method'); ?></h4>
 
-            <div id="wct-preview-toggle" style="<?php echo ($checkout_toolkit_delivery_method_settings['show_as'] ?? 'toggle') !== 'toggle' ? 'display:none;' : ''; ?>">
+            <div id="wct-preview-toggle" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') !== 'toggle' ? 'display:none;' : ''; ?>">
                 <div style="display: flex; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; max-width: 300px;">
                     <span style="flex: 1; text-align: center; padding: 12px 20px; background: #2271b1; color: #fff; font-weight: 500;" id="wct-preview-delivery-toggle">
-                        <?php echo esc_html($checkout_toolkit_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?>
+                        <?php echo esc_html($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?>
                     </span>
                     <span style="flex: 1; text-align: center; padding: 12px 20px; background: #f9f9f9; border-left: 1px solid #ddd; font-weight: 500;" id="wct-preview-pickup-toggle">
-                        <?php echo esc_html($checkout_toolkit_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?>
+                        <?php echo esc_html($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?>
                     </span>
                 </div>
             </div>
 
-            <div id="wct-preview-radio" style="<?php echo ($checkout_toolkit_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle' ? 'display:none;' : ''; ?>">
+            <div id="wct-preview-radio" style="<?php echo ($marwchto_delivery_method_settings['show_as'] ?? 'toggle') === 'toggle' ? 'display:none;' : ''; ?>">
                 <p style="margin: 5px 0;">
-                    <label><input type="radio" name="wct-preview-method" checked> <span id="wct-preview-delivery-radio"><?php echo esc_html($checkout_toolkit_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?></span></label>
+                    <label><input type="radio" name="wct-preview-method" checked> <span id="wct-preview-delivery-radio"><?php echo esc_html($marwchto_delivery_method_settings['delivery_label'] ?? 'Delivery'); ?></span></label>
                 </p>
                 <p style="margin: 5px 0;">
-                    <label><input type="radio" name="wct-preview-method"> <span id="wct-preview-pickup-radio"><?php echo esc_html($checkout_toolkit_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?></span></label>
+                    <label><input type="radio" name="wct-preview-method"> <span id="wct-preview-pickup-radio"><?php echo esc_html($marwchto_delivery_method_settings['pickup_label'] ?? 'Pickup'); ?></span></label>
                 </p>
             </div>
         </div>

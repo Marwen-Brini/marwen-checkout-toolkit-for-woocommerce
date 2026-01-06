@@ -50,8 +50,8 @@ class Settings
     public function register_settings(): void
     {
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_delivery_settings',
+            'marwchto_settings',
+            'marwchto_delivery_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_delivery_settings'],
@@ -60,8 +60,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_field_settings',
+            'marwchto_settings',
+            'marwchto_field_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_field_settings'],
@@ -70,8 +70,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_order_notes_settings',
+            'marwchto_settings',
+            'marwchto_order_notes_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_order_notes_settings'],
@@ -80,8 +80,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_field_2_settings',
+            'marwchto_settings',
+            'marwchto_field_2_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_field_2_settings'],
@@ -90,8 +90,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_delivery_method_settings',
+            'marwchto_settings',
+            'marwchto_delivery_method_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_delivery_method_settings'],
@@ -100,8 +100,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_delivery_instructions_settings',
+            'marwchto_settings',
+            'marwchto_delivery_instructions_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_delivery_instructions_settings'],
@@ -110,8 +110,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_time_window_settings',
+            'marwchto_settings',
+            'marwchto_time_window_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_time_window_settings'],
@@ -120,8 +120,8 @@ class Settings
         );
 
         register_setting(
-            'checkout_toolkit_settings',
-            'checkout_toolkit_store_locations_settings',
+            'marwchto_settings',
+            'marwchto_store_locations_settings',
             [
                 'type' => 'array',
                 'sanitize_callback' => [$this, 'sanitize_store_locations_settings'],
@@ -166,7 +166,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_field_2_settings', $this->get_default_field_2_settings());
+            return get_option('marwchto_field_2_settings', $this->get_default_field_2_settings());
         }
 
         $defaults = $this->get_default_field_2_settings();
@@ -220,7 +220,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_order_notes_settings', $this->get_default_order_notes_settings());
+            return get_option('marwchto_order_notes_settings', $this->get_default_order_notes_settings());
         }
 
         return [
@@ -259,7 +259,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_delivery_method_settings', $this->get_default_delivery_method_settings());
+            return get_option('marwchto_delivery_method_settings', $this->get_default_delivery_method_settings());
         }
 
         $defaults = $this->get_default_delivery_method_settings();
@@ -316,7 +316,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_delivery_instructions_settings', $this->get_default_delivery_instructions_settings());
+            return get_option('marwchto_delivery_instructions_settings', $this->get_default_delivery_instructions_settings());
         }
 
         $defaults = $this->get_default_delivery_instructions_settings();
@@ -367,7 +367,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_time_window_settings', $this->get_default_time_window_settings());
+            return get_option('marwchto_time_window_settings', $this->get_default_time_window_settings());
         }
 
         $defaults = $this->get_default_time_window_settings();
@@ -410,7 +410,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_store_locations_settings', $this->get_default_store_locations_settings());
+            return get_option('marwchto_store_locations_settings', $this->get_default_store_locations_settings());
         }
 
         $defaults = $this->get_default_store_locations_settings();
@@ -475,7 +475,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_delivery_settings', Main::get_instance()->get_default_delivery_settings());
+            return get_option('marwchto_delivery_settings', Main::get_instance()->get_default_delivery_settings());
         }
 
         $defaults = Main::get_instance()->get_default_delivery_settings();
@@ -511,7 +511,7 @@ class Settings
     {
         // Return current settings if input is null (saving from another tab).
         if ($input === null) {
-            return get_option('checkout_toolkit_field_settings', Main::get_instance()->get_default_field_settings());
+            return get_option('marwchto_field_settings', Main::get_instance()->get_default_field_settings());
         }
 
         $defaults = Main::get_instance()->get_default_field_settings();

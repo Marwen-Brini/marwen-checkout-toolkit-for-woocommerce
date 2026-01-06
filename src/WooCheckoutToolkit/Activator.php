@@ -74,12 +74,12 @@ class Activator
         $main = Main::get_instance();
 
         // Only set defaults if options don't exist
-        if (get_option('checkout_toolkit_delivery_settings') === false) {
-            add_option('checkout_toolkit_delivery_settings', $main->get_default_delivery_settings());
+        if (get_option('marwchto_delivery_settings') === false) {
+            add_option('marwchto_delivery_settings', $main->get_default_delivery_settings());
         }
 
-        if (get_option('checkout_toolkit_field_settings') === false) {
-            add_option('checkout_toolkit_field_settings', $main->get_default_field_settings());
+        if (get_option('marwchto_field_settings') === false) {
+            add_option('marwchto_field_settings', $main->get_default_field_settings());
         }
     }
 
@@ -88,10 +88,10 @@ class Activator
      */
     private static function set_activation_timestamp(): void
     {
-        if (get_option('checkout_toolkit_activated_at') === false) {
-            add_option('checkout_toolkit_activated_at', time());
+        if (get_option('marwchto_activated_at') === false) {
+            add_option('marwchto_activated_at', time());
         }
 
-        update_option('checkout_toolkit_version', MARWCHTO_VERSION);
+        update_option('marwchto_version', MARWCHTO_VERSION);
     }
 }

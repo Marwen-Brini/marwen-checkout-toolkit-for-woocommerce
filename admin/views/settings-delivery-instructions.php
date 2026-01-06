@@ -4,7 +4,7 @@
  *
  * @package CheckoutToolkitForWoo
  *
- * @var array $checkout_toolkit_delivery_instructions_settings Delivery instructions settings array.
+ * @var array $marwchto_delivery_instructions_settings Delivery instructions settings array.
  */
 
 defined('ABSPATH') || exit;
@@ -26,10 +26,10 @@ defined('ABSPATH') || exit;
                 <td>
                     <label>
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_instructions_settings[enabled]"
+                               name="marwchto_delivery_instructions_settings[enabled]"
                                id="wct-di-enabled"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['enabled'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_instructions_settings['enabled'])); ?>>
                         <?php esc_html_e('Show delivery instructions field on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <p class="description">
@@ -39,7 +39,7 @@ defined('ABSPATH') || exit;
             </tr>
         </tbody>
 
-        <tbody id="wct-di-options" class="<?php echo empty($checkout_toolkit_delivery_instructions_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
+        <tbody id="wct-di-options" class="<?php echo empty($marwchto_delivery_instructions_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
             <!-- Required -->
             <tr>
                 <th scope="row">
@@ -48,9 +48,9 @@ defined('ABSPATH') || exit;
                 <td>
                     <label>
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_instructions_settings[required]"
+                               name="marwchto_delivery_instructions_settings[required]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['required'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_instructions_settings['required'])); ?>>
                         <?php esc_html_e('Require customers to select or enter delivery instructions', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
@@ -66,8 +66,8 @@ defined('ABSPATH') || exit;
                 <td>
                     <input type="text"
                            id="wct_di_field_label"
-                           name="checkout_toolkit_delivery_instructions_settings[field_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?>"
+                           name="marwchto_delivery_instructions_settings[field_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?>"
                            class="regular-text">
                     <p class="description">
                         <?php esc_html_e('Main heading for the delivery instructions section.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
@@ -85,8 +85,8 @@ defined('ABSPATH') || exit;
                 <td>
                     <input type="text"
                            id="wct_di_preset_label"
-                           name="checkout_toolkit_delivery_instructions_settings[preset_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>"
+                           name="marwchto_delivery_instructions_settings[preset_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -103,21 +103,21 @@ defined('ABSPATH') || exit;
                     <div class="wct-preset-options-wrapper">
                         <div class="wct-preset-options-list">
                             <?php
-                            $checkout_toolkit_preset_options = $checkout_toolkit_delivery_instructions_settings['preset_options'] ?? [];
-                            if (empty($checkout_toolkit_preset_options)) {
-                                $checkout_toolkit_preset_options = [['value' => '', 'label' => '']];
+                            $marwchto_preset_options = $marwchto_delivery_instructions_settings['preset_options'] ?? [];
+                            if (empty($marwchto_preset_options)) {
+                                $marwchto_preset_options = [['value' => '', 'label' => '']];
                             }
-                            foreach ($checkout_toolkit_preset_options as $checkout_toolkit_index => $checkout_toolkit_option) :
+                            foreach ($marwchto_preset_options as $marwchto_index => $marwchto_option) :
                             ?>
                             <div class="wct-preset-option-row">
                                 <input type="text"
-                                       name="checkout_toolkit_delivery_instructions_settings[preset_options][<?php echo esc_attr($checkout_toolkit_index); ?>][label]"
-                                       value="<?php echo esc_attr($checkout_toolkit_option['label'] ?? ''); ?>"
+                                       name="marwchto_delivery_instructions_settings[preset_options][<?php echo esc_attr($marwchto_index); ?>][label]"
+                                       value="<?php echo esc_attr($marwchto_option['label'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Label (shown to customer)', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
                                 <input type="text"
-                                       name="checkout_toolkit_delivery_instructions_settings[preset_options][<?php echo esc_attr($checkout_toolkit_index); ?>][value]"
-                                       value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>"
+                                       name="marwchto_delivery_instructions_settings[preset_options][<?php echo esc_attr($marwchto_index); ?>][value]"
+                                       value="<?php echo esc_attr($marwchto_option['value'] ?? ''); ?>"
                                        placeholder="<?php esc_attr_e('Value (stored)', 'marwen-checkout-toolkit-for-woocommerce'); ?>"
                                        class="regular-text">
                                 <a href="#" class="button-link-delete wct-remove-preset-option" title="<?php esc_attr_e('Remove', 'marwen-checkout-toolkit-for-woocommerce'); ?>">&times;</a>
@@ -141,8 +141,8 @@ defined('ABSPATH') || exit;
                 <td>
                     <input type="text"
                            id="wct_di_custom_label"
-                           name="checkout_toolkit_delivery_instructions_settings[custom_label]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>"
+                           name="marwchto_delivery_instructions_settings[custom_label]"
+                           value="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>"
                            class="regular-text">
                     <p class="description">
                         <?php esc_html_e('Label for the optional custom text area.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
@@ -160,8 +160,8 @@ defined('ABSPATH') || exit;
                 <td>
                     <input type="text"
                            id="wct_di_custom_placeholder"
-                           name="checkout_toolkit_delivery_instructions_settings[custom_placeholder]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"
+                           name="marwchto_delivery_instructions_settings[custom_placeholder]"
+                           value="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"
                            class="regular-text">
                 </td>
             </tr>
@@ -176,8 +176,8 @@ defined('ABSPATH') || exit;
                 <td>
                     <input type="number"
                            id="wct_di_max_length"
-                           name="checkout_toolkit_delivery_instructions_settings[max_length]"
-                           value="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['max_length'] ?? 500); ?>"
+                           name="marwchto_delivery_instructions_settings[max_length]"
+                           value="<?php echo esc_attr($marwchto_delivery_instructions_settings['max_length'] ?? 500); ?>"
                            min="0"
                            max="10000"
                            class="small-text">
@@ -195,16 +195,16 @@ defined('ABSPATH') || exit;
                 <td>
                     <label style="display: block; margin-bottom: 8px;">
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_instructions_settings[show_in_admin]"
+                               name="marwchto_delivery_instructions_settings[show_in_admin]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['show_in_admin'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_instructions_settings['show_in_admin'])); ?>>
                         <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                     <label style="display: block;">
                         <input type="checkbox"
-                               name="checkout_toolkit_delivery_instructions_settings[show_in_emails]"
+                               name="marwchto_delivery_instructions_settings[show_in_emails]"
                                value="1"
-                               <?php checked(!empty($checkout_toolkit_delivery_instructions_settings['show_in_emails'])); ?>>
+                               <?php checked(!empty($marwchto_delivery_instructions_settings['show_in_emails'])); ?>>
                         <?php esc_html_e('Include in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                     </label>
                 </td>
@@ -218,21 +218,21 @@ defined('ABSPATH') || exit;
         <p class="description"><?php esc_html_e('This is how the delivery instructions will appear on checkout (when Delivery is selected).', 'marwen-checkout-toolkit-for-woocommerce'); ?></p>
 
         <div class="wct-preview-content" style="margin-top: 15px; max-width: 400px;">
-            <h4 id="wct-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($checkout_toolkit_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
+            <h4 id="wct-preview-field-label" style="margin-bottom: 15px;"><?php echo esc_html($marwchto_delivery_instructions_settings['field_label'] ?? 'Delivery Instructions'); ?></h4>
 
             <div style="margin-bottom: 15px;">
                 <label id="wct-preview-preset-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
-                    <?php echo esc_html($checkout_toolkit_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>
+                    <?php echo esc_html($marwchto_delivery_instructions_settings['preset_label'] ?? 'Common Instructions'); ?>
                 </label>
                 <select style="width: 100%; padding: 8px;" id="wct-preview-preset-select">
                     <option value=""><?php esc_html_e('Select an option...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
                     <?php
-                    $checkout_toolkit_preview_options = $checkout_toolkit_delivery_instructions_settings['preset_options'] ?? [];
-                    foreach ($checkout_toolkit_preview_options as $checkout_toolkit_option) :
-                        if (!empty($checkout_toolkit_option['label'])) :
+                    $marwchto_preview_options = $marwchto_delivery_instructions_settings['preset_options'] ?? [];
+                    foreach ($marwchto_preview_options as $marwchto_option) :
+                        if (!empty($marwchto_option['label'])) :
                     ?>
-                        <option value="<?php echo esc_attr($checkout_toolkit_option['value'] ?? ''); ?>">
-                            <?php echo esc_html($checkout_toolkit_option['label']); ?>
+                        <option value="<?php echo esc_attr($marwchto_option['value'] ?? ''); ?>">
+                            <?php echo esc_html($marwchto_option['label']); ?>
                         </option>
                     <?php
                         endif;
@@ -243,11 +243,11 @@ defined('ABSPATH') || exit;
 
             <div>
                 <label id="wct-preview-custom-label" style="display: block; margin-bottom: 5px; font-weight: 500;">
-                    <?php echo esc_html($checkout_toolkit_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>
+                    <?php echo esc_html($marwchto_delivery_instructions_settings['custom_label'] ?? 'Additional Instructions'); ?>
                 </label>
                 <textarea id="wct-preview-custom-textarea"
                           style="width: 100%; padding: 8px; min-height: 80px;"
-                          placeholder="<?php echo esc_attr($checkout_toolkit_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"></textarea>
+                          placeholder="<?php echo esc_attr($marwchto_delivery_instructions_settings['custom_placeholder'] ?? 'Any other delivery instructions...'); ?>"></textarea>
             </div>
         </div>
     </div>

@@ -39,12 +39,12 @@ class DeliveryManager
         add_action('admin_menu', [$this, 'add_menu_page'], 20);
 
         // AJAX handlers
-        add_action('wp_ajax_checkout_toolkit_update_delivery_status', [$this, 'ajax_update_status']);
-        add_action('wp_ajax_checkout_toolkit_bulk_update_status', [$this, 'ajax_bulk_update_status']);
-        add_action('wp_ajax_checkout_toolkit_get_calendar_data', [$this, 'ajax_get_calendar_data']);
+        add_action('wp_ajax_marwchto_update_delivery_status', [$this, 'ajax_update_status']);
+        add_action('wp_ajax_marwchto_bulk_update_status', [$this, 'ajax_bulk_update_status']);
+        add_action('wp_ajax_marwchto_get_calendar_data', [$this, 'ajax_get_calendar_data']);
 
         // Set default status when delivery date is saved
-        add_action('checkout_toolkit_delivery_date_saved', [$this, 'set_default_status'], 10, 2);
+        add_action('marwchto_delivery_date_saved', [$this, 'set_default_status'], 10, 2);
 
         // Add column to orders list
         add_filter('manage_edit-shop_order_columns', [$this, 'add_orders_column']);
@@ -208,7 +208,7 @@ class DeliveryManager
          * @param string $new_status New status key.
          * @param string $old_status Previous status key.
          */
-        do_action('checkout_toolkit_delivery_status_changed', $order->get_id(), $new_status, $old_status);
+        do_action('marwchto_delivery_status_changed', $order->get_id(), $new_status, $old_status);
 
         // Send customer email
         if ($send_email && $old_status !== $new_status) {
@@ -233,7 +233,7 @@ class DeliveryManager
          * @param \WC_Order $order Order object.
          * @param string $status Status key.
          */
-        $send = apply_filters('checkout_toolkit_send_delivery_status_email', true, $order, $status);
+        $send = apply_filters('marwchto_send_delivery_status_email', true, $order, $status);
 
         if (!$send) {
             return;
@@ -245,7 +245,7 @@ class DeliveryManager
          * @param \WC_Order $order Order object.
          * @param string $status Status key.
          */
-        do_action('checkout_toolkit_before_delivery_status_email', $order, $status);
+        do_action('marwchto_before_delivery_status_email', $order, $status);
 
         $to = $order->get_billing_email();
         $subject = DeliveryStatus::get_email_subject($status, $order);
@@ -289,10 +289,10 @@ class DeliveryManager
         }
 
         ob_start();
-        $checkout_toolkit_order = $order;
-        $checkout_toolkit_status = $status;
-        $checkout_toolkit_status_label = DeliveryStatus::get_label($status);
-        $checkout_toolkit_message = DeliveryStatus::get_email_message($status, $order);
+        $marwchto_order = $order;
+        $marwchto_status = $status;
+        $marwchto_status_label = DeliveryStatus::get_label($status);
+        $marwchto_message = DeliveryStatus::get_email_message($status, $order);
         include $template_path;
         return ob_get_clean();
     }
@@ -472,7 +472,7 @@ class DeliveryManager
         // Format date
         try {
             $date = new \DateTime($delivery_date);
-            $settings = get_option('checkout_toolkit_delivery_settings', []);
+            $settings = get_option('marwchto_delivery_settings', []);
             $format = $settings['date_format'] ?? 'M j';
             $formatted_date = date_i18n($format, $date->getTimestamp());
         } catch (\Exception $e) {

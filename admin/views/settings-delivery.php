@@ -7,10 +7,10 @@
 
 defined('ABSPATH') || exit;
 
-$checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
-$checkout_toolkit_positions = $checkout_toolkit_settings_obj->get_field_positions();
-$checkout_toolkit_date_formats = $checkout_toolkit_settings_obj->get_date_formats();
-$checkout_toolkit_weekdays = [
+$marwchto_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
+$marwchto_positions = $marwchto_settings_obj->get_field_positions();
+$marwchto_date_formats = $marwchto_settings_obj->get_date_formats();
+$marwchto_weekdays = [
     0 => __('Sunday', 'marwen-checkout-toolkit-for-woocommerce'),
     1 => __('Monday', 'marwen-checkout-toolkit-for-woocommerce'),
     2 => __('Tuesday', 'marwen-checkout-toolkit-for-woocommerce'),
@@ -31,9 +31,9 @@ $checkout_toolkit_weekdays = [
             <td>
                 <label>
                     <input type="checkbox"
-                           name="checkout_toolkit_delivery_settings[enabled]"
+                           name="marwchto_delivery_settings[enabled]"
                            value="1"
-                           <?php checked(!empty($checkout_toolkit_delivery_settings['enabled'])); ?>>
+                           <?php checked(!empty($marwchto_delivery_settings['enabled'])); ?>>
                     <?php esc_html_e('Show delivery date picker on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </td>
@@ -42,15 +42,15 @@ $checkout_toolkit_weekdays = [
         <!-- Field Label -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_delivery_label">
+                <label for="marwchto_delivery_label">
                     <?php esc_html_e('Field Label', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="text"
-                       id="checkout_toolkit_delivery_label"
-                       name="checkout_toolkit_delivery_settings[field_label]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['field_label'] ?? ''); ?>"
+                       id="marwchto_delivery_label"
+                       name="marwchto_delivery_settings[field_label]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['field_label'] ?? ''); ?>"
                        class="regular-text">
             </td>
         </tr>
@@ -63,9 +63,9 @@ $checkout_toolkit_weekdays = [
             <td>
                 <label>
                     <input type="checkbox"
-                           name="checkout_toolkit_delivery_settings[required]"
+                           name="marwchto_delivery_settings[required]"
                            value="1"
-                           <?php checked(!empty($checkout_toolkit_delivery_settings['required'])); ?>>
+                           <?php checked(!empty($marwchto_delivery_settings['required'])); ?>>
                     <?php esc_html_e('Make field required', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </td>
@@ -74,15 +74,15 @@ $checkout_toolkit_weekdays = [
         <!-- Minimum Lead Time -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_min_lead_days">
+                <label for="marwchto_min_lead_days">
                     <?php esc_html_e('Minimum Lead Time', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="number"
-                       id="checkout_toolkit_min_lead_days"
-                       name="checkout_toolkit_delivery_settings[min_lead_days]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['min_lead_days'] ?? 2); ?>"
+                       id="marwchto_min_lead_days"
+                       name="marwchto_delivery_settings[min_lead_days]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['min_lead_days'] ?? 2); ?>"
                        min="0"
                        max="365"
                        class="small-text">
@@ -96,15 +96,15 @@ $checkout_toolkit_weekdays = [
         <!-- Maximum Advance Booking -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_max_future_days">
+                <label for="marwchto_max_future_days">
                     <?php esc_html_e('Maximum Advance Booking', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="number"
-                       id="checkout_toolkit_max_future_days"
-                       name="checkout_toolkit_delivery_settings[max_future_days]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['max_future_days'] ?? 30); ?>"
+                       id="marwchto_max_future_days"
+                       name="marwchto_delivery_settings[max_future_days]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['max_future_days'] ?? 30); ?>"
                        min="1"
                        max="365"
                        class="small-text">
@@ -122,13 +122,13 @@ $checkout_toolkit_weekdays = [
             </th>
             <td>
                 <fieldset>
-                    <?php foreach ($checkout_toolkit_weekdays as $checkout_toolkit_day_num => $checkout_toolkit_day_name) : ?>
+                    <?php foreach ($marwchto_weekdays as $marwchto_day_num => $marwchto_day_name) : ?>
                         <label style="display: inline-block; margin-right: 15px; margin-bottom: 5px;">
                             <input type="checkbox"
-                                   name="checkout_toolkit_delivery_settings[disabled_weekdays][]"
-                                   value="<?php echo esc_attr($checkout_toolkit_day_num); ?>"
-                                   <?php checked(in_array($checkout_toolkit_day_num, $checkout_toolkit_delivery_settings['disabled_weekdays'] ?? [], false)); ?>>
-                            <?php echo esc_html($checkout_toolkit_day_name); ?>
+                                   name="marwchto_delivery_settings[disabled_weekdays][]"
+                                   value="<?php echo esc_attr($marwchto_day_num); ?>"
+                                   <?php checked(in_array($marwchto_day_num, $marwchto_delivery_settings['disabled_weekdays'] ?? [], false)); ?>>
+                            <?php echo esc_html($marwchto_day_name); ?>
                         </label>
                     <?php endforeach; ?>
                 </fieldset>
@@ -151,16 +151,16 @@ $checkout_toolkit_weekdays = [
         <!-- Date Format -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_date_format">
+                <label for="marwchto_date_format">
                     <?php esc_html_e('Date Format', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
-                <select id="checkout_toolkit_date_format" name="checkout_toolkit_delivery_settings[date_format]">
-                    <?php foreach ($checkout_toolkit_date_formats as $checkout_toolkit_format => $checkout_toolkit_example) : ?>
-                        <option value="<?php echo esc_attr($checkout_toolkit_format); ?>"
-                                <?php selected($checkout_toolkit_delivery_settings['date_format'] ?? 'F j, Y', $checkout_toolkit_format); ?>>
-                            <?php echo esc_html($checkout_toolkit_example); ?>
+                <select id="marwchto_date_format" name="marwchto_delivery_settings[date_format]">
+                    <?php foreach ($marwchto_date_formats as $marwchto_format => $marwchto_example) : ?>
+                        <option value="<?php echo esc_attr($marwchto_format); ?>"
+                                <?php selected($marwchto_delivery_settings['date_format'] ?? 'F j, Y', $marwchto_format); ?>>
+                            <?php echo esc_html($marwchto_example); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -175,16 +175,16 @@ $checkout_toolkit_weekdays = [
             <td>
                 <label style="margin-right: 15px;">
                     <input type="radio"
-                           name="checkout_toolkit_delivery_settings[first_day_of_week]"
+                           name="marwchto_delivery_settings[first_day_of_week]"
                            value="0"
-                           <?php checked(($checkout_toolkit_delivery_settings['first_day_of_week'] ?? 1) == 0); ?>>
+                           <?php checked(($marwchto_delivery_settings['first_day_of_week'] ?? 1) == 0); ?>>
                     <?php esc_html_e('Sunday', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
                 <label>
                     <input type="radio"
-                           name="checkout_toolkit_delivery_settings[first_day_of_week]"
+                           name="marwchto_delivery_settings[first_day_of_week]"
                            value="1"
-                           <?php checked(($checkout_toolkit_delivery_settings['first_day_of_week'] ?? 1) == 1); ?>>
+                           <?php checked(($marwchto_delivery_settings['first_day_of_week'] ?? 1) == 1); ?>>
                     <?php esc_html_e('Monday', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </td>
@@ -193,16 +193,16 @@ $checkout_toolkit_weekdays = [
         <!-- Field Position -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_delivery_position">
+                <label for="marwchto_delivery_position">
                     <?php esc_html_e('Field Position', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
-                <select id="checkout_toolkit_delivery_position" name="checkout_toolkit_delivery_settings[field_position]">
-                    <?php foreach ($checkout_toolkit_positions as $checkout_toolkit_hook => $checkout_toolkit_label) : ?>
-                        <option value="<?php echo esc_attr($checkout_toolkit_hook); ?>"
-                                <?php selected($checkout_toolkit_delivery_settings['field_position'] ?? 'woocommerce_after_order_notes', $checkout_toolkit_hook); ?>>
-                            <?php echo esc_html($checkout_toolkit_label); ?>
+                <select id="marwchto_delivery_position" name="marwchto_delivery_settings[field_position]">
+                    <?php foreach ($marwchto_positions as $marwchto_hook => $marwchto_label) : ?>
+                        <option value="<?php echo esc_attr($marwchto_hook); ?>"
+                                <?php selected($marwchto_delivery_settings['field_position'] ?? 'woocommerce_after_order_notes', $marwchto_hook); ?>>
+                            <?php echo esc_html($marwchto_label); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -217,16 +217,16 @@ $checkout_toolkit_weekdays = [
             <td>
                 <label style="display: block; margin-bottom: 8px;">
                     <input type="checkbox"
-                           name="checkout_toolkit_delivery_settings[show_in_admin]"
+                           name="marwchto_delivery_settings[show_in_admin]"
                            value="1"
-                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_in_admin'])); ?>>
+                           <?php checked(!empty($marwchto_delivery_settings['show_in_admin'])); ?>>
                     <?php esc_html_e('Show in admin order details', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
                 <label style="display: block;">
                     <input type="checkbox"
-                           name="checkout_toolkit_delivery_settings[show_in_emails]"
+                           name="marwchto_delivery_settings[show_in_emails]"
                            value="1"
-                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_in_emails'])); ?>>
+                           <?php checked(!empty($marwchto_delivery_settings['show_in_emails'])); ?>>
                     <?php esc_html_e('Include in order emails', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </td>
@@ -249,9 +249,9 @@ $checkout_toolkit_weekdays = [
             <td>
                 <label>
                     <input type="checkbox"
-                           name="checkout_toolkit_delivery_settings[show_estimated_delivery]"
+                           name="marwchto_delivery_settings[show_estimated_delivery]"
                            value="1"
-                           <?php checked(!empty($checkout_toolkit_delivery_settings['show_estimated_delivery'])); ?>>
+                           <?php checked(!empty($marwchto_delivery_settings['show_estimated_delivery'])); ?>>
                     <?php esc_html_e('Display estimated delivery date message on checkout', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </td>
@@ -260,15 +260,15 @@ $checkout_toolkit_weekdays = [
         <!-- Cutoff Time -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_cutoff_time">
+                <label for="marwchto_cutoff_time">
                     <?php esc_html_e('Order Cutoff Time', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="time"
-                       id="checkout_toolkit_cutoff_time"
-                       name="checkout_toolkit_delivery_settings[cutoff_time]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['cutoff_time'] ?? '14:00'); ?>"
+                       id="marwchto_cutoff_time"
+                       name="marwchto_delivery_settings[cutoff_time]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['cutoff_time'] ?? '14:00'); ?>"
                        class="regular-text"
                        style="width: 120px;">
                 <p class="description">
@@ -280,15 +280,15 @@ $checkout_toolkit_weekdays = [
         <!-- Before Cutoff Message -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_cutoff_message">
+                <label for="marwchto_cutoff_message">
                     <?php esc_html_e('Before Cutoff Message', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="text"
-                       id="checkout_toolkit_cutoff_message"
-                       name="checkout_toolkit_delivery_settings[cutoff_message]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['cutoff_message'] ?? 'Order by {time} for delivery as early as {date}'); ?>"
+                       id="marwchto_cutoff_message"
+                       name="marwchto_delivery_settings[cutoff_message]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['cutoff_message'] ?? 'Order by {time} for delivery as early as {date}'); ?>"
                        class="large-text">
                 <p class="description">
                     <?php esc_html_e('Message shown before cutoff time. Use {time} for cutoff time and {date} for earliest delivery date.', 'marwen-checkout-toolkit-for-woocommerce'); ?>
@@ -299,15 +299,15 @@ $checkout_toolkit_weekdays = [
         <!-- After Cutoff Message -->
         <tr>
             <th scope="row">
-                <label for="checkout_toolkit_estimated_message">
+                <label for="marwchto_estimated_message">
                     <?php esc_html_e('After Cutoff Message', 'marwen-checkout-toolkit-for-woocommerce'); ?>
                 </label>
             </th>
             <td>
                 <input type="text"
-                       id="checkout_toolkit_estimated_message"
-                       name="checkout_toolkit_delivery_settings[estimated_delivery_message]"
-                       value="<?php echo esc_attr($checkout_toolkit_delivery_settings['estimated_delivery_message'] ?? 'Order now for delivery as early as {date}'); ?>"
+                       id="marwchto_estimated_message"
+                       name="marwchto_delivery_settings[estimated_delivery_message]"
+                       value="<?php echo esc_attr($marwchto_delivery_settings['estimated_delivery_message'] ?? 'Order now for delivery as early as {date}'); ?>"
                        class="large-text">
                 <p class="description">
                     <?php esc_html_e('Message shown after cutoff time. Use {date} for earliest delivery date.', 'marwen-checkout-toolkit-for-woocommerce'); ?>

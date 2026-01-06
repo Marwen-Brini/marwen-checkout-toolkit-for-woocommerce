@@ -47,7 +47,7 @@ class AvailabilityChecker
             $current->modify('+1 day');
         }
 
-        return apply_filters('checkout_toolkit_available_dates', $available);
+        return apply_filters('marwchto_available_dates', $available);
     }
 
     /**
@@ -91,7 +91,7 @@ class AvailabilityChecker
             return false;
         }
 
-        return apply_filters('checkout_toolkit_is_date_available', true, $date);
+        return apply_filters('marwchto_is_date_available', true, $date);
     }
 
     /**
@@ -232,7 +232,7 @@ class AvailabilityChecker
     private function get_settings(): array
     {
         $defaults = \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings();
-        $settings = get_option('checkout_toolkit_delivery_settings', []);
+        $settings = get_option('marwchto_delivery_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 }

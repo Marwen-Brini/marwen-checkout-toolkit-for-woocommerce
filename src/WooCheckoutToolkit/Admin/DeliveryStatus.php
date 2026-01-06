@@ -47,7 +47,7 @@ class DeliveryStatus
          *
          * @param array $statuses Status key => label pairs.
          */
-        return apply_filters('checkout_toolkit_delivery_statuses', $statuses);
+        return apply_filters('marwchto_delivery_statuses', $statuses);
     }
 
     /**
@@ -97,7 +97,7 @@ class DeliveryStatus
          *
          * @param array $colors Status key => color config pairs.
          */
-        return apply_filters('checkout_toolkit_delivery_status_colors', $colors);
+        return apply_filters('marwchto_delivery_status_colors', $colors);
     }
 
     /**
@@ -247,7 +247,7 @@ class DeliveryStatus
         if ($delivery_date) {
             try {
                 $date = new \DateTime($delivery_date);
-                $settings = get_option('checkout_toolkit_delivery_settings', []);
+                $settings = get_option('marwchto_delivery_settings', []);
                 $format = $settings['date_format'] ?? 'F j, Y';
                 $formatted_date = date_i18n($format, $date->getTimestamp());
             } catch (\Exception $e) {

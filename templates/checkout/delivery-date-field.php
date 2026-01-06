@@ -14,14 +14,14 @@
 
 defined('ABSPATH') || exit;
 
-do_action('checkout_toolkit_before_delivery_date_field');
+do_action('marwchto_before_delivery_date_field');
 ?>
 
 <div class="checkout-toolkit-delivery-date-wrapper">
     <?php
     woocommerce_form_field(
-        'checkout_toolkit_delivery_date',
-        apply_filters('checkout_toolkit_delivery_date_field_args', [
+        'marwchto_delivery_date',
+        apply_filters('marwchto_delivery_date_field_args', [
             'type' => 'text',
             'label' => $settings['field_label'],
             'required' => $settings['required'],
@@ -35,8 +35,8 @@ do_action('checkout_toolkit_before_delivery_date_field');
         $field_value
     );
     ?>
-    <input type="hidden" name="checkout_toolkit_delivery_date_value" id="checkout_toolkit_delivery_date_value" value="" />
+    <input type="hidden" name="marwchto_delivery_date_value" id="marwchto_delivery_date_value" value="" />
 </div>
 
 <?php
-do_action('checkout_toolkit_after_delivery_date_field');
+do_action('marwchto_after_delivery_date_field');

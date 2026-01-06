@@ -36,13 +36,13 @@ class EmailDisplay
      */
     public function add_to_email(\WC_Order $order, bool $sent_to_admin, bool $plain_text, $email): void
     {
-        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
-        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
-        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
-        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $field_settings = get_option('checkout_toolkit_field_settings', []);
-        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
+        $delivery_method_settings = get_option('marwchto_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('marwchto_delivery_instructions_settings', []);
+        $time_window_settings = get_option('marwchto_time_window_settings', []);
+        $store_locations_settings = get_option('marwchto_store_locations_settings', []);
+        $delivery_settings = get_option('marwchto_delivery_settings', []);
+        $field_settings = get_option('marwchto_field_settings', []);
+        $field_2_settings = get_option('marwchto_field_2_settings', []);
 
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
@@ -263,7 +263,7 @@ class EmailDisplay
         if ($show_field) {
             $label = $field_settings['field_label'] ?? __('Special Instructions', 'marwen-checkout-toolkit-for-woocommerce');
             $output = $this->format_field_value($custom_field, $field_settings);
-            $output = apply_filters('checkout_toolkit_email_custom_field', $output, $order, $email);
+            $output = apply_filters('marwchto_email_custom_field', $output, $order, $email);
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';
@@ -274,7 +274,7 @@ class EmailDisplay
         if ($show_field_2) {
             $label = $field_2_settings['field_label'] ?? __('Additional Information', 'marwen-checkout-toolkit-for-woocommerce');
             $output = $this->format_field_value($custom_field_2, $field_2_settings);
-            $output = apply_filters('checkout_toolkit_email_custom_field_2', $output, $order, $email);
+            $output = apply_filters('marwchto_email_custom_field_2', $output, $order, $email);
 
             echo '<tr>';
             echo '<th style="text-align: left; padding: 12px; background-color: #f8f8f8;">' . esc_html($label) . '</th>';

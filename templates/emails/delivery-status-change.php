@@ -4,25 +4,25 @@
  *
  * @package WooCheckoutToolkit
  *
- * @var WC_Order $checkout_toolkit_order Order object.
- * @var string $checkout_toolkit_status Status key.
- * @var string $checkout_toolkit_status_label Status label.
- * @var string $checkout_toolkit_message Status message.
+ * @var WC_Order $marwchto_order Order object.
+ * @var string $marwchto_status Status key.
+ * @var string $marwchto_status_label Status label.
+ * @var string $marwchto_message Status message.
  */
 
 defined('ABSPATH') || exit;
 
-$checkout_toolkit_delivery_date = $checkout_toolkit_order->get_meta('_wct_delivery_date');
-$checkout_toolkit_formatted_date = '';
+$marwchto_delivery_date = $marwchto_order->get_meta('_wct_delivery_date');
+$marwchto_formatted_date = '';
 
-if ($checkout_toolkit_delivery_date) {
+if ($marwchto_delivery_date) {
     try {
-        $checkout_toolkit_date_obj = new DateTime($checkout_toolkit_delivery_date);
-        $checkout_toolkit_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $checkout_toolkit_format = $checkout_toolkit_settings['date_format'] ?? 'F j, Y';
-        $checkout_toolkit_formatted_date = date_i18n($checkout_toolkit_format, $checkout_toolkit_date_obj->getTimestamp());
+        $marwchto_date_obj = new DateTime($marwchto_delivery_date);
+        $marwchto_settings = get_option('marwchto_delivery_settings', []);
+        $marwchto_format = $marwchto_settings['date_format'] ?? 'F j, Y';
+        $marwchto_formatted_date = date_i18n($marwchto_format, $marwchto_date_obj->getTimestamp());
     } catch (Exception $e) {
-        $checkout_toolkit_formatted_date = $checkout_toolkit_delivery_date;
+        $marwchto_formatted_date = $marwchto_delivery_date;
     }
 }
 ?>
@@ -33,13 +33,13 @@ if ($checkout_toolkit_delivery_date) {
         printf(
             /* translators: %s: Customer first name */
             esc_html__('Hi %s,', 'marwen-checkout-toolkit-for-woocommerce'),
-            esc_html($checkout_toolkit_order->get_billing_first_name())
+            esc_html($marwchto_order->get_billing_first_name())
         );
         ?>
     </p>
 
     <p style="margin: 0 0 16px;">
-        <?php echo esc_html($checkout_toolkit_message); ?>
+        <?php echo esc_html($marwchto_message); ?>
     </p>
 </div>
 
@@ -54,16 +54,16 @@ if ($checkout_toolkit_delivery_date) {
                 <?php esc_html_e('Order Number:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
-                #<?php echo esc_html($checkout_toolkit_order->get_order_number()); ?>
+                #<?php echo esc_html($marwchto_order->get_order_number()); ?>
             </td>
         </tr>
-        <?php if ($checkout_toolkit_formatted_date) : ?>
+        <?php if ($marwchto_formatted_date) : ?>
         <tr>
             <td style="padding: 5px 0; color: #666;">
                 <?php esc_html_e('Delivery Date:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
-                <?php echo esc_html($checkout_toolkit_formatted_date); ?>
+                <?php echo esc_html($marwchto_formatted_date); ?>
             </td>
         </tr>
         <?php endif; ?>
@@ -72,7 +72,7 @@ if ($checkout_toolkit_delivery_date) {
                 <?php esc_html_e('Delivery Status:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0; font-weight: 600;">
-                <?php echo esc_html($checkout_toolkit_status_label); ?>
+                <?php echo esc_html($marwchto_status_label); ?>
             </td>
         </tr>
         <tr>
@@ -80,7 +80,7 @@ if ($checkout_toolkit_delivery_date) {
                 <?php esc_html_e('Delivery Address:', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </td>
             <td style="padding: 5px 0;">
-                <?php echo wp_kses_post($checkout_toolkit_order->get_formatted_shipping_address() ?: $checkout_toolkit_order->get_formatted_billing_address()); ?>
+                <?php echo wp_kses_post($marwchto_order->get_formatted_shipping_address() ?: $marwchto_order->get_formatted_billing_address()); ?>
             </td>
         </tr>
     </table>

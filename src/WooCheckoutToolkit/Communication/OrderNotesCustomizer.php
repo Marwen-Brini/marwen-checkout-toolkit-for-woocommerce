@@ -68,7 +68,7 @@ class OrderNotesCustomizer
     public function get_settings(): array
     {
         $defaults = $this->get_default_settings();
-        $settings = get_option('checkout_toolkit_order_notes_settings', []);
+        $settings = get_option('marwchto_order_notes_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 

@@ -71,7 +71,7 @@ class StoreLocationSelector
             return;
         }
 
-        $show = apply_filters('checkout_toolkit_show_store_location', true, WC()->cart);
+        $show = apply_filters('marwchto_show_store_location', true, WC()->cart);
 
         if (!$show) {
             return;
@@ -79,7 +79,7 @@ class StoreLocationSelector
 
         // Get current delivery method to determine initial visibility
         $delivery_method_settings = Main::get_instance()->get_delivery_method_settings();
-        $current_method = WC()->checkout->get_value('checkout_toolkit_delivery_method');
+        $current_method = WC()->checkout->get_value('marwchto_delivery_method');
         if (empty($current_method)) {
             $current_method = $delivery_method_settings['default_method'] ?? 'delivery';
         }
@@ -94,22 +94,22 @@ class StoreLocationSelector
             $initial_display = 'block';
         }
 
-        $current_location = WC()->checkout->get_value('checkout_toolkit_store_location') ?: '';
+        $current_location = WC()->checkout->get_value('marwchto_store_location') ?: '';
 
         $required = !empty($settings['required']);
         $required_attr = $required ? ' required' : '';
         $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-checkout-toolkit-for-woocommerce') . '">*</abbr>' : '';
 
-        do_action('checkout_toolkit_before_store_location');
+        do_action('marwchto_before_store_location');
         ?>
         <div class="wct-store-location-wrapper" id="wct-store-location-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <p class="form-row form-row-wide">
-                <label for="checkout_toolkit_store_location">
+                <label for="marwchto_store_location">
                     <?php echo esc_html($settings['field_label'] ?: __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce')); ?>
                     <?php echo wp_kses_post($required_mark); ?>
                 </label>
-                <select name="checkout_toolkit_store_location"
-                        id="checkout_toolkit_store_location"
+                <select name="marwchto_store_location"
+                        id="marwchto_store_location"
                         class="wct-store-location-select"
                         <?php echo esc_attr($required_attr); ?>>
                     <option value=""><?php esc_html_e('Select a location...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
@@ -144,7 +144,7 @@ class StoreLocationSelector
             </div>
         </div>
         <?php
-        do_action('checkout_toolkit_after_store_location');
+        do_action('marwchto_after_store_location');
     }
 
     /**
@@ -195,8 +195,8 @@ class StoreLocationSelector
             return 'delivery';
         }
 
-        $value = isset($_POST['checkout_toolkit_delivery_method'])
-            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_method']))
+        $value = isset($_POST['marwchto_delivery_method'])
+            ? sanitize_key(wp_unslash($_POST['marwchto_delivery_method']))
             : '';
 
         if (empty($value) || !in_array($value, ['delivery', 'pickup'], true)) {
@@ -224,8 +224,8 @@ class StoreLocationSelector
             return '';
         }
 
-        return isset($_POST['checkout_toolkit_store_location'])
-            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_store_location']))
+        return isset($_POST['marwchto_store_location'])
+            ? sanitize_key(wp_unslash($_POST['marwchto_store_location']))
             : '';
     }
 
@@ -258,7 +258,7 @@ class StoreLocationSelector
 
         if (!empty($store_location)) {
             $order->update_meta_data('_wct_store_location', $store_location);
-            do_action('checkout_toolkit_store_location_saved', $order->get_id(), $store_location);
+            do_action('marwchto_store_location_saved', $order->get_id(), $store_location);
         }
     }
 
@@ -270,7 +270,7 @@ class StoreLocationSelector
     public function get_settings(): array
     {
         $defaults = $this->get_default_settings();
-        $settings = get_option('checkout_toolkit_store_locations_settings', []);
+        $settings = get_option('marwchto_store_locations_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 

@@ -62,13 +62,13 @@ class DeliveryMethod
             return;
         }
 
-        $show = apply_filters('checkout_toolkit_show_delivery_method', true, WC()->cart);
+        $show = apply_filters('marwchto_show_delivery_method', true, WC()->cart);
 
         if (!$show) {
             return;
         }
 
-        $current_value = WC()->checkout->get_value('checkout_toolkit_delivery_method');
+        $current_value = WC()->checkout->get_value('marwchto_delivery_method');
         if (empty($current_value)) {
             $current_value = $settings['default_method'] ?? 'delivery';
         }
@@ -76,7 +76,7 @@ class DeliveryMethod
         $delivery_label = $settings['delivery_label'] ?: __('Delivery', 'marwen-checkout-toolkit-for-woocommerce');
         $pickup_label = $settings['pickup_label'] ?: __('Pickup', 'marwen-checkout-toolkit-for-woocommerce');
 
-        do_action('checkout_toolkit_before_delivery_method');
+        do_action('marwchto_before_delivery_method');
         ?>
         <div class="wct-delivery-method-wrapper" id="wct-delivery-method-wrapper">
             <h3><?php echo esc_html($settings['field_label'] ?: __('Fulfillment Method', 'marwen-checkout-toolkit-for-woocommerce')); ?></h3>
@@ -85,14 +85,14 @@ class DeliveryMethod
                 <div class="wct-delivery-method-toggle">
                     <label class="wct-toggle-option <?php echo $current_value === 'delivery' ? 'active' : ''; ?>">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method"
+                               name="marwchto_delivery_method"
                                value="delivery"
                                <?php checked($current_value, 'delivery'); ?>>
                         <span class="wct-toggle-label"><?php echo esc_html($delivery_label); ?></span>
                     </label>
                     <label class="wct-toggle-option <?php echo $current_value === 'pickup' ? 'active' : ''; ?>">
                         <input type="radio"
-                               name="checkout_toolkit_delivery_method"
+                               name="marwchto_delivery_method"
                                value="pickup"
                                <?php checked($current_value, 'pickup'); ?>>
                         <span class="wct-toggle-label"><?php echo esc_html($pickup_label); ?></span>
@@ -103,7 +103,7 @@ class DeliveryMethod
                     <p class="form-row">
                         <label class="wct-radio-option">
                             <input type="radio"
-                                   name="checkout_toolkit_delivery_method"
+                                   name="marwchto_delivery_method"
                                    value="delivery"
                                    <?php checked($current_value, 'delivery'); ?>>
                             <?php echo esc_html($delivery_label); ?>
@@ -112,7 +112,7 @@ class DeliveryMethod
                     <p class="form-row">
                         <label class="wct-radio-option">
                             <input type="radio"
-                                   name="checkout_toolkit_delivery_method"
+                                   name="marwchto_delivery_method"
                                    value="pickup"
                                    <?php checked($current_value, 'pickup'); ?>>
                             <?php echo esc_html($pickup_label); ?>
@@ -122,7 +122,7 @@ class DeliveryMethod
             <?php endif; ?>
         </div>
         <?php
-        do_action('checkout_toolkit_after_delivery_method');
+        do_action('marwchto_after_delivery_method');
     }
 
     /**
@@ -163,8 +163,8 @@ class DeliveryMethod
             return $this->settings['default_method'] ?? 'delivery';
         }
 
-        $value = isset($_POST['checkout_toolkit_delivery_method'])
-            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_method']))
+        $value = isset($_POST['marwchto_delivery_method'])
+            ? sanitize_key(wp_unslash($_POST['marwchto_delivery_method']))
             : '';
 
         // Default to delivery if not set
@@ -199,7 +199,7 @@ class DeliveryMethod
         if (in_array($value, ['delivery', 'pickup'], true)) {
             $order->update_meta_data('_wct_delivery_method', $value);
 
-            do_action('checkout_toolkit_delivery_method_saved', $order->get_id(), $value);
+            do_action('marwchto_delivery_method_saved', $order->get_id(), $value);
         }
     }
 
@@ -211,7 +211,7 @@ class DeliveryMethod
     public function get_settings(): array
     {
         $defaults = $this->get_default_settings();
-        $settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $settings = get_option('marwchto_delivery_method_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 

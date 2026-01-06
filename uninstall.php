@@ -16,13 +16,13 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 /**
  * Remove all plugin options
  */
-function checkout_toolkit_delete_options(): void
+function marwchto_delete_options(): void
 {
     $options = [
-        'checkout_toolkit_delivery_settings',
-        'checkout_toolkit_field_settings',
-        'checkout_toolkit_activated_at',
-        'checkout_toolkit_version',
+        'marwchto_delivery_settings',
+        'marwchto_field_settings',
+        'marwchto_activated_at',
+        'marwchto_version',
     ];
 
     foreach ($options as $option) {
@@ -33,7 +33,7 @@ function checkout_toolkit_delete_options(): void
 /**
  * Remove all plugin transients
  */
-function checkout_toolkit_delete_transients(): void
+function marwchto_delete_transients(): void
 {
     global $wpdb;
 
@@ -41,8 +41,8 @@ function checkout_toolkit_delete_transients(): void
     $wpdb->query(
         $wpdb->prepare(
             "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-            '_transient_checkout_toolkit_%',
-            '_transient_timeout_checkout_toolkit_%'
+            '_transient_marwchto_%',
+            '_transient_timeout_marwchto_%'
         )
     );
 }
@@ -51,7 +51,7 @@ function checkout_toolkit_delete_transients(): void
  * Remove order meta (optional - uncomment if desired)
  * Note: This removes customer data, so it's commented out by default
  */
-function checkout_toolkit_delete_order_meta(): void
+function marwchto_delete_order_meta(): void
 {
     global $wpdb;
 
@@ -84,11 +84,11 @@ function checkout_toolkit_delete_order_meta(): void
 }
 
 // Run cleanup
-checkout_toolkit_delete_options();
-checkout_toolkit_delete_transients();
+marwchto_delete_options();
+marwchto_delete_transients();
 
 // Uncomment the following line to also remove order meta data on uninstall
-// checkout_toolkit_delete_order_meta();
+// marwchto_delete_order_meta();
 
 // Clear object cache
 wp_cache_flush();

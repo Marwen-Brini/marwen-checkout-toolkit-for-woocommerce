@@ -7,19 +7,19 @@
 
 defined('ABSPATH') || exit;
 
-$checkout_toolkit_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
-$checkout_toolkit_delivery_settings = get_option('checkout_toolkit_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
-$checkout_toolkit_field_settings = get_option('checkout_toolkit_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
-$checkout_toolkit_field_2_settings = get_option('checkout_toolkit_field_2_settings', $checkout_toolkit_settings_obj->get_default_field_2_settings());
-$checkout_toolkit_order_notes_settings = get_option('checkout_toolkit_order_notes_settings', [
+$marwchto_settings_obj = new \WooCheckoutToolkit\Admin\Settings();
+$marwchto_delivery_settings = get_option('marwchto_delivery_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings());
+$marwchto_field_settings = get_option('marwchto_field_settings', \WooCheckoutToolkit\Main::get_instance()->get_default_field_settings());
+$marwchto_field_2_settings = get_option('marwchto_field_2_settings', $marwchto_settings_obj->get_default_field_2_settings());
+$marwchto_order_notes_settings = get_option('marwchto_order_notes_settings', [
     'enabled' => false,
     'custom_placeholder' => '',
     'custom_label' => '',
 ]);
-$checkout_toolkit_delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', $checkout_toolkit_settings_obj->get_default_delivery_method_settings());
-$checkout_toolkit_delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', $checkout_toolkit_settings_obj->get_default_delivery_instructions_settings());
-$checkout_toolkit_time_window_settings = get_option('checkout_toolkit_time_window_settings', $checkout_toolkit_settings_obj->get_default_time_window_settings());
-$checkout_toolkit_store_locations_settings = get_option('checkout_toolkit_store_locations_settings', $checkout_toolkit_settings_obj->get_default_store_locations_settings());
+$marwchto_delivery_method_settings = get_option('marwchto_delivery_method_settings', $marwchto_settings_obj->get_default_delivery_method_settings());
+$marwchto_delivery_instructions_settings = get_option('marwchto_delivery_instructions_settings', $marwchto_settings_obj->get_default_delivery_instructions_settings());
+$marwchto_time_window_settings = get_option('marwchto_time_window_settings', $marwchto_settings_obj->get_default_time_window_settings());
+$marwchto_store_locations_settings = get_option('marwchto_store_locations_settings', $marwchto_settings_obj->get_default_store_locations_settings());
 ?>
 
 <div class="wrap wct-settings-wrap">
@@ -57,7 +57,7 @@ $checkout_toolkit_store_locations_settings = get_option('checkout_toolkit_store_
     </nav>
 
     <form method="post" action="options.php" class="wct-settings-form">
-        <?php settings_fields('checkout_toolkit_settings'); ?>
+        <?php settings_fields('marwchto_settings'); ?>
 
         <?php if ($active_tab === 'delivery-method') : ?>
             <?php include MARWCHTO_PLUGIN_DIR . 'admin/views/settings-delivery-method.php'; ?>

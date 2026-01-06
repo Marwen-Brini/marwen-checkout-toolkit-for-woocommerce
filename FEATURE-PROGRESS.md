@@ -1,12 +1,23 @@
-# Checkout Toolkit Feature Expansion Progress
+# Marwen Checkout Toolkit Feature Expansion Progress
 
 ## Overview
 
-Comprehensive expansion of the Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
+Comprehensive expansion of the Marwen Checkout Toolkit for WooCommerce plugin with 10 new features organized into 4 phases. This document tracks implementation progress, technical details, and serves as a reference for continuing development.
 
 **Total Features:** 10
 **Completed:** 9
 **Progress:** 90%
+
+---
+
+## Plugin Status
+
+**Plugin Name:** Marwen Checkout Toolkit for WooCommerce
+**Text Domain:** `marwen-checkout-toolkit-for-woocommerce`
+**WordPress.org Submission:** Resubmitted after review fixes (January 4, 2026)
+**Slug Request:** Requested `marwen-checkout-toolkit-for-woocommerce`
+
+**Next Phase:** Pro version development (after approval)
 
 ---
 
@@ -1492,6 +1503,91 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2026-01-04 (Session 8) - WordPress.org Review Fixes
+
+**Review Response:** Addressed all issues from WordPress.org plugin review team.
+
+#### Issue 1: Plugin Name Too Generic
+- Renamed plugin from "Checkout Toolkit for WooCommerce" to "Marwen Checkout Toolkit for WooCommerce"
+- Changed text domain from `checkout-toolkit-for-woo` to `marwen-checkout-toolkit-for-woocommerce`
+- Renamed main plugin file to `marwen-checkout-toolkit-for-woocommerce.php`
+- Renamed plugin folder to `marwen-checkout-toolkit-for-woocommerce`
+- Updated composer.json package name
+- Renamed .pot translation file
+- Requested new slug reservation from WordPress.org
+
+#### Issue 2: Inline CSS/JS (17 instances)
+Moved all inline styles and scripts to external files:
+
+**Frontend (public/):**
+- Added CSS to `public/css/checkout.css` for:
+  - Delivery method toggle buttons
+  - Delivery instructions field
+  - Store location selector
+  - Time window field
+- Added JS methods to `public/js/checkout.js`:
+  - `initDeliveryMethodToggle()`
+  - `initDeliveryInstructions()`
+  - `initStoreLocationSelector()`
+  - `initTimeWindow()`
+  - `initDeliveryDateVisibility()`
+
+**Admin (admin/):**
+- Added CSS to `admin/css/admin.css` for:
+  - Select options wrapper
+  - Conditional fields
+  - Disabled field options
+  - Visibility options
+  - Store locations wrapper
+  - Preset options
+  - Dashboard widget
+- Added JS methods to `admin/js/admin.js`:
+  - `initFieldSettings()`
+  - `initDeliveryMethodSettings()`
+  - `initDeliveryInstructionsSettings()`
+  - `initStoreLocationsSettings()`
+  - `initTimeWindowSettings()`
+- Updated `Admin.php` to pass translations via `wp_localize_script()`
+
+**Files cleaned (inline CSS/JS removed):**
+- Frontend: DeliveryMethod.php, DeliveryInstructions.php, StoreLocationSelector.php, TimeWindow.php, DeliveryDate.php
+- Admin views: settings-fields.php, settings-store-locations.php, settings-delivery-instructions.php, settings-time-windows.php, settings-delivery-method.php, delivery-widget.php
+
+#### Issue 4: Sanitization Guards
+Added `is_array()` guards to prevent TypeErrors in sanitization callbacks:
+- `select_options`
+- `preset_options`
+- `time_slots`
+- `locations`
+- `disabled_weekdays`
+- `blocked_dates`
+- `visibility_products`
+- `visibility_categories`
+
+#### Issue 5: Missing Requires Plugins Header
+Added `Requires Plugins: woocommerce` to main plugin file header for WordPress 6.5+ dependency management.
+
+#### Production Cleanup
+Removed development files for WordPress.org submission:
+- `.gitignore`
+- `.git/`
+- `.claude/`
+- `DEVELOPER.md`, `FEATURE-PROGRESS.md`, `PROGRESS.md` (from production zip only)
+
+#### Plugin Check Results
+Final `wp plugin check` results:
+- **0 Errors**
+- **7 Warnings** (acceptable - slow DB queries for WooCommerce order meta)
+
+### 2025-12-28 (Session 7)
+- Submitted plugin to WordPress.org for review
+- Created production build:
+  - Removed `.git/`, `.gitignore`, `.idea/`, `vendor/`
+  - Created custom PSR-4 autoloader (`includes/autoload.php`)
+  - Plugin passes `wp plugin check` with 0 errors
+- Production copy at: `wp-content/plugins/checkout-toolkit-for-woo-production/`
+- Awaiting reviewer feedback before Pro version development
 
 ### 2025-12-26 (Session 6)
 - Completed Feature 9: Product/Category Field Visibility

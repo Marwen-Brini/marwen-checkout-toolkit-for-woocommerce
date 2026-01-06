@@ -73,12 +73,12 @@ class DeliveryDate
         }
 
         // Check if delivery method is enabled - if so, we need conditional visibility
-        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $delivery_method_settings = get_option('marwchto_delivery_method_settings', []);
         $delivery_method_enabled = !empty($delivery_method_settings['enabled']);
         $default_method = $delivery_method_settings['default_method'] ?? 'delivery';
         $initial_hidden = $delivery_method_enabled && $default_method === 'pickup';
 
-        do_action('checkout_toolkit_before_delivery_date_field');
+        do_action('marwchto_before_delivery_date_field');
 
         // Wrapper for conditional visibility
         $style = $initial_hidden ? 'display: none;' : '';
@@ -88,8 +88,8 @@ class DeliveryDate
         $this->render_estimated_delivery_message();
 
         woocommerce_form_field(
-            'checkout_toolkit_delivery_date',
-            apply_filters('checkout_toolkit_delivery_date_field_args', [
+            'marwchto_delivery_date',
+            apply_filters('marwchto_delivery_date_field_args', [
                 'type' => 'text',
                 'label' => $settings['field_label'],
                 'required' => $settings['required'],
@@ -100,15 +100,15 @@ class DeliveryDate
                     'data-wct-datepicker' => 'true',
                 ],
             ]),
-            WC()->checkout->get_value('checkout_toolkit_delivery_date')
+            WC()->checkout->get_value('marwchto_delivery_date')
         );
 
         // Hidden field for actual date value (Y-m-d format)
-        echo '<input type="hidden" name="checkout_toolkit_delivery_date_value" id="checkout_toolkit_delivery_date_value" value="" />';
+        echo '<input type="hidden" name="marwchto_delivery_date_value" id="marwchto_delivery_date_value" value="" />';
 
         echo '</div>';
 
-        do_action('checkout_toolkit_after_delivery_date_field');
+        do_action('marwchto_after_delivery_date_field');
     }
 
     /**
@@ -128,8 +128,8 @@ class DeliveryDate
             return;
         }
 
-        $date = isset($_POST['checkout_toolkit_delivery_date_value'])
-            ? sanitize_text_field(wp_unslash($_POST['checkout_toolkit_delivery_date_value']))
+        $date = isset($_POST['marwchto_delivery_date_value'])
+            ? sanitize_text_field(wp_unslash($_POST['marwchto_delivery_date_value']))
             : '';
 
         Logger::debug('Validating delivery date', ['date' => $date, 'required' => $settings['required']]);
@@ -164,7 +164,7 @@ class DeliveryDate
         }
 
         // Availability validation
-        $is_valid = apply_filters('checkout_toolkit_validate_delivery_date', true, $date);
+        $is_valid = apply_filters('marwchto_validate_delivery_date', true, $date);
 
         if ($is_valid && !$this->availability_checker->is_date_available($date)) {
             Logger::warning('Selected date not available', ['date' => $date]);
@@ -193,8 +193,8 @@ class DeliveryDate
         }
 
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by WooCommerce checkout.
-        $date = isset($_POST['checkout_toolkit_delivery_date_value'])
-            ? sanitize_text_field(wp_unslash($_POST['checkout_toolkit_delivery_date_value'])) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $date = isset($_POST['marwchto_delivery_date_value'])
+            ? sanitize_text_field(wp_unslash($_POST['marwchto_delivery_date_value'])) // phpcs:ignore WordPress.Security.NonceVerification.Missing
             : '';
 
         if (!empty($date) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
@@ -205,7 +205,7 @@ class DeliveryDate
                 'delivery_date' => $date,
             ]);
 
-            do_action('checkout_toolkit_delivery_date_saved', $order->get_id(), $date);
+            do_action('marwchto_delivery_date_saved', $order->get_id(), $date);
         }
     }
 
@@ -256,7 +256,7 @@ class DeliveryDate
     private function get_settings(): array
     {
         $defaults = \WooCheckoutToolkit\Main::get_instance()->get_default_delivery_settings();
-        $settings = get_option('checkout_toolkit_delivery_settings', []);
+        $settings = get_option('marwchto_delivery_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 }

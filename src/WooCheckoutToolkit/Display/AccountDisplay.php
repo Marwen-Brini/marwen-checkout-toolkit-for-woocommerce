@@ -31,13 +31,13 @@ class AccountDisplay
      */
     public function display_in_order_details(\WC_Order $order): void
     {
-        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
-        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
-        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
-        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $field_settings = get_option('checkout_toolkit_field_settings', []);
-        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
+        $delivery_method_settings = get_option('marwchto_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('marwchto_delivery_instructions_settings', []);
+        $time_window_settings = get_option('marwchto_time_window_settings', []);
+        $store_locations_settings = get_option('marwchto_store_locations_settings', []);
+        $delivery_settings = get_option('marwchto_delivery_settings', []);
+        $field_settings = get_option('marwchto_field_settings', []);
+        $field_2_settings = get_option('marwchto_field_2_settings', []);
 
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
@@ -62,7 +62,7 @@ class AccountDisplay
         }
 
         // Check order status
-        $display_statuses = apply_filters('checkout_toolkit_display_order_statuses', ['completed', 'processing', 'on-hold', 'pending']);
+        $display_statuses = apply_filters('marwchto_display_order_statuses', ['completed', 'processing', 'on-hold', 'pending']);
 
         if (!in_array($order->get_status(), $display_statuses, true)) {
             return;

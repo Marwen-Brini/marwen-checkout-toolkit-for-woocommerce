@@ -30,13 +30,13 @@ use WooCheckoutToolkit\Admin\DeliveryStatus;
         <div class="wct-widget-breakdown">
             <h4><?php esc_html_e("Today's Status Breakdown", 'marwen-checkout-toolkit-for-woocommerce'); ?></h4>
             <ul class="wct-status-list">
-                <?php foreach ($status_counts as $checkout_toolkit_status => $checkout_toolkit_count) : ?>
+                <?php foreach ($status_counts as $marwchto_status => $marwchto_count) : ?>
                     <li>
                         <?php
                         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Badge HTML is escaped in get_badge_html
-                        echo DeliveryStatus::get_badge_html($checkout_toolkit_status);
+                        echo DeliveryStatus::get_badge_html($marwchto_status);
                         ?>
-                        <span class="status-count"><?php echo esc_html($checkout_toolkit_count); ?></span>
+                        <span class="status-count"><?php echo esc_html($marwchto_count); ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>

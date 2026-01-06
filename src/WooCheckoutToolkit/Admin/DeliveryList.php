@@ -390,7 +390,7 @@ class DeliveryList extends \WP_List_Table
 
         try {
             $date = new \DateTime($delivery_date);
-            $settings = get_option('checkout_toolkit_delivery_settings', []);
+            $settings = get_option('marwchto_delivery_settings', []);
             $format = $settings['date_format'] ?? 'F j, Y';
             $formatted = date_i18n($format, $date->getTimestamp());
 

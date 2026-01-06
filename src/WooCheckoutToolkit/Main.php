@@ -428,7 +428,7 @@ final class Main
     public function get_delivery_method_settings(): array
     {
         $defaults = $this->get_default_delivery_method_settings();
-        $settings = get_option('checkout_toolkit_delivery_method_settings', []);
+        $settings = get_option('marwchto_delivery_method_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -462,7 +462,7 @@ final class Main
     public function get_delivery_instructions_settings(): array
     {
         $defaults = $this->get_default_delivery_instructions_settings();
-        $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $settings = get_option('marwchto_delivery_instructions_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -492,7 +492,7 @@ final class Main
     public function get_time_window_settings(): array
     {
         $defaults = $this->get_default_time_window_settings();
-        $settings = get_option('checkout_toolkit_time_window_settings', []);
+        $settings = get_option('marwchto_time_window_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -517,7 +517,7 @@ final class Main
     public function get_store_locations_settings(): array
     {
         $defaults = $this->get_default_store_locations_settings();
-        $settings = get_option('checkout_toolkit_store_locations_settings', []);
+        $settings = get_option('marwchto_store_locations_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -551,7 +551,7 @@ final class Main
     public function get_field_2_settings(): array
     {
         $defaults = $this->get_default_field_2_settings();
-        $settings = get_option('checkout_toolkit_field_2_settings', []);
+        $settings = get_option('marwchto_field_2_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -676,7 +676,7 @@ final class Main
                 'showCounter' => true,
             ],
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('checkout_toolkit_checkout'),
+            'nonce' => wp_create_nonce('marwchto_checkout'),
             'i18n' => [
                 'selectDate' => __('Select a date', 'marwen-checkout-toolkit-for-woocommerce'),
                 'charactersRemaining' => __('characters remaining', 'marwen-checkout-toolkit-for-woocommerce'),
@@ -701,7 +701,7 @@ final class Main
             ]);
         }
 
-        return apply_filters('checkout_toolkit_frontend_config', $config);
+        return apply_filters('marwchto_frontend_config', $config);
     }
 
     /**
@@ -807,7 +807,7 @@ final class Main
     public function get_delivery_settings(): array
     {
         $defaults = $this->get_default_delivery_settings();
-        $settings = get_option('checkout_toolkit_delivery_settings', []);
+        $settings = get_option('marwchto_delivery_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -817,7 +817,7 @@ final class Main
     public function get_field_settings(): array
     {
         $defaults = $this->get_default_field_settings();
-        $settings = get_option('checkout_toolkit_field_settings', []);
+        $settings = get_option('marwchto_field_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
@@ -839,7 +839,7 @@ final class Main
     public function get_order_notes_settings(): array
     {
         $defaults = $this->get_default_order_notes_settings();
-        $settings = get_option('checkout_toolkit_order_notes_settings', []);
+        $settings = get_option('marwchto_order_notes_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 }

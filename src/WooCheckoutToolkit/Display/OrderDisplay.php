@@ -42,13 +42,13 @@ class OrderDisplay
             return;
         }
 
-        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
-        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
-        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
-        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $field_settings = get_option('checkout_toolkit_field_settings', []);
-        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
+        $delivery_method_settings = get_option('marwchto_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('marwchto_delivery_instructions_settings', []);
+        $time_window_settings = get_option('marwchto_time_window_settings', []);
+        $store_locations_settings = get_option('marwchto_store_locations_settings', []);
+        $delivery_settings = get_option('marwchto_delivery_settings', []);
+        $field_settings = get_option('marwchto_field_settings', []);
+        $field_2_settings = get_option('marwchto_field_2_settings', []);
 
         $delivery_method = $order->get_meta('_wct_delivery_method');
         $delivery_instructions_preset = $order->get_meta('_wct_delivery_instructions_preset');
@@ -120,7 +120,7 @@ class OrderDisplay
         // Display custom field
         if ($custom_field !== '' && !empty($field_settings['show_in_admin'])) {
             $output = $this->format_field_value($custom_field, $field_settings);
-            $output = apply_filters('checkout_toolkit_display_custom_field', $output, $order);
+            $output = apply_filters('marwchto_display_custom_field', $output, $order);
             echo '<p><strong>' . esc_html($field_settings['field_label'] ?? __('Special Instructions', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
@@ -128,12 +128,12 @@ class OrderDisplay
         // Display custom field 2
         if ($custom_field_2 !== '' && !empty($field_2_settings['show_in_admin'])) {
             $output = $this->format_field_value($custom_field_2, $field_2_settings);
-            $output = apply_filters('checkout_toolkit_display_custom_field_2', $output, $order);
+            $output = apply_filters('marwchto_display_custom_field_2', $output, $order);
             echo '<p><strong>' . esc_html($field_2_settings['field_label'] ?? __('Additional Information', 'marwen-checkout-toolkit-for-woocommerce')) . ':</strong><br>';
             echo nl2br(esc_html($output)) . '</p>';
         }
 
-        do_action('checkout_toolkit_after_admin_order_display', $order);
+        do_action('marwchto_after_admin_order_display', $order);
     }
 
     /**
@@ -147,7 +147,7 @@ class OrderDisplay
             : 'shop_order';
 
         add_meta_box(
-            'checkout_toolkit_order_details',
+            'marwchto_order_details',
             __('Checkout Toolkit Details', 'marwen-checkout-toolkit-for-woocommerce'),
             [$this, 'render_meta_box'],
             $screen,
@@ -181,13 +181,13 @@ class OrderDisplay
             return;
         }
 
-        $delivery_method_settings = get_option('checkout_toolkit_delivery_method_settings', []);
-        $delivery_instructions_settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
-        $time_window_settings = get_option('checkout_toolkit_time_window_settings', []);
-        $store_locations_settings = get_option('checkout_toolkit_store_locations_settings', []);
-        $delivery_settings = get_option('checkout_toolkit_delivery_settings', []);
-        $field_settings = get_option('checkout_toolkit_field_settings', []);
-        $field_2_settings = get_option('checkout_toolkit_field_2_settings', []);
+        $delivery_method_settings = get_option('marwchto_delivery_method_settings', []);
+        $delivery_instructions_settings = get_option('marwchto_delivery_instructions_settings', []);
+        $time_window_settings = get_option('marwchto_time_window_settings', []);
+        $store_locations_settings = get_option('marwchto_store_locations_settings', []);
+        $delivery_settings = get_option('marwchto_delivery_settings', []);
+        $field_settings = get_option('marwchto_field_settings', []);
+        $field_2_settings = get_option('marwchto_field_2_settings', []);
 
         echo '<div class="wct-order-delivery-meta">';
 

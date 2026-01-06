@@ -65,7 +65,7 @@ class DeliveryInstructions
             return;
         }
 
-        $show = apply_filters('checkout_toolkit_show_delivery_instructions', true, WC()->cart);
+        $show = apply_filters('marwchto_show_delivery_instructions', true, WC()->cart);
 
         if (!$show) {
             return;
@@ -73,7 +73,7 @@ class DeliveryInstructions
 
         // Get current delivery method to determine initial visibility
         $delivery_method_settings = Main::get_instance()->get_delivery_method_settings();
-        $current_method = WC()->checkout->get_value('checkout_toolkit_delivery_method');
+        $current_method = WC()->checkout->get_value('marwchto_delivery_method');
         if (empty($current_method)) {
             $current_method = $delivery_method_settings['default_method'] ?? 'delivery';
         }
@@ -88,15 +88,15 @@ class DeliveryInstructions
             $initial_display = 'none';
         }
 
-        $current_preset = WC()->checkout->get_value('checkout_toolkit_delivery_instructions_preset') ?: '';
-        $current_custom = WC()->checkout->get_value('checkout_toolkit_delivery_instructions_custom') ?: '';
+        $current_preset = WC()->checkout->get_value('marwchto_delivery_instructions_preset') ?: '';
+        $current_custom = WC()->checkout->get_value('marwchto_delivery_instructions_custom') ?: '';
 
         $preset_options = $settings['preset_options'] ?? [];
         $required = !empty($settings['required']);
         $required_attr = $required ? ' required' : '';
         $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-checkout-toolkit-for-woocommerce') . '">*</abbr>' : '';
 
-        do_action('checkout_toolkit_before_delivery_instructions');
+        do_action('marwchto_before_delivery_instructions');
         ?>
         <div class="wct-delivery-instructions-wrapper" id="wct-delivery-instructions-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <h3>
@@ -106,11 +106,11 @@ class DeliveryInstructions
 
             <!-- Preset Dropdown -->
             <p class="form-row form-row-wide">
-                <label for="checkout_toolkit_delivery_instructions_preset">
+                <label for="marwchto_delivery_instructions_preset">
                     <?php echo esc_html($settings['preset_label'] ?: __('Common Instructions', 'marwen-checkout-toolkit-for-woocommerce')); ?>
                 </label>
-                <select name="checkout_toolkit_delivery_instructions_preset"
-                        id="checkout_toolkit_delivery_instructions_preset"
+                <select name="marwchto_delivery_instructions_preset"
+                        id="marwchto_delivery_instructions_preset"
                         class="wct-delivery-instructions-preset"
                         <?php echo esc_attr($required_attr); ?>>
                     <option value=""><?php esc_html_e('Select an option...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
@@ -127,11 +127,11 @@ class DeliveryInstructions
 
             <!-- Custom Textarea -->
             <p class="form-row form-row-wide">
-                <label for="checkout_toolkit_delivery_instructions_custom">
+                <label for="marwchto_delivery_instructions_custom">
                     <?php echo esc_html($settings['custom_label'] ?: __('Additional Instructions', 'marwen-checkout-toolkit-for-woocommerce')); ?>
                 </label>
-                <textarea name="checkout_toolkit_delivery_instructions_custom"
-                          id="checkout_toolkit_delivery_instructions_custom"
+                <textarea name="marwchto_delivery_instructions_custom"
+                          id="marwchto_delivery_instructions_custom"
                           class="wct-delivery-instructions-custom"
                           placeholder="<?php echo esc_attr($settings['custom_placeholder'] ?: ''); ?>"
                           rows="3"
@@ -145,7 +145,7 @@ class DeliveryInstructions
             </p>
         </div>
         <?php
-        do_action('checkout_toolkit_after_delivery_instructions');
+        do_action('marwchto_after_delivery_instructions');
     }
 
     /**
@@ -199,8 +199,8 @@ class DeliveryInstructions
             return 'delivery';
         }
 
-        $value = isset($_POST['checkout_toolkit_delivery_method'])
-            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_method']))
+        $value = isset($_POST['marwchto_delivery_method'])
+            ? sanitize_key(wp_unslash($_POST['marwchto_delivery_method']))
             : '';
 
         if (empty($value) || !in_array($value, ['delivery', 'pickup'], true)) {
@@ -228,8 +228,8 @@ class DeliveryInstructions
             return '';
         }
 
-        return isset($_POST['checkout_toolkit_delivery_instructions_preset'])
-            ? sanitize_key(wp_unslash($_POST['checkout_toolkit_delivery_instructions_preset']))
+        return isset($_POST['marwchto_delivery_instructions_preset'])
+            ? sanitize_key(wp_unslash($_POST['marwchto_delivery_instructions_preset']))
             : '';
     }
 
@@ -249,8 +249,8 @@ class DeliveryInstructions
             return '';
         }
 
-        $value = isset($_POST['checkout_toolkit_delivery_instructions_custom'])
-            ? sanitize_textarea_field(wp_unslash($_POST['checkout_toolkit_delivery_instructions_custom']))
+        $value = isset($_POST['marwchto_delivery_instructions_custom'])
+            ? sanitize_textarea_field(wp_unslash($_POST['marwchto_delivery_instructions_custom']))
             : '';
 
         // Apply max length
@@ -293,13 +293,13 @@ class DeliveryInstructions
         // Save preset value
         if (!empty($preset)) {
             $order->update_meta_data('_wct_delivery_instructions_preset', $preset);
-            do_action('checkout_toolkit_delivery_instructions_preset_saved', $order->get_id(), $preset);
+            do_action('marwchto_delivery_instructions_preset_saved', $order->get_id(), $preset);
         }
 
         // Save custom value
         if (!empty($custom)) {
             $order->update_meta_data('_wct_delivery_instructions_custom', $custom);
-            do_action('checkout_toolkit_delivery_instructions_custom_saved', $order->get_id(), $custom);
+            do_action('marwchto_delivery_instructions_custom_saved', $order->get_id(), $custom);
         }
     }
 
@@ -311,7 +311,7 @@ class DeliveryInstructions
     public function get_settings(): array
     {
         $defaults = $this->get_default_settings();
-        $settings = get_option('checkout_toolkit_delivery_instructions_settings', []);
+        $settings = get_option('marwchto_delivery_instructions_settings', []);
         return wp_parse_args($settings, $defaults);
     }
 
