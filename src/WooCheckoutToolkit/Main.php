@@ -301,7 +301,7 @@ final class Main
 
         // Pass settings to JavaScript
         $script_data = $this->get_blocks_script_data();
-        wp_localize_script('checkout-toolkit-blocks', 'checkoutToolkitData', $script_data);
+        wp_localize_script('checkout-toolkit-blocks', 'marwchtoData', $script_data);
 
         // Blocks checkout styles
         wp_enqueue_style(
@@ -655,7 +655,7 @@ final class Main
         );
 
         // Localize script with configuration
-        wp_localize_script('wct-checkout', 'wctConfig', $this->get_frontend_config());
+        wp_localize_script('wct-checkout', 'marwchtoConfig', $this->get_frontend_config());
     }
 
     /**

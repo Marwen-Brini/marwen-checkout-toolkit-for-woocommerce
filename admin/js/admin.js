@@ -53,7 +53,7 @@
                 const date = $input.data('selected-date') || $input.val();
 
                 if (!date) {
-                    alert(wctAdmin.i18n.selectDate || 'Please select a date');
+                    alert(marwchtoAdmin.i18n.selectDate || 'Please select a date');
                     return;
                 }
 
@@ -75,7 +75,7 @@
 
             // Remove date button
             $('#checkout_toolkit_blocked_dates_list').on('click', '.wct-remove-date', function() {
-                if (confirm(wctAdmin.i18n.confirmRemove || 'Are you sure?')) {
+                if (confirm(marwchtoAdmin.i18n.confirmRemove || 'Are you sure?')) {
                     $(this).closest('.wct-blocked-date-item').fadeOut(200, function() {
                         $(this).remove();
                         self.updateNoDateMessage();
@@ -166,9 +166,9 @@
                 var index = wrapper.find('.wct-select-option-row').length;
 
                 var newRow = '<div class="wct-select-option-row">' +
-                    '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="' + (wctAdmin.i18n.label || 'Label') + '" class="regular-text">' +
-                    '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="' + (wctAdmin.i18n.value || 'Value') + '" class="regular-text">' +
-                    '<a href="#" class="button-link-delete wct-remove-option" title="' + (wctAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
+                    '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.label || 'Label') + '" class="regular-text">' +
+                    '<input type="text" name="' + optionName + '[select_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.value || 'Value') + '" class="regular-text">' +
+                    '<a href="#" class="button-link-delete wct-remove-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
                     '</div>';
 
                 wrapper.append(newRow);
@@ -242,7 +242,7 @@
                                     return {
                                         term: params.term,
                                         action: $el.data('action'),
-                                        security: wctAdmin.nonces.searchProducts || ''
+                                        security: marwchtoAdmin.nonces.searchProducts || ''
                                     };
                                 },
                                 processResults: function(data) {
@@ -337,9 +337,9 @@
                 var index = wrapper.find('.wct-preset-option-row').length;
 
                 var newRow = '<div class="wct-preset-option-row">' +
-                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (wctAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
-                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="' + (wctAdmin.i18n.valueStored || 'Value (stored)') + '" class="regular-text">' +
-                    '<a href="#" class="button-link-delete wct-remove-preset-option" title="' + (wctAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
+                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
+                    '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][value]" value="" placeholder="' + (marwchtoAdmin.i18n.valueStored || 'Value (stored)') + '" class="regular-text">' +
+                    '<a href="#" class="button-link-delete wct-remove-preset-option" title="' + (marwchtoAdmin.i18n.remove || 'Remove') + '">&times;</a>' +
                     '</div>';
 
                 wrapper.append(newRow);
@@ -390,31 +390,31 @@
 
                 var newRow = '<div class="wct-location-row">' +
                     '<div class="wct-location-header">' +
-                        '<h4>' + (wctAdmin.i18n.location || 'Location') + ' <span class="wct-location-number">' + (index + 1) + '</span></h4>' +
-                        '<a href="#" class="button-link-delete wct-remove-location" title="' + (wctAdmin.i18n.removeLocation || 'Remove location') + '">' +
-                            (wctAdmin.i18n.remove || 'Remove') +
+                        '<h4>' + (marwchtoAdmin.i18n.location || 'Location') + ' <span class="wct-location-number">' + (index + 1) + '</span></h4>' +
+                        '<a href="#" class="button-link-delete wct-remove-location" title="' + (marwchtoAdmin.i18n.removeLocation || 'Remove location') + '">' +
+                            (marwchtoAdmin.i18n.remove || 'Remove') +
                         '</a>' +
                     '</div>' +
                     '<div class="wct-location-fields">' +
                         '<div class="wct-location-field">' +
-                            '<label>' + (wctAdmin.i18n.locationId || 'Location ID') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][id]" value="" placeholder="' + (wctAdmin.i18n.locationIdPlaceholder || 'e.g., main-store (auto-generated if empty)') + '">' +
+                            '<label>' + (marwchtoAdmin.i18n.locationId || 'Location ID') + '</label>' +
+                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][id]" value="" placeholder="' + (marwchtoAdmin.i18n.locationIdPlaceholder || 'e.g., main-store (auto-generated if empty)') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
-                            '<label>' + (wctAdmin.i18n.storeName || 'Store Name') + ' <span style="color: #d63638;">*</span></label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (wctAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="wct-location-name">' +
+                            '<label>' + (marwchtoAdmin.i18n.storeName || 'Store Name') + ' <span style="color: #d63638;">*</span></label>' +
+                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][name]" value="" placeholder="' + (marwchtoAdmin.i18n.storeNamePlaceholder || 'Store name (required)') + '" class="wct-location-name">' +
                         '</div>' +
                         '<div class="wct-location-field full-width">' +
-                            '<label>' + (wctAdmin.i18n.address || 'Address') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][address]" value="" placeholder="' + (wctAdmin.i18n.fullAddress || 'Full address') + '">' +
+                            '<label>' + (marwchtoAdmin.i18n.address || 'Address') + '</label>' +
+                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][address]" value="" placeholder="' + (marwchtoAdmin.i18n.fullAddress || 'Full address') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
-                            '<label>' + (wctAdmin.i18n.phone || 'Phone') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][phone]" value="" placeholder="' + (wctAdmin.i18n.phoneNumber || 'Phone number') + '">' +
+                            '<label>' + (marwchtoAdmin.i18n.phone || 'Phone') + '</label>' +
+                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][phone]" value="" placeholder="' + (marwchtoAdmin.i18n.phoneNumber || 'Phone number') + '">' +
                         '</div>' +
                         '<div class="wct-location-field">' +
-                            '<label>' + (wctAdmin.i18n.hours || 'Hours') + '</label>' +
-                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][hours]" value="" placeholder="' + (wctAdmin.i18n.hoursPlaceholder || 'e.g., Mon-Fri: 9am-6pm') + '">' +
+                            '<label>' + (marwchtoAdmin.i18n.hours || 'Hours') + '</label>' +
+                            '<input type="text" name="checkout_toolkit_store_locations_settings[locations][' + index + '][hours]" value="" placeholder="' + (marwchtoAdmin.i18n.hoursPlaceholder || 'e.g., Mon-Fri: 9am-6pm') + '">' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -495,10 +495,10 @@
             $('#add-time-slot').on('click', function() {
                 var html = '<div class="time-slot-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">' +
                     '<input type="text" name="checkout_toolkit_time_window_settings[time_slots][' + slotIndex + '][value]" ' +
-                    'placeholder="' + (wctAdmin.i18n.timeSlotValuePlaceholder || 'Value (e.g., morning)') + '" class="regular-text" style="width: 200px;">' +
+                    'placeholder="' + (marwchtoAdmin.i18n.timeSlotValuePlaceholder || 'Value (e.g., morning)') + '" class="regular-text" style="width: 200px;">' +
                     '<input type="text" name="checkout_toolkit_time_window_settings[time_slots][' + slotIndex + '][label]" ' +
-                    'placeholder="' + (wctAdmin.i18n.timeSlotLabelPlaceholder || 'Label (e.g., Morning 9am-12pm)') + '" class="regular-text" style="width: 300px;">' +
-                    '<button type="button" class="button remove-time-slot">' + (wctAdmin.i18n.remove || 'Remove') + '</button>' +
+                    'placeholder="' + (marwchtoAdmin.i18n.timeSlotLabelPlaceholder || 'Label (e.g., Morning 9am-12pm)') + '" class="regular-text" style="width: 300px;">' +
+                    '<button type="button" class="button remove-time-slot">' + (marwchtoAdmin.i18n.remove || 'Remove') + '</button>' +
                     '</div>';
                 $('#time-slots-container').append(html);
                 slotIndex++;

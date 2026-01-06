@@ -12,7 +12,7 @@
          * Initialize checkout functionality
          */
         init: function() {
-            if (typeof wctConfig === 'undefined') {
+            if (typeof marwchtoConfig === 'undefined') {
                 return;
             }
 
@@ -29,7 +29,7 @@
          * Initialize Flatpickr date picker
          */
         initDeliveryDatePicker: function() {
-            if (!wctConfig.delivery.enabled) {
+            if (!marwchtoConfig.delivery.enabled) {
                 return;
             }
 
@@ -42,15 +42,15 @@
             const self = this;
 
             flatpickr($datepicker[0], {
-                minDate: wctConfig.delivery.minDate,
-                maxDate: wctConfig.delivery.maxDate,
+                minDate: marwchtoConfig.delivery.minDate,
+                maxDate: marwchtoConfig.delivery.maxDate,
                 dateFormat: 'Y-m-d',
                 altInput: true,
-                altFormat: wctConfig.delivery.dateFormat || 'F j, Y',
-                firstDayOfWeek: wctConfig.delivery.firstDayOfWeek || 1,
+                altFormat: marwchtoConfig.delivery.dateFormat || 'F j, Y',
+                firstDayOfWeek: marwchtoConfig.delivery.firstDayOfWeek || 1,
                 disableMobile: false,
                 locale: {
-                    firstDayOfWeek: wctConfig.delivery.firstDayOfWeek || 1
+                    firstDayOfWeek: marwchtoConfig.delivery.firstDayOfWeek || 1
                 },
                 disable: [
                     // Disable specific dates
@@ -78,11 +78,11 @@
          * Get blocked dates array
          */
         getBlockedDates: function() {
-            if (!wctConfig.delivery.disabledDates) {
+            if (!marwchtoConfig.delivery.disabledDates) {
                 return [];
             }
 
-            return wctConfig.delivery.disabledDates.map(function(date) {
+            return marwchtoConfig.delivery.disabledDates.map(function(date) {
                 return date;
             });
         },
@@ -91,24 +91,24 @@
          * Check if a day of week is disabled
          */
         isDayDisabled: function(date) {
-            if (!wctConfig.delivery.disabledDays || !wctConfig.delivery.disabledDays.length) {
+            if (!marwchtoConfig.delivery.disabledDays || !marwchtoConfig.delivery.disabledDays.length) {
                 return false;
             }
 
             const dayOfWeek = date.getDay();
-            return wctConfig.delivery.disabledDays.includes(dayOfWeek);
+            return marwchtoConfig.delivery.disabledDays.includes(dayOfWeek);
         },
 
         /**
          * Initialize character counter for custom field
          */
         initCharacterCounter: function() {
-            if (!wctConfig.field.enabled) {
+            if (!marwchtoConfig.field.enabled) {
                 return;
             }
 
             const $field = $('#checkout_toolkit_custom_field');
-            const maxLength = wctConfig.field.maxLength;
+            const maxLength = marwchtoConfig.field.maxLength;
 
             if (!$field.length || !maxLength || maxLength <= 0) {
                 return;
@@ -121,7 +121,7 @@
             // Update counter function
             const updateCounter = function() {
                 const remaining = maxLength - $field.val().length;
-                $counter.text(remaining + ' ' + (wctConfig.i18n.charactersRemaining || 'characters remaining'));
+                $counter.text(remaining + ' ' + (marwchtoConfig.i18n.charactersRemaining || 'characters remaining'));
 
                 // Add warning class when low
                 if (remaining <= 20) {
@@ -193,7 +193,7 @@
 
             var updateCounter = function() {
                 var remaining = maxLength - $customField.val().length;
-                var text = wctConfig.i18n ? wctConfig.i18n.charactersRemaining : 'characters remaining';
+                var text = marwchtoConfig.i18n ? marwchtoConfig.i18n.charactersRemaining : 'characters remaining';
                 $counter.text(remaining + ' ' + text);
 
                 if (remaining <= 20) {

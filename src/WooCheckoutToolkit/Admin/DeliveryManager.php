@@ -128,7 +128,7 @@ class DeliveryManager
             true
         );
 
-        wp_localize_script('wct-delivery-admin', 'wctDelivery', [
+        wp_localize_script('wct-delivery-admin', 'marwchtoDelivery', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_delivery_nonce'),
             'statuses' => DeliveryStatus::get_statuses(),

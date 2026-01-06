@@ -79,11 +79,11 @@
             $wrapper.addClass('wct-quick-status-updating');
 
             $.ajax({
-                url: wctDelivery.ajaxUrl,
+                url: marwchtoDelivery.ajaxUrl,
                 type: 'POST',
                 data: {
                     action: 'checkout_toolkit_update_delivery_status',
-                    nonce: wctDelivery.nonce,
+                    nonce: marwchtoDelivery.nonce,
                     order_id: orderId,
                     status: status
                 },
@@ -98,14 +98,14 @@
                         }
 
                         // Show success message
-                        self.showNotice('success', response.data.message || wctDelivery.i18n.statusUpdated);
+                        self.showNotice('success', response.data.message || marwchtoDelivery.i18n.statusUpdated);
                     } else {
-                        self.showNotice('error', response.data.message || wctDelivery.i18n.error);
+                        self.showNotice('error', response.data.message || marwchtoDelivery.i18n.error);
                     }
                 },
                 error: function() {
                     $wrapper.removeClass('wct-quick-status-updating');
-                    self.showNotice('error', wctDelivery.i18n.error);
+                    self.showNotice('error', marwchtoDelivery.i18n.error);
                 }
             });
         },
@@ -163,7 +163,7 @@
 
                 var date = $(this).data('date');
                 if (date) {
-                    window.location.href = wctDelivery.ajaxUrl.replace('admin-ajax.php', 'admin.php') +
+                    window.location.href = marwchtoDelivery.ajaxUrl.replace('admin-ajax.php', 'admin.php') +
                         '?page=wct-deliveries&tab=list&filter_date=' + date;
                 }
             });

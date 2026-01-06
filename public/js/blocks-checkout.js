@@ -38,7 +38,7 @@
     }
 
     if (!settings || Object.keys(settings).length === 0) {
-        settings = window.checkoutToolkitData || {};
+        settings = window.marwchtoData || {};
     }
 
     if (!settings || Object.keys(settings).length === 0) {

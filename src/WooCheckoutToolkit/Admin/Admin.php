@@ -83,7 +83,7 @@ class Admin
             true
         );
 
-        wp_localize_script('wct-admin', 'wctAdmin', [
+        wp_localize_script('wct-admin', 'marwchtoAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_admin'),
             'nonces' => [
