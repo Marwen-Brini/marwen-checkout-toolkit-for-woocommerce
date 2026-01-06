@@ -69,15 +69,15 @@ class AccountDisplay
         }
 
         echo '<section class="wct-order-details">';
-        echo '<h2>' . esc_html__('Additional Order Information', 'marwen-checkout-toolkit-for-woocommerce') . '</h2>';
+        echo '<h2>' . esc_html__('Additional Order Information', 'marwen-marwchto-for-woocommerce') . '</h2>';
         echo '<table class="woocommerce-table woocommerce-table--wct-details shop_table wct-details">';
         echo '<tbody>';
 
         if ($show_delivery_method) {
-            $label = $delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $delivery_method_settings['field_label'] ?? __('Fulfillment Method', 'marwen-marwchto-for-woocommerce');
             $method_label = $delivery_method === 'pickup'
-                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'marwen-checkout-toolkit-for-woocommerce'))
-                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'marwen-checkout-toolkit-for-woocommerce'));
+                ? ($delivery_method_settings['pickup_label'] ?? __('Pickup', 'marwen-marwchto-for-woocommerce'))
+                : ($delivery_method_settings['delivery_label'] ?? __('Delivery', 'marwen-marwchto-for-woocommerce'));
 
             echo '<tr>';
             echo '<th>' . esc_html($label) . '</th>';
@@ -88,16 +88,16 @@ class AccountDisplay
         if ($show_store_location) {
             $location = $this->get_store_location_by_id($store_location, $store_locations_settings);
             if ($location) {
-                $label = $store_locations_settings['field_label'] ?? __('Pickup Location', 'marwen-checkout-toolkit-for-woocommerce');
+                $label = $store_locations_settings['field_label'] ?? __('Pickup Location', 'marwen-marwchto-for-woocommerce');
                 $output = '<strong>' . esc_html($location['name']) . '</strong>';
                 if (!empty($location['address'])) {
                     $output .= '<br>' . esc_html($location['address']);
                 }
                 if (!empty($location['phone'])) {
-                    $output .= '<br>' . esc_html__('Phone:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['phone']);
+                    $output .= '<br>' . esc_html__('Phone:', 'marwen-marwchto-for-woocommerce') . ' ' . esc_html($location['phone']);
                 }
                 if (!empty($location['hours'])) {
-                    $output .= '<br>' . esc_html__('Hours:', 'marwen-checkout-toolkit-for-woocommerce') . ' ' . esc_html($location['hours']);
+                    $output .= '<br>' . esc_html__('Hours:', 'marwen-marwchto-for-woocommerce') . ' ' . esc_html($location['hours']);
                 }
 
                 echo '<tr>';
@@ -109,7 +109,7 @@ class AccountDisplay
         }
 
         if ($show_delivery_instructions) {
-            $label = $delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $delivery_instructions_settings['field_label'] ?? __('Delivery Instructions', 'marwen-marwchto-for-woocommerce');
             $output = '';
 
             if (!empty($delivery_instructions_preset)) {
@@ -132,7 +132,7 @@ class AccountDisplay
         }
 
         if ($show_time_window) {
-            $label = $time_window_settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $time_window_settings['field_label'] ?? __('Preferred Time', 'marwen-marwchto-for-woocommerce');
             $time_label = $this->get_time_slot_label($time_window, $time_window_settings);
 
             echo '<tr>';
@@ -143,7 +143,7 @@ class AccountDisplay
 
         if ($show_delivery) {
             $formatted_date = $this->format_date($delivery_date, $delivery_settings['date_format'] ?? 'F j, Y');
-            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $delivery_settings['field_label'] ?? __('Delivery Date', 'marwen-marwchto-for-woocommerce');
 
             echo '<tr>';
             echo '<th>' . esc_html($label) . '</th>';
@@ -152,7 +152,7 @@ class AccountDisplay
         }
 
         if ($show_field) {
-            $label = $field_settings['field_label'] ?? __('Special Instructions', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $field_settings['field_label'] ?? __('Special Instructions', 'marwen-marwchto-for-woocommerce');
             $output = $this->format_field_value($custom_field, $field_settings);
 
             echo '<tr>';
@@ -162,7 +162,7 @@ class AccountDisplay
         }
 
         if ($show_field_2) {
-            $label = $field_2_settings['field_label'] ?? __('Additional Information', 'marwen-checkout-toolkit-for-woocommerce');
+            $label = $field_2_settings['field_label'] ?? __('Additional Information', 'marwen-marwchto-for-woocommerce');
             $output = $this->format_field_value($custom_field_2, $field_2_settings);
 
             echo '<tr>';
@@ -203,8 +203,8 @@ class AccountDisplay
         switch ($field_type) {
             case 'checkbox':
                 return $value === '1'
-                    ? __('Yes', 'marwen-checkout-toolkit-for-woocommerce')
-                    : __('No', 'marwen-checkout-toolkit-for-woocommerce');
+                    ? __('Yes', 'marwen-marwchto-for-woocommerce')
+                    : __('No', 'marwen-marwchto-for-woocommerce');
 
             case 'select':
                 $options = $settings['select_options'] ?? [];

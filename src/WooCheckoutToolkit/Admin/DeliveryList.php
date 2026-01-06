@@ -44,13 +44,13 @@ class DeliveryList extends \WP_List_Table
     {
         return [
             'cb' => '<input type="checkbox" />',
-            'order' => __('Order', 'marwen-checkout-toolkit-for-woocommerce'),
-            'customer' => __('Customer', 'marwen-checkout-toolkit-for-woocommerce'),
-            'delivery_date' => __('Delivery Date', 'marwen-checkout-toolkit-for-woocommerce'),
-            'delivery_status' => __('Delivery Status', 'marwen-checkout-toolkit-for-woocommerce'),
-            'order_status' => __('Order Status', 'marwen-checkout-toolkit-for-woocommerce'),
-            'order_total' => __('Total', 'marwen-checkout-toolkit-for-woocommerce'),
-            'actions' => __('Actions', 'marwen-checkout-toolkit-for-woocommerce'),
+            'order' => __('Order', 'marwen-marwchto-for-woocommerce'),
+            'customer' => __('Customer', 'marwen-marwchto-for-woocommerce'),
+            'delivery_date' => __('Delivery Date', 'marwen-marwchto-for-woocommerce'),
+            'delivery_status' => __('Delivery Status', 'marwen-marwchto-for-woocommerce'),
+            'order_status' => __('Order Status', 'marwen-marwchto-for-woocommerce'),
+            'order_total' => __('Total', 'marwen-marwchto-for-woocommerce'),
+            'actions' => __('Actions', 'marwen-marwchto-for-woocommerce'),
         ];
     }
 
@@ -80,7 +80,7 @@ class DeliveryList extends \WP_List_Table
         foreach (DeliveryStatus::get_statuses() as $key => $label) {
             $actions['set_status_' . $key] = sprintf(
                 /* translators: %s: Status label */
-                __('Set to %s', 'marwen-checkout-toolkit-for-woocommerce'),
+                __('Set to %s', 'marwen-marwchto-for-woocommerce'),
                 $label
             );
         }
@@ -133,7 +133,7 @@ class DeliveryList extends \WP_List_Table
                 '<div class="notice notice-success is-dismissible"><p>%s</p></div>',
                 sprintf(
                     /* translators: %d: Number of orders updated */
-                    esc_html__('%d delivery status(es) updated.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    esc_html__('%d delivery status(es) updated.', 'marwen-marwchto-for-woocommerce'),
                     (int) $updated
                 )
             );
@@ -403,13 +403,13 @@ class DeliveryList extends \WP_List_Table
 
             if ($date < $today) {
                 $class = 'marwchto-date-past';
-                $badge = '<span class="wct-date-badge past">' . esc_html__('Past', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
+                $badge = '<span class="wct-date-badge past">' . esc_html__('Past', 'marwen-marwchto-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $today->format('Y-m-d')) {
                 $class = 'marwchto-date-today';
-                $badge = '<span class="wct-date-badge today">' . esc_html__('Today', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
+                $badge = '<span class="wct-date-badge today">' . esc_html__('Today', 'marwen-marwchto-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $tomorrow->format('Y-m-d')) {
                 $class = 'marwchto-date-tomorrow';
-                $badge = '<span class="wct-date-badge tomorrow">' . esc_html__('Tomorrow', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
+                $badge = '<span class="wct-date-badge tomorrow">' . esc_html__('Tomorrow', 'marwen-marwchto-for-woocommerce') . '</span>';
             }
 
             return sprintf(
@@ -483,8 +483,8 @@ class DeliveryList extends \WP_List_Table
         $actions['view'] = sprintf(
             '<a href="%s" class="button button-small" title="%s">%s</a>',
             esc_url($order->get_edit_order_url()),
-            esc_attr__('View Order', 'marwen-checkout-toolkit-for-woocommerce'),
-            esc_html__('View', 'marwen-checkout-toolkit-for-woocommerce')
+            esc_attr__('View Order', 'marwen-marwchto-for-woocommerce'),
+            esc_html__('View', 'marwen-marwchto-for-woocommerce')
         );
 
         return implode(' ', $actions);
@@ -527,16 +527,16 @@ class DeliveryList extends \WP_List_Table
 
         // Date filter
         echo '<select name="filter_date" id="filter_date">';
-        echo '<option value="">' . esc_html__('All dates', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
-        echo '<option value="today"' . selected($filter_date, 'today', false) . '>' . esc_html__('Today', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
-        echo '<option value="tomorrow"' . selected($filter_date, 'tomorrow', false) . '>' . esc_html__('Tomorrow', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
-        echo '<option value="this_week"' . selected($filter_date, 'this_week', false) . '>' . esc_html__('This week', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
-        echo '<option value="this_month"' . selected($filter_date, 'this_month', false) . '>' . esc_html__('This month', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
+        echo '<option value="">' . esc_html__('All dates', 'marwen-marwchto-for-woocommerce') . '</option>';
+        echo '<option value="today"' . selected($filter_date, 'today', false) . '>' . esc_html__('Today', 'marwen-marwchto-for-woocommerce') . '</option>';
+        echo '<option value="tomorrow"' . selected($filter_date, 'tomorrow', false) . '>' . esc_html__('Tomorrow', 'marwen-marwchto-for-woocommerce') . '</option>';
+        echo '<option value="this_week"' . selected($filter_date, 'this_week', false) . '>' . esc_html__('This week', 'marwen-marwchto-for-woocommerce') . '</option>';
+        echo '<option value="this_month"' . selected($filter_date, 'this_month', false) . '>' . esc_html__('This month', 'marwen-marwchto-for-woocommerce') . '</option>';
         echo '</select>';
 
         // Delivery status filter
         echo '<select name="filter_status" id="filter_status">';
-        echo '<option value="">' . esc_html__('All statuses', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
+        echo '<option value="">' . esc_html__('All statuses', 'marwen-marwchto-for-woocommerce') . '</option>';
         foreach (DeliveryStatus::get_statuses() as $key => $label) {
             echo '<option value="' . esc_attr($key) . '"' . selected($filter_status, $key, false) . '>' . esc_html($label) . '</option>';
         }
@@ -544,14 +544,14 @@ class DeliveryList extends \WP_List_Table
 
         // Order status filter
         echo '<select name="filter_order_status" id="filter_order_status">';
-        echo '<option value="">' . esc_html__('All order statuses', 'marwen-checkout-toolkit-for-woocommerce') . '</option>';
+        echo '<option value="">' . esc_html__('All order statuses', 'marwen-marwchto-for-woocommerce') . '</option>';
         foreach (wc_get_order_statuses() as $key => $label) {
             $key = str_replace('wc-', '', $key);
             echo '<option value="' . esc_attr($key) . '"' . selected($filter_order_status, $key, false) . '>' . esc_html($label) . '</option>';
         }
         echo '</select>';
 
-        submit_button(__('Filter', 'marwen-checkout-toolkit-for-woocommerce'), '', 'filter_action', false);
+        submit_button(__('Filter', 'marwen-marwchto-for-woocommerce'), '', 'filter_action', false);
 
         echo '</div>';
     }
@@ -561,6 +561,6 @@ class DeliveryList extends \WP_List_Table
      */
     public function no_items(): void
     {
-        esc_html_e('No deliveries found.', 'marwen-checkout-toolkit-for-woocommerce');
+        esc_html_e('No deliveries found.', 'marwen-marwchto-for-woocommerce');
     }
 }

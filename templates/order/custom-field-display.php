@@ -3,7 +3,7 @@
  * Custom field display in admin order
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/order/custom-field-display.php
+ * yourtheme/woocommerce/marwen-marwchto-for-woocommerce/order/custom-field-display.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0

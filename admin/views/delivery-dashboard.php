@@ -26,17 +26,17 @@ if ($marwchto_calendar_month < 1 || $marwchto_calendar_month > 12) {
 ?>
 
 <div class="wrap wct-delivery-dashboard">
-    <h1 class="wp-heading-inline"><?php esc_html_e('Delivery Management', 'marwen-checkout-toolkit-for-woocommerce'); ?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e('Delivery Management', 'marwen-marwchto-for-woocommerce'); ?></h1>
     <hr class="wp-header-end">
 
     <nav class="nav-tab-wrapper wct-delivery-tabs">
         <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=list')); ?>"
            class="nav-tab <?php echo $marwchto_active_tab === 'list' ? 'nav-tab-active' : ''; ?>">
-            <?php esc_html_e('Deliveries', 'marwen-checkout-toolkit-for-woocommerce'); ?>
+            <?php esc_html_e('Deliveries', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
         <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=calendar')); ?>"
            class="nav-tab <?php echo $marwchto_active_tab === 'calendar' ? 'nav-tab-active' : ''; ?>">
-            <?php esc_html_e('Calendar', 'marwen-checkout-toolkit-for-woocommerce'); ?>
+            <?php esc_html_e('Calendar', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
     </nav>
 

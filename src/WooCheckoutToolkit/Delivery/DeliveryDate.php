@@ -82,7 +82,7 @@ class DeliveryDate
 
         // Wrapper for conditional visibility
         $style = $initial_hidden ? 'display: none;' : '';
-        echo '<div class="checkout-toolkit-delivery-date-wrapper" style="' . esc_attr($style) . '">';
+        echo '<div class="marwchto-delivery-date-wrapper" style="' . esc_attr($style) . '">';
 
         // Render estimated delivery message above the date picker
         $this->render_estimated_delivery_message();
@@ -140,7 +140,7 @@ class DeliveryDate
             wc_add_notice(
                 sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
                     '<strong>' . esc_html($settings['field_label']) . '</strong>'
                 ),
                 'error'
@@ -157,7 +157,7 @@ class DeliveryDate
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
             Logger::error('Invalid date format', ['date' => $date]);
             wc_add_notice(
-                __('Invalid date format. Please select a valid date.', 'marwen-checkout-toolkit-for-woocommerce'),
+                __('Invalid date format. Please select a valid date.', 'marwen-marwchto-for-woocommerce'),
                 'error'
             );
             return;
@@ -169,7 +169,7 @@ class DeliveryDate
         if ($is_valid && !$this->availability_checker->is_date_available($date)) {
             Logger::warning('Selected date not available', ['date' => $date]);
             wc_add_notice(
-                __('The selected delivery date is not available. Please choose another date.', 'marwen-checkout-toolkit-for-woocommerce'),
+                __('The selected delivery date is not available. Please choose another date.', 'marwen-marwchto-for-woocommerce'),
                 'error'
             );
         }

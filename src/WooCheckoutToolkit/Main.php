@@ -399,8 +399,8 @@ final class Main
                 'selectOptions' => $field_2_settings['select_options'] ?? [],
             ],
             'i18n' => [
-                'selectDate' => __('Select a date', 'marwen-checkout-toolkit-for-woocommerce'),
-                'charactersRemaining' => __('characters remaining', 'marwen-checkout-toolkit-for-woocommerce'),
+                'selectDate' => __('Select a date', 'marwen-marwchto-for-woocommerce'),
+                'charactersRemaining' => __('characters remaining', 'marwen-marwchto-for-woocommerce'),
             ],
         ];
     }
@@ -678,8 +678,8 @@ final class Main
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('marwchto_checkout'),
             'i18n' => [
-                'selectDate' => __('Select a date', 'marwen-checkout-toolkit-for-woocommerce'),
-                'charactersRemaining' => __('characters remaining', 'marwen-checkout-toolkit-for-woocommerce'),
+                'selectDate' => __('Select a date', 'marwen-marwchto-for-woocommerce'),
+                'charactersRemaining' => __('characters remaining', 'marwen-marwchto-for-woocommerce'),
             ],
         ];
 

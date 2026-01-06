@@ -94,26 +94,26 @@ class DeliveryInstructions
         $preset_options = $settings['preset_options'] ?? [];
         $required = !empty($settings['required']);
         $required_attr = $required ? ' required' : '';
-        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-checkout-toolkit-for-woocommerce') . '">*</abbr>' : '';
+        $required_mark = $required ? '<abbr class="required" title="' . esc_attr__('required', 'marwen-marwchto-for-woocommerce') . '">*</abbr>' : '';
 
         do_action('marwchto_before_delivery_instructions');
         ?>
         <div class="wct-delivery-instructions-wrapper" id="wct-delivery-instructions-wrapper" style="display: <?php echo esc_attr($initial_display); ?>;">
             <h3>
-                <?php echo esc_html($settings['field_label'] ?: __('Delivery Instructions', 'marwen-checkout-toolkit-for-woocommerce')); ?>
+                <?php echo esc_html($settings['field_label'] ?: __('Delivery Instructions', 'marwen-marwchto-for-woocommerce')); ?>
                 <?php echo wp_kses_post($required_mark); ?>
             </h3>
 
             <!-- Preset Dropdown -->
             <p class="form-row form-row-wide">
                 <label for="marwchto_delivery_instructions_preset">
-                    <?php echo esc_html($settings['preset_label'] ?: __('Common Instructions', 'marwen-checkout-toolkit-for-woocommerce')); ?>
+                    <?php echo esc_html($settings['preset_label'] ?: __('Common Instructions', 'marwen-marwchto-for-woocommerce')); ?>
                 </label>
                 <select name="marwchto_delivery_instructions_preset"
                         id="marwchto_delivery_instructions_preset"
                         class="wct-delivery-instructions-preset"
                         <?php echo esc_attr($required_attr); ?>>
-                    <option value=""><?php esc_html_e('Select an option...', 'marwen-checkout-toolkit-for-woocommerce'); ?></option>
+                    <option value=""><?php esc_html_e('Select an option...', 'marwen-marwchto-for-woocommerce'); ?></option>
                     <?php foreach ($preset_options as $option) : ?>
                         <?php if (!empty($option['label'])) : ?>
                             <option value="<?php echo esc_attr($option['value'] ?? ''); ?>"
@@ -128,7 +128,7 @@ class DeliveryInstructions
             <!-- Custom Textarea -->
             <p class="form-row form-row-wide">
                 <label for="marwchto_delivery_instructions_custom">
-                    <?php echo esc_html($settings['custom_label'] ?: __('Additional Instructions', 'marwen-checkout-toolkit-for-woocommerce')); ?>
+                    <?php echo esc_html($settings['custom_label'] ?: __('Additional Instructions', 'marwen-marwchto-for-woocommerce')); ?>
                 </label>
                 <textarea name="marwchto_delivery_instructions_custom"
                           id="marwchto_delivery_instructions_custom"
@@ -177,7 +177,7 @@ class DeliveryInstructions
         if (empty($preset) && empty($custom)) {
             wc_add_notice(
                 /* translators: %s: field label */
-                sprintf(__('%s is required.', 'marwen-checkout-toolkit-for-woocommerce'), $settings['field_label']),
+                sprintf(__('%s is required.', 'marwen-marwchto-for-woocommerce'), $settings['field_label']),
                 'error'
             );
         }

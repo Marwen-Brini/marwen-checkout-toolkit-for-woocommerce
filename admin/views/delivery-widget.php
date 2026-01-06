@@ -18,17 +18,17 @@ use WooCheckoutToolkit\Admin\DeliveryStatus;
     <div class="wct-widget-stats">
         <div class="wct-widget-stat">
             <span class="stat-number"><?php echo esc_html($today_count); ?></span>
-            <span class="stat-label"><?php esc_html_e("Today's Deliveries", 'marwen-checkout-toolkit-for-woocommerce'); ?></span>
+            <span class="stat-label"><?php esc_html_e("Today's Deliveries", 'marwen-marwchto-for-woocommerce'); ?></span>
         </div>
         <div class="wct-widget-stat">
             <span class="stat-number"><?php echo esc_html($week_count); ?></span>
-            <span class="stat-label"><?php esc_html_e('This Week', 'marwen-checkout-toolkit-for-woocommerce'); ?></span>
+            <span class="stat-label"><?php esc_html_e('This Week', 'marwen-marwchto-for-woocommerce'); ?></span>
         </div>
     </div>
 
     <?php if ($today_count > 0) : ?>
         <div class="wct-widget-breakdown">
-            <h4><?php esc_html_e("Today's Status Breakdown", 'marwen-checkout-toolkit-for-woocommerce'); ?></h4>
+            <h4><?php esc_html_e("Today's Status Breakdown", 'marwen-marwchto-for-woocommerce'); ?></h4>
             <ul class="wct-status-list">
                 <?php foreach ($status_counts as $marwchto_status => $marwchto_count) : ?>
                     <li>
@@ -45,10 +45,10 @@ use WooCheckoutToolkit\Admin\DeliveryStatus;
 
     <div class="wct-widget-actions">
         <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=list&filter_date=today')); ?>" class="button">
-            <?php esc_html_e("View Today's Deliveries", 'marwen-checkout-toolkit-for-woocommerce'); ?>
+            <?php esc_html_e("View Today's Deliveries", 'marwen-marwchto-for-woocommerce'); ?>
         </a>
         <a href="<?php echo esc_url(admin_url('admin.php?page=wct-deliveries&tab=calendar')); ?>" class="button">
-            <?php esc_html_e('View Calendar', 'marwen-checkout-toolkit-for-woocommerce'); ?>
+            <?php esc_html_e('View Calendar', 'marwen-marwchto-for-woocommerce'); ?>
         </a>
     </div>
 </div>

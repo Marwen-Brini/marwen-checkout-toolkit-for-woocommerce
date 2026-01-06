@@ -72,10 +72,10 @@ class TimeWindow
 
         // Wrapper for conditional visibility
         $style = $initial_hidden ? 'display: none;' : '';
-        echo '<div class="checkout-toolkit-time-window-wrapper" style="' . esc_attr($style) . '">';
+        echo '<div class="marwchto-time-window-wrapper" style="' . esc_attr($style) . '">';
 
         // Build options array for select field
-        $options = ['' => __('Select a time...', 'marwen-checkout-toolkit-for-woocommerce')];
+        $options = ['' => __('Select a time...', 'marwen-marwchto-for-woocommerce')];
         foreach ($time_slots as $slot) {
             if (!empty($slot['value']) && !empty($slot['label'])) {
                 $options[$slot['value']] = $slot['label'];
@@ -86,7 +86,7 @@ class TimeWindow
             'marwchto_time_window',
             apply_filters('marwchto_time_window_field_args', [
                 'type' => 'select',
-                'label' => $settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce'),
+                'label' => $settings['field_label'] ?? __('Preferred Time', 'marwen-marwchto-for-woocommerce'),
                 'required' => $settings['required'] ?? false,
                 'class' => ['form-row-wide', 'marwchto-time-window-field'],
                 'options' => $options,
@@ -139,8 +139,8 @@ class TimeWindow
             wc_add_notice(
                 sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
-                    '<strong>' . esc_html($settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce')) . '</strong>'
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
+                    '<strong>' . esc_html($settings['field_label'] ?? __('Preferred Time', 'marwen-marwchto-for-woocommerce')) . '</strong>'
                 ),
                 'error'
             );
@@ -152,7 +152,7 @@ class TimeWindow
             $valid_values = array_column($settings['time_slots'] ?? [], 'value');
             if (!in_array($time_window, $valid_values, true)) {
                 wc_add_notice(
-                    __('Please select a valid time window.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('Please select a valid time window.', 'marwen-marwchto-for-woocommerce'),
                     'error'
                 );
             }
@@ -220,11 +220,11 @@ class TimeWindow
         $defaults = [
             'enabled' => false,
             'required' => false,
-            'field_label' => __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce'),
+            'field_label' => __('Preferred Time', 'marwen-marwchto-for-woocommerce'),
             'time_slots' => [
-                ['value' => 'morning', 'label' => __('Morning (9am - 12pm)', 'marwen-checkout-toolkit-for-woocommerce')],
-                ['value' => 'afternoon', 'label' => __('Afternoon (12pm - 5pm)', 'marwen-checkout-toolkit-for-woocommerce')],
-                ['value' => 'evening', 'label' => __('Evening (5pm - 8pm)', 'marwen-checkout-toolkit-for-woocommerce')],
+                ['value' => 'morning', 'label' => __('Morning (9am - 12pm)', 'marwen-marwchto-for-woocommerce')],
+                ['value' => 'afternoon', 'label' => __('Afternoon (12pm - 5pm)', 'marwen-marwchto-for-woocommerce')],
+                ['value' => 'evening', 'label' => __('Evening (5pm - 8pm)', 'marwen-marwchto-for-woocommerce')],
             ],
             'show_only_with_delivery' => true,
             'show_in_emails' => true,

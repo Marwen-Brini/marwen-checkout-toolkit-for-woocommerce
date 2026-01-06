@@ -3,7 +3,7 @@
  * Delivery date field template
  *
  * This template can be overridden by copying it to:
- * yourtheme/woocommerce/marwen-checkout-toolkit-for-woocommerce/checkout/delivery-date-field.php
+ * yourtheme/woocommerce/marwen-marwchto-for-woocommerce/checkout/delivery-date-field.php
  *
  * @package CheckoutToolkitForWoo
  * @version 1.0.0
@@ -17,7 +17,7 @@ defined('ABSPATH') || exit;
 do_action('marwchto_before_delivery_date_field');
 ?>
 
-<div class="checkout-toolkit-delivery-date-wrapper">
+<div class="marwchto-delivery-date-wrapper">
     <?php
     woocommerce_form_field(
         'marwchto_delivery_date',

@@ -259,9 +259,9 @@
             // Handle delivery method change - show/hide time window
             $(document.body).off('wct_delivery_method_changed.timewindow').on('wct_delivery_method_changed.timewindow', function(e, method) {
                 if (method === 'pickup') {
-                    $('.checkout-toolkit-time-window-wrapper').slideUp(200);
+                    $('.marwchto-time-window-wrapper').slideUp(200);
                 } else {
-                    $('.checkout-toolkit-time-window-wrapper').slideDown(200);
+                    $('.marwchto-time-window-wrapper').slideDown(200);
                 }
             });
         },
@@ -273,9 +273,9 @@
             // Handle delivery method change - show/hide delivery date
             $(document.body).off('wct_delivery_method_changed.deliverydate').on('wct_delivery_method_changed.deliverydate', function(e, method) {
                 if (method === 'pickup') {
-                    $('.checkout-toolkit-delivery-date-wrapper').slideUp(200);
+                    $('.marwchto-delivery-date-wrapper').slideUp(200);
                 } else {
-                    $('.checkout-toolkit-delivery-date-wrapper').slideDown(200);
+                    $('.marwchto-delivery-date-wrapper').slideDown(200);
                 }
             });
         }

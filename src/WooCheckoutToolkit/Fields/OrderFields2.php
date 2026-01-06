@@ -137,7 +137,7 @@ class OrderFields2
      */
     private function get_select_options(array $options): array
     {
-        $formatted = ['' => __('Select an option...', 'marwen-checkout-toolkit-for-woocommerce')];
+        $formatted = ['' => __('Select an option...', 'marwen-marwchto-for-woocommerce')];
 
         foreach ($options as $option) {
             if (!empty($option['value'])) {
@@ -172,7 +172,7 @@ class OrderFields2
             wc_add_notice(
                 sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
                     '<strong>' . esc_html($settings['field_label']) . '</strong>'
                 ),
                 'error'
@@ -187,7 +187,7 @@ class OrderFields2
                 wc_add_notice(
                     sprintf(
                         /* translators: %s: Field label */
-                        __('%s has an invalid selection.', 'marwen-checkout-toolkit-for-woocommerce'),
+                        __('%s has an invalid selection.', 'marwen-marwchto-for-woocommerce'),
                         '<strong>' . esc_html($settings['field_label']) . '</strong>'
                     ),
                     'error'
@@ -204,7 +204,7 @@ class OrderFields2
                 wc_add_notice(
                     sprintf(
                         /* translators: 1: Field label, 2: Maximum character count */
-                        __('%1$s is too long. Maximum %2$d characters allowed.', 'marwen-checkout-toolkit-for-woocommerce'),
+                        __('%1$s is too long. Maximum %2$d characters allowed.', 'marwen-marwchto-for-woocommerce'),
                         '<strong>' . esc_html($settings['field_label']) . '</strong>',
                         $max_length
                     ),

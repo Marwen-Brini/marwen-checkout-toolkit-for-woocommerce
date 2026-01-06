@@ -45,7 +45,7 @@ class Activator
             wp_die(
                 esc_html__(
                     'Checkout Toolkit for WooCommerce requires PHP 8.1 or higher.',
-                    'marwen-checkout-toolkit-for-woocommerce'
+                    'marwen-marwchto-for-woocommerce'
                 ),
                 'Plugin Activation Error',
                 ['back_link' => true]
@@ -58,7 +58,7 @@ class Activator
             wp_die(
                 esc_html__(
                     'Checkout Toolkit for WooCommerce requires WordPress 5.8 or higher.',
-                    'marwen-checkout-toolkit-for-woocommerce'
+                    'marwen-marwchto-for-woocommerce'
                 ),
                 'Plugin Activation Error',
                 ['back_link' => true]

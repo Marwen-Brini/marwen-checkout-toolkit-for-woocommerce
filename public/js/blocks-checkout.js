@@ -186,9 +186,9 @@
             pendingExtensionData = {};
 
             if (typeof checkoutStore.setExtensionData === 'function') {
-                checkoutStore.setExtensionData('checkout-toolkit', dataToSend);
+                checkoutStore.setExtensionData('marwchto', dataToSend);
             } else if (typeof checkoutStore.__internalSetExtensionData === 'function') {
-                checkoutStore.__internalSetExtensionData('checkout-toolkit', dataToSend);
+                checkoutStore.__internalSetExtensionData('marwchto', dataToSend);
             }
         }
     };
@@ -271,7 +271,7 @@
 
         const handleChange = (method) => {
             setSelectedMethod(method);
-            setExtensionData('checkout-toolkit', 'delivery_method', method);
+            setExtensionData('marwchto', 'delivery_method', method);
 
             // Dispatch custom event for other components to listen to
             document.dispatchEvent(new CustomEvent('wct_delivery_method_changed', {
@@ -381,7 +381,7 @@
         const handlePresetChange = (e) => {
             const val = e.target.value;
             setPresetValue(val);
-            setExtensionData('checkout-toolkit', 'delivery_instructions_preset', val);
+            setExtensionData('marwchto', 'delivery_instructions_preset', val);
         };
 
         const handleCustomChange = (e) => {
@@ -394,7 +394,7 @@
 
             setCustomValue(val);
             setCharCount(val.length);
-            setExtensionData('checkout-toolkit', 'delivery_instructions_custom', val);
+            setExtensionData('marwchto', 'delivery_instructions_custom', val);
         };
 
         if (!deliveryInstructions || !deliveryInstructions.enabled) return null;
@@ -493,7 +493,7 @@
         const handleChange = (e) => {
             const val = e.target.value;
             setSelectedTime(val);
-            setExtensionData('checkout-toolkit', 'time_window', val);
+            setExtensionData('marwchto', 'time_window', val);
         };
 
         if (!timeWindow || !timeWindow.enabled) return null;
@@ -569,7 +569,7 @@
         const handleChange = (e) => {
             const val = e.target.value;
             setSelectedLocation(val);
-            setExtensionData('checkout-toolkit', 'store_location', val);
+            setExtensionData('marwchto', 'store_location', val);
         };
 
         if (!storeLocations || !storeLocations.enabled) return null;
@@ -767,7 +767,7 @@
                     locale: { firstDayOfWeek: delivery.firstDayOfWeek || 0 },
                     onChange: (selectedDates, dateStr) => {
                         setSelectedDate(dateStr);
-                        setExtensionData('checkout-toolkit', 'delivery_date', dateStr);
+                        setExtensionData('marwchto', 'delivery_date', dateStr);
                     }
                 });
             };
@@ -837,7 +837,7 @@
 
                 setValue(newValue);
                 setCharCount(newValue.length);
-                setExtensionData('checkout-toolkit', fieldKey, newValue);
+                setExtensionData('marwchto', fieldKey, newValue);
             };
 
             if (!fieldConfig || !fieldConfig.enabled) return null;
@@ -910,7 +910,7 @@
                 }
             };
 
-            return el('div', { className: `checkout-toolkit-${fieldId}-block wc-block-components-checkout-step`, style: { marginTop: '16px', marginBottom: '16px' } },
+            return el('div', { className: `marwchto-${fieldId}-block wc-block-components-checkout-step`, style: { marginTop: '16px', marginBottom: '16px' } },
                 el('div', { className: 'wc-block-components-checkout-step__heading' },
                     el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
                         fieldConfig.label,

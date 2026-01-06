@@ -91,32 +91,32 @@ class Admin
             ],
             'i18n' => [
                 // General
-                'confirmRemove' => __('Are you sure you want to remove this date?', 'marwen-checkout-toolkit-for-woocommerce'),
-                'dateAdded' => __('Date added successfully', 'marwen-checkout-toolkit-for-woocommerce'),
-                'dateRemoved' => __('Date removed', 'marwen-checkout-toolkit-for-woocommerce'),
-                'selectDate' => __('Please select a date', 'marwen-checkout-toolkit-for-woocommerce'),
-                'remove' => __('Remove', 'marwen-checkout-toolkit-for-woocommerce'),
-                'label' => __('Label', 'marwen-checkout-toolkit-for-woocommerce'),
-                'value' => __('Value', 'marwen-checkout-toolkit-for-woocommerce'),
+                'confirmRemove' => __('Are you sure you want to remove this date?', 'marwen-marwchto-for-woocommerce'),
+                'dateAdded' => __('Date added successfully', 'marwen-marwchto-for-woocommerce'),
+                'dateRemoved' => __('Date removed', 'marwen-marwchto-for-woocommerce'),
+                'selectDate' => __('Please select a date', 'marwen-marwchto-for-woocommerce'),
+                'remove' => __('Remove', 'marwen-marwchto-for-woocommerce'),
+                'label' => __('Label', 'marwen-marwchto-for-woocommerce'),
+                'value' => __('Value', 'marwen-marwchto-for-woocommerce'),
                 // Delivery Instructions
-                'labelShownToCustomer' => __('Label (shown to customer)', 'marwen-checkout-toolkit-for-woocommerce'),
-                'valueStored' => __('Value (stored)', 'marwen-checkout-toolkit-for-woocommerce'),
+                'labelShownToCustomer' => __('Label (shown to customer)', 'marwen-marwchto-for-woocommerce'),
+                'valueStored' => __('Value (stored)', 'marwen-marwchto-for-woocommerce'),
                 // Store Locations
-                'location' => __('Location', 'marwen-checkout-toolkit-for-woocommerce'),
-                'removeLocation' => __('Remove location', 'marwen-checkout-toolkit-for-woocommerce'),
-                'locationId' => __('Location ID', 'marwen-checkout-toolkit-for-woocommerce'),
-                'locationIdPlaceholder' => __('e.g., main-store (auto-generated if empty)', 'marwen-checkout-toolkit-for-woocommerce'),
-                'storeName' => __('Store Name', 'marwen-checkout-toolkit-for-woocommerce'),
-                'storeNamePlaceholder' => __('Store name (required)', 'marwen-checkout-toolkit-for-woocommerce'),
-                'address' => __('Address', 'marwen-checkout-toolkit-for-woocommerce'),
-                'fullAddress' => __('Full address', 'marwen-checkout-toolkit-for-woocommerce'),
-                'phone' => __('Phone', 'marwen-checkout-toolkit-for-woocommerce'),
-                'phoneNumber' => __('Phone number', 'marwen-checkout-toolkit-for-woocommerce'),
-                'hours' => __('Hours', 'marwen-checkout-toolkit-for-woocommerce'),
-                'hoursPlaceholder' => __('e.g., Mon-Fri: 9am-6pm', 'marwen-checkout-toolkit-for-woocommerce'),
+                'location' => __('Location', 'marwen-marwchto-for-woocommerce'),
+                'removeLocation' => __('Remove location', 'marwen-marwchto-for-woocommerce'),
+                'locationId' => __('Location ID', 'marwen-marwchto-for-woocommerce'),
+                'locationIdPlaceholder' => __('e.g., main-store (auto-generated if empty)', 'marwen-marwchto-for-woocommerce'),
+                'storeName' => __('Store Name', 'marwen-marwchto-for-woocommerce'),
+                'storeNamePlaceholder' => __('Store name (required)', 'marwen-marwchto-for-woocommerce'),
+                'address' => __('Address', 'marwen-marwchto-for-woocommerce'),
+                'fullAddress' => __('Full address', 'marwen-marwchto-for-woocommerce'),
+                'phone' => __('Phone', 'marwen-marwchto-for-woocommerce'),
+                'phoneNumber' => __('Phone number', 'marwen-marwchto-for-woocommerce'),
+                'hours' => __('Hours', 'marwen-marwchto-for-woocommerce'),
+                'hoursPlaceholder' => __('e.g., Mon-Fri: 9am-6pm', 'marwen-marwchto-for-woocommerce'),
                 // Time Window
-                'timeSlotValuePlaceholder' => __('Value (e.g., morning)', 'marwen-checkout-toolkit-for-woocommerce'),
-                'timeSlotLabelPlaceholder' => __('Label (e.g., Morning 9am-12pm)', 'marwen-checkout-toolkit-for-woocommerce'),
+                'timeSlotValuePlaceholder' => __('Value (e.g., morning)', 'marwen-marwchto-for-woocommerce'),
+                'timeSlotLabelPlaceholder' => __('Label (e.g., Morning 9am-12pm)', 'marwen-marwchto-for-woocommerce'),
             ],
         ]);
     }
@@ -129,7 +129,7 @@ class Admin
         $settings_link = sprintf(
             '<a href="%s">%s</a>',
             admin_url('admin.php?page=wct-settings'),
-            __('Settings', 'marwen-checkout-toolkit-for-woocommerce')
+            __('Settings', 'marwen-marwchto-for-woocommerce')
         );
 
         array_unshift($links, $settings_link);

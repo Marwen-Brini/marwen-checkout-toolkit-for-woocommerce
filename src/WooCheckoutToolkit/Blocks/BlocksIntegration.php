@@ -27,7 +27,7 @@ class BlocksIntegration implements IntegrationInterface
      */
     public function get_name(): string
     {
-        return 'checkout-toolkit';
+        return 'marwchto';
     }
 
     /**
@@ -157,22 +157,22 @@ class BlocksIntegration implements IntegrationInterface
             ],
             'cart' => $this->get_cart_visibility_data(),
             'i18n' => [
-                'selectDate' => __('Select a date', 'marwen-checkout-toolkit-for-woocommerce'),
-                'selectOption' => __('Select an option...', 'marwen-checkout-toolkit-for-woocommerce'),
-                'charactersRemaining' => __('characters remaining', 'marwen-checkout-toolkit-for-woocommerce'),
+                'selectDate' => __('Select a date', 'marwen-marwchto-for-woocommerce'),
+                'selectOption' => __('Select an option...', 'marwen-marwchto-for-woocommerce'),
+                'charactersRemaining' => __('characters remaining', 'marwen-marwchto-for-woocommerce'),
                 'deliveryDateRequired' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
                     $delivery_settings['field_label']
                 ),
                 'customFieldRequired' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
                     $field_settings['field_label']
                 ),
                 'customField2Required' => sprintf(
                     /* translators: %s: Field label */
-                    __('%s is a required field.', 'marwen-checkout-toolkit-for-woocommerce'),
+                    __('%s is a required field.', 'marwen-marwchto-for-woocommerce'),
                     $field_2_settings['field_label']
                 ),
             ],
@@ -328,7 +328,7 @@ class BlocksIntegration implements IntegrationInterface
         if (function_exists('woocommerce_store_api_register_endpoint_data')) {
             woocommerce_store_api_register_endpoint_data([
                 'endpoint' => 'checkout',
-                'namespace' => 'checkout-toolkit',
+                'namespace' => 'marwchto',
                 'schema_callback' => [$this, 'get_store_api_schema'],
                 'schema_type' => ARRAY_A,
             ]);
@@ -350,49 +350,49 @@ class BlocksIntegration implements IntegrationInterface
     {
         return [
             'delivery_method' => [
-                'description' => __('Delivery method (delivery or pickup)', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Delivery method (delivery or pickup)', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_instructions_preset' => [
-                'description' => __('Delivery instructions preset option', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Delivery instructions preset option', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_instructions_custom' => [
-                'description' => __('Custom delivery instructions', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Custom delivery instructions', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'time_window' => [
-                'description' => __('Preferred time window', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Preferred time window', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'store_location' => [
-                'description' => __('Pickup store location', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Pickup store location', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'delivery_date' => [
-                'description' => __('Preferred delivery date', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Preferred delivery date', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'custom_field' => [
-                'description' => __('Custom order field', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Custom order field', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
             ],
             'custom_field_2' => [
-                'description' => __('Second custom order field', 'marwen-checkout-toolkit-for-woocommerce'),
+                'description' => __('Second custom order field', 'marwen-marwchto-for-woocommerce'),
                 'type' => ['string', 'null'],
                 'context' => ['view', 'edit'],
                 'default' => '',
@@ -410,11 +410,11 @@ class BlocksIntegration implements IntegrationInterface
     {
         $extensions = $request->get_param('extensions');
 
-        if (!is_array($extensions) || !isset($extensions['checkout-toolkit'])) {
+        if (!is_array($extensions) || !isset($extensions['marwchto'])) {
             return;
         }
 
-        $data = $extensions['checkout-toolkit'];
+        $data = $extensions['marwchto'];
 
         // Save delivery method
         $current_delivery_method = 'delivery';
