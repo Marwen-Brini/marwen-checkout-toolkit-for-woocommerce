@@ -85,7 +85,7 @@ class Admin
 
         wp_localize_script('marwchto-admin', 'marwchtoAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('wct_admin'),
+            'nonce' => wp_create_nonce('marwchto_admin'),
             'nonces' => [
                 'searchProducts' => wp_create_nonce('search-products'),
             ],

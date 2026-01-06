@@ -146,12 +146,12 @@
             $('.marwchto-toggle-option input[type="radio"]').off('change.wct').on('change.wct', function() {
                 $('.marwchto-toggle-option').removeClass('active');
                 $(this).closest('.marwchto-toggle-option').addClass('active');
-                $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
+                $(document.body).trigger('marwchto_delivery_method_changed', [$(this).val()]);
             });
 
             // Radio style
             $('.marwchto-radio-option input[type="radio"]').off('change.wct').on('change.wct', function() {
-                $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
+                $(document.body).trigger('marwchto_delivery_method_changed', [$(this).val()]);
             });
         },
 
@@ -162,7 +162,7 @@
             const self = this;
 
             // Handle delivery method change - show/hide instructions
-            $(document.body).off('wct_delivery_method_changed.instructions').on('wct_delivery_method_changed.instructions', function(e, method) {
+            $(document.body).off('marwchto_delivery_method_changed.instructions').on('marwchto_delivery_method_changed.instructions', function(e, method) {
                 if (method === 'pickup') {
                     $('#marwchto-delivery-instructions-wrapper').slideUp(200);
                 } else {
@@ -212,7 +212,7 @@
          */
         initStoreLocationSelector: function() {
             // Handle delivery method change - show/hide store location (OPPOSITE of delivery fields)
-            $(document.body).off('wct_delivery_method_changed.storelocation').on('wct_delivery_method_changed.storelocation', function(e, method) {
+            $(document.body).off('marwchto_delivery_method_changed.storelocation').on('marwchto_delivery_method_changed.storelocation', function(e, method) {
                 if (method === 'pickup') {
                     $('#marwchto-store-location-wrapper').slideDown(200);
                 } else {
@@ -257,7 +257,7 @@
          */
         initTimeWindow: function() {
             // Handle delivery method change - show/hide time window
-            $(document.body).off('wct_delivery_method_changed.timewindow').on('wct_delivery_method_changed.timewindow', function(e, method) {
+            $(document.body).off('marwchto_delivery_method_changed.timewindow').on('marwchto_delivery_method_changed.timewindow', function(e, method) {
                 if (method === 'pickup') {
                     $('.marwchto-time-window-wrapper').slideUp(200);
                 } else {
@@ -271,7 +271,7 @@
          */
         initDeliveryDateVisibility: function() {
             // Handle delivery method change - show/hide delivery date
-            $(document.body).off('wct_delivery_method_changed.deliverydate').on('wct_delivery_method_changed.deliverydate', function(e, method) {
+            $(document.body).off('marwchto_delivery_method_changed.deliverydate').on('marwchto_delivery_method_changed.deliverydate', function(e, method) {
                 if (method === 'pickup') {
                     $('.marwchto-delivery-date-wrapper').slideUp(200);
                 } else {

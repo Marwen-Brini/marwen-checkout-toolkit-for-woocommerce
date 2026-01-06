@@ -274,7 +274,7 @@
             setExtensionData('marwchto', 'delivery_method', method);
 
             // Dispatch custom event for other components to listen to
-            document.dispatchEvent(new CustomEvent('wct_delivery_method_changed', {
+            document.dispatchEvent(new CustomEvent('marwchto_delivery_method_changed', {
                 detail: { method }
             }));
         };
@@ -374,8 +374,8 @@
                 setIsVisible(method !== 'pickup');
             };
 
-            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
-            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+            document.addEventListener('marwchto_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('marwchto_delivery_method_changed', handleMethodChange);
         }, []);
 
         const handlePresetChange = (e) => {
@@ -486,8 +486,8 @@
                 setIsVisible(method !== 'pickup');
             };
 
-            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
-            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+            document.addEventListener('marwchto_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('marwchto_delivery_method_changed', handleMethodChange);
         }, [showOnlyDelivery]);
 
         const handleChange = (e) => {
@@ -562,8 +562,8 @@
                 setIsVisible(method === 'pickup'); // Show ONLY for pickup
             };
 
-            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
-            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+            document.addEventListener('marwchto_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('marwchto_delivery_method_changed', handleMethodChange);
         }, []);
 
         const handleChange = (e) => {
@@ -734,8 +734,8 @@
                 setIsVisible(method !== 'pickup');
             };
 
-            document.addEventListener('wct_delivery_method_changed', handleMethodChange);
-            return () => document.removeEventListener('wct_delivery_method_changed', handleMethodChange);
+            document.addEventListener('marwchto_delivery_method_changed', handleMethodChange);
+            return () => document.removeEventListener('marwchto_delivery_method_changed', handleMethodChange);
         }, []);
 
         useEffect(() => {

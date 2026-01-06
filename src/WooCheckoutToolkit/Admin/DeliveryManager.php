@@ -130,7 +130,7 @@ class DeliveryManager
 
         wp_localize_script('marwchto-delivery-admin', 'marwchtoDelivery', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('wct_delivery_nonce'),
+            'nonce' => wp_create_nonce('marwchto_delivery_nonce'),
             'statuses' => DeliveryStatus::get_statuses(),
             'colors' => DeliveryStatus::get_colors(),
             'i18n' => [
@@ -302,7 +302,7 @@ class DeliveryManager
      */
     public function ajax_update_status(): void
     {
-        check_ajax_referer('wct_delivery_nonce', 'nonce');
+        check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
@@ -339,7 +339,7 @@ class DeliveryManager
      */
     public function ajax_bulk_update_status(): void
     {
-        check_ajax_referer('wct_delivery_nonce', 'nonce');
+        check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
@@ -380,7 +380,7 @@ class DeliveryManager
      */
     public function ajax_get_calendar_data(): void
     {
-        check_ajax_referer('wct_delivery_nonce', 'nonce');
+        check_ajax_referer('marwchto_delivery_nonce', 'nonce');
 
         if (!current_user_can('manage_woocommerce')) {
             wp_send_json_error(['message' => __('Permission denied', 'marwen-marwchto-for-woocommerce')]);
@@ -410,7 +410,7 @@ class DeliveryManager
 
             // Add after order status column
             if ($key === 'order_status') {
-                $new_columns['wct_delivery'] = __('Delivery', 'marwen-marwchto-for-woocommerce');
+                $new_columns['marwchto_delivery'] = __('Delivery', 'marwen-marwchto-for-woocommerce');
             }
         }
 
@@ -425,7 +425,7 @@ class DeliveryManager
      */
     public function render_orders_column(string $column, int $order_id): void
     {
-        if ($column !== 'wct_delivery') {
+        if ($column !== 'marwchto_delivery') {
             return;
         }
 
@@ -441,7 +441,7 @@ class DeliveryManager
      */
     public function render_orders_column_hpos(string $column, \WC_Order $order): void
     {
-        if ($column !== 'wct_delivery') {
+        if ($column !== 'marwchto_delivery') {
             return;
         }
 
@@ -496,7 +496,7 @@ class DeliveryManager
         }
 
         wp_add_dashboard_widget(
-            'wct_deliveries_widget',
+            'marwchto_deliveries_widget',
             __('Upcoming Deliveries', 'marwen-marwchto-for-woocommerce'),
             [$this, 'render_dashboard_widget']
         );
