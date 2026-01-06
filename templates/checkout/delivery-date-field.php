@@ -25,8 +25,8 @@ do_action('marwchto_before_delivery_date_field');
             'type' => 'text',
             'label' => $settings['field_label'],
             'required' => $settings['required'],
-            'class' => ['form-row-wide', 'wct-delivery-date-field'],
-            'input_class' => ['wct-datepicker'],
+            'class' => ['form-row-wide', 'marwchto-delivery-date-field'],
+            'input_class' => ['marwchto-datepicker'],
             'custom_attributes' => [
                 'readonly' => 'readonly',
                 'data-wct-datepicker' => 'true',

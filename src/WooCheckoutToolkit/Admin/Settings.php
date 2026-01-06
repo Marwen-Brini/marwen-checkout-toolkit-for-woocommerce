@@ -39,7 +39,7 @@ class Settings
             __('Checkout Toolkit', 'marwen-checkout-toolkit-for-woocommerce'),
             __('Checkout Toolkit', 'marwen-checkout-toolkit-for-woocommerce'),
             'manage_woocommerce',
-            'wct-settings',
+            'marwchto-settings',
             [$this, 'render_settings_page']
         );
     }

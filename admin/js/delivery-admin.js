@@ -23,7 +23,7 @@
          */
         bindEvents: function() {
             // Quick status change from dropdown
-            $(document).on('change', '.wct-delivery-status-select', this.handleStatusChange.bind(this));
+            $(document).on('change', '.marwchto-delivery-status-select', this.handleStatusChange.bind(this));
 
             // Status change from order meta box
             $(document).on('change', '#wct_delivery_status', this.handleMetaBoxStatusChange.bind(this));
@@ -36,7 +36,7 @@
          */
         handleStatusChange: function(e) {
             var $select = $(e.target);
-            var $wrapper = $select.closest('.wct-status-wrapper');
+            var $wrapper = $select.closest('.marwchto-status-wrapper');
             var orderId = $wrapper.data('order-id');
             var newStatus = $select.val();
 
@@ -61,7 +61,7 @@
                 return;
             }
 
-            var $wrapper = $select.closest('.wct-order-delivery-meta');
+            var $wrapper = $select.closest('.marwchto-order-delivery-meta');
             this.updateStatus(orderId, newStatus, $wrapper);
         },
 
@@ -76,7 +76,7 @@
             var self = this;
 
             // Add loading state
-            $wrapper.addClass('wct-quick-status-updating');
+            $wrapper.addClass('marwchto-quick-status-updating');
 
             $.ajax({
                 url: marwchtoDelivery.ajaxUrl,
@@ -88,11 +88,11 @@
                     status: status
                 },
                 success: function(response) {
-                    $wrapper.removeClass('wct-quick-status-updating');
+                    $wrapper.removeClass('marwchto-quick-status-updating');
 
                     if (response.success) {
                         // Update badge if present
-                        var $badge = $wrapper.find('.wct-delivery-status-badge');
+                        var $badge = $wrapper.find('.marwchto-delivery-status-badge');
                         if ($badge.length && response.data.badge) {
                             $badge.replaceWith(response.data.badge);
                         }
@@ -104,7 +104,7 @@
                     }
                 },
                 error: function() {
-                    $wrapper.removeClass('wct-quick-status-updating');
+                    $wrapper.removeClass('marwchto-quick-status-updating');
                     self.showNotice('error', marwchtoDelivery.i18n.error);
                 }
             });
@@ -120,11 +120,11 @@
             var $notice = $('<div class="notice notice-' + type + ' is-dismissible"><p>' + message + '</p></div>');
 
             // Remove existing notices
-            $('.wct-delivery-dashboard .notice, .woocommerce-layout__notice-list .notice').remove();
+            $('.marwchto-delivery-dashboard .notice, .woocommerce-layout__notice-list .notice').remove();
 
             // Add new notice
-            if ($('.wct-delivery-dashboard').length) {
-                $('.wct-delivery-dashboard h1').after($notice);
+            if ($('.marwchto-delivery-dashboard').length) {
+                $('.marwchto-delivery-dashboard h1').after($notice);
             } else {
                 // For order page
                 $('.wrap h1, .woocommerce-layout__header').first().after($notice);
@@ -155,7 +155,7 @@
          */
         bindEvents: function() {
             // Click on calendar day with deliveries
-            $(document).on('click', '.wct-calendar td.has-deliveries', function(e) {
+            $(document).on('click', '.marwchto-calendar td.has-deliveries', function(e) {
                 // Don't trigger if clicking on the link
                 if ($(e.target).closest('a').length) {
                     return;
@@ -186,7 +186,7 @@
          */
         bindEvents: function() {
             // Confirm bulk status change
-            $(document).on('submit', '.wct-delivery-dashboard form', function(e) {
+            $(document).on('submit', '.marwchto-delivery-dashboard form', function(e) {
                 var action = $(this).find('select[name="action"]').val();
 
                 if (action && action.indexOf('set_status_') === 0) {

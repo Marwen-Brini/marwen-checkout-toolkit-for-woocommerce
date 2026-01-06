@@ -88,7 +88,7 @@ class TimeWindow
                 'type' => 'select',
                 'label' => $settings['field_label'] ?? __('Preferred Time', 'marwen-checkout-toolkit-for-woocommerce'),
                 'required' => $settings['required'] ?? false,
-                'class' => ['form-row-wide', 'wct-time-window-field'],
+                'class' => ['form-row-wide', 'marwchto-time-window-field'],
                 'options' => $options,
             ]),
             WC()->checkout->get_value('marwchto_time_window')

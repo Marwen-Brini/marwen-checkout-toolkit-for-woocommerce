@@ -69,7 +69,7 @@ class DeliveryManager
             __('Deliveries', 'marwen-checkout-toolkit-for-woocommerce'),
             __('Deliveries', 'marwen-checkout-toolkit-for-woocommerce'),
             'manage_woocommerce',
-            'wct-deliveries',
+            'marwchto-deliveries',
             [$this, 'render_dashboard']
         );
     }
@@ -114,21 +114,21 @@ class DeliveryManager
         }
 
         wp_enqueue_style(
-            'wct-delivery-admin',
+            'marwchto-delivery-admin',
             MARWCHTO_PLUGIN_URL . 'admin/css/delivery-admin.css',
             [],
             MARWCHTO_VERSION
         );
 
         wp_enqueue_script(
-            'wct-delivery-admin',
+            'marwchto-delivery-admin',
             MARWCHTO_PLUGIN_URL . 'admin/js/delivery-admin.js',
             ['jquery'],
             MARWCHTO_VERSION,
             true
         );
 
-        wp_localize_script('wct-delivery-admin', 'marwchtoDelivery', [
+        wp_localize_script('marwchto-delivery-admin', 'marwchtoDelivery', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_delivery_nonce'),
             'statuses' => DeliveryStatus::get_statuses(),

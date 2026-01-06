@@ -43,7 +43,7 @@ class Admin
         // Load CSS on settings page and dashboard (for widget)
         if (in_array($hook, ['woocommerce_page_wct-settings', 'index.php'], true)) {
             wp_enqueue_style(
-                'wct-admin',
+                'marwchto-admin',
                 MARWCHTO_PLUGIN_URL . 'admin/css/admin.css',
                 [],
                 MARWCHTO_VERSION
@@ -56,7 +56,7 @@ class Admin
         }
 
         wp_enqueue_script(
-            'wct-admin',
+            'marwchto-admin',
             MARWCHTO_PLUGIN_URL . 'admin/js/admin.js',
             ['jquery'],
             MARWCHTO_VERSION,
@@ -83,7 +83,7 @@ class Admin
             true
         );
 
-        wp_localize_script('wct-admin', 'marwchtoAdmin', [
+        wp_localize_script('marwchto-admin', 'marwchtoAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wct_admin'),
             'nonces' => [

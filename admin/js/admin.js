@@ -74,9 +74,9 @@
             });
 
             // Remove date button
-            $('#checkout_toolkit_blocked_dates_list').on('click', '.wct-remove-date', function() {
+            $('#checkout_toolkit_blocked_dates_list').on('click', '.marwchto-remove-date', function() {
                 if (confirm(marwchtoAdmin.i18n.confirmRemove || 'Are you sure?')) {
-                    $(this).closest('.wct-blocked-date-item').fadeOut(200, function() {
+                    $(this).closest('.marwchto-blocked-date-item').fadeOut(200, function() {
                         $(this).remove();
                         self.updateNoDateMessage();
                     });
@@ -91,7 +91,7 @@
             const $list = $('#checkout_toolkit_blocked_dates_list');
 
             // Remove "no dates" message if present
-            $list.find('.wct-no-dates').remove();
+            $list.find('.marwchto-no-dates').remove();
 
             // Format date for display
             const displayDate = this.formatDateForDisplay(date);
@@ -125,7 +125,7 @@
         updateNoDateMessage: function() {
             const $list = $('#checkout_toolkit_blocked_dates_list');
 
-            if ($list.find('.wct-blocked-date-item').length === 0) {
+            if ($list.find('.marwchto-blocked-date-item').length === 0) {
                 $list.html('<p class="wct-no-dates">No dates blocked.</p>');
             }
         },
@@ -137,33 +137,33 @@
             const self = this;
 
             // Enable/disable field options based on enabled checkbox
-            $('#wct-field-1-enabled').on('change', function() {
+            $('#marwchto-field-1-enabled').on('change', function() {
                 self.toggleFieldOptions(1, $(this).is(':checked'));
             });
 
-            $('#wct-field-2-enabled').on('change', function() {
+            $('#marwchto-field-2-enabled').on('change', function() {
                 self.toggleFieldOptions(2, $(this).is(':checked'));
             });
 
             // Field type change handler
-            $('.wct-field-type-radio').on('change', function() {
+            $('.marwchto-field-type-radio').on('change', function() {
                 var fieldNum = $(this).data('field');
                 var fieldType = $(this).val();
 
                 // Hide all conditional fields for this field number
-                $('.wct-field-' + fieldNum + '-text, .wct-field-' + fieldNum + '-textarea, .wct-field-' + fieldNum + '-checkbox, .wct-field-' + fieldNum + '-select').removeClass('active');
+                $('.marwchto-field-' + fieldNum + '-text, .marwchto-field-' + fieldNum + '-textarea, .marwchto-field-' + fieldNum + '-checkbox, .marwchto-field-' + fieldNum + '-select').removeClass('active');
 
                 // Show relevant conditional fields
-                $('.wct-field-' + fieldNum + '-' + fieldType).addClass('active');
+                $('.marwchto-field-' + fieldNum + '-' + fieldType).addClass('active');
             });
 
             // Add option button handler
-            $('.wct-add-option').on('click', function(e) {
+            $('.marwchto-add-option').on('click', function(e) {
                 e.preventDefault();
                 var fieldNum = $(this).data('field');
-                var wrapper = $(this).closest('.wct-select-options-wrapper').find('.wct-select-options-list');
+                var wrapper = $(this).closest('.marwchto-select-options-wrapper').find('.marwchto-select-options-list');
                 var optionName = fieldNum === 1 ? 'checkout_toolkit_field_settings' : 'checkout_toolkit_field_2_settings';
-                var index = wrapper.find('.wct-select-option-row').length;
+                var index = wrapper.find('.marwchto-select-option-row').length;
 
                 var newRow = '<div class="wct-select-option-row">' +
                     '<input type="text" name="' + optionName + '[select_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.label || 'Label') + '" class="regular-text">' +
@@ -175,32 +175,32 @@
             });
 
             // Remove option button handler
-            $(document).on('click', '.wct-remove-option', function(e) {
+            $(document).on('click', '.marwchto-remove-option', function(e) {
                 e.preventDefault();
-                var wrapper = $(this).closest('.wct-select-options-list');
+                var wrapper = $(this).closest('.marwchto-select-options-list');
 
                 // Keep at least one option row
-                if (wrapper.find('.wct-select-option-row').length > 1) {
-                    $(this).closest('.wct-select-option-row').remove();
+                if (wrapper.find('.marwchto-select-option-row').length > 1) {
+                    $(this).closest('.marwchto-select-option-row').remove();
                 }
             });
 
             // Visibility type change handler
-            $('.wct-visibility-type-radio').on('change', function() {
+            $('.marwchto-visibility-type-radio').on('change', function() {
                 var fieldNum = $(this).data('field');
                 var visibilityType = $(this).val();
 
                 // Hide all visibility options for this field
-                $('.wct-visibility-' + fieldNum + '-products').removeClass('active');
-                $('.wct-visibility-' + fieldNum + '-categories').removeClass('active');
+                $('.marwchto-visibility-' + fieldNum + '-products').removeClass('active');
+                $('.marwchto-visibility-' + fieldNum + '-categories').removeClass('active');
 
                 // Show/hide visibility mode section
                 if (visibilityType === 'always') {
-                    $('.wct-visibility-' + fieldNum + '-mode').hide();
+                    $('.marwchto-visibility-' + fieldNum + '-mode').hide();
                 } else {
-                    $('.wct-visibility-' + fieldNum + '-mode').show();
+                    $('.marwchto-visibility-' + fieldNum + '-mode').show();
                     // Show the relevant visibility option
-                    $('.wct-visibility-' + fieldNum + '-' + visibilityType).addClass('active');
+                    $('.marwchto-visibility-' + fieldNum + '-' + visibilityType).addClass('active');
                 }
             });
 
@@ -212,12 +212,12 @@
          * Toggle field options enabled/disabled state
          */
         toggleFieldOptions: function(fieldNum, isEnabled) {
-            var optionsWrapper = $('#wct-field-' + fieldNum + '-options');
+            var optionsWrapper = $('#marwchto-field-' + fieldNum + '-options');
 
             if (isEnabled) {
-                optionsWrapper.removeClass('wct-field-options-disabled');
+                optionsWrapper.removeClass('marwchto-field-options-disabled');
             } else {
-                optionsWrapper.addClass('wct-field-options-disabled');
+                optionsWrapper.addClass('marwchto-field-options-disabled');
             }
         },
 
@@ -273,29 +273,29 @@
         initDeliveryMethodSettings: function() {
             // Update preview when labels change
             $('#checkout_toolkit_dm_field_label').on('input', function() {
-                $('#wct-preview-label').text($(this).val() || 'Fulfillment Method');
+                $('#marwchto-preview-label').text($(this).val() || 'Fulfillment Method');
             });
 
             $('#checkout_toolkit_dm_delivery_label').on('input', function() {
                 var label = $(this).val() || 'Delivery';
-                $('#wct-preview-delivery-toggle').text(label);
-                $('#wct-preview-delivery-radio').text(label);
+                $('#marwchto-preview-delivery-toggle').text(label);
+                $('#marwchto-preview-delivery-radio').text(label);
             });
 
             $('#checkout_toolkit_dm_pickup_label').on('input', function() {
                 var label = $(this).val() || 'Pickup';
-                $('#wct-preview-pickup-toggle').text(label);
-                $('#wct-preview-pickup-radio').text(label);
+                $('#marwchto-preview-pickup-toggle').text(label);
+                $('#marwchto-preview-pickup-radio').text(label);
             });
 
             // Toggle between toggle/radio preview
             $('input[name="checkout_toolkit_delivery_method_settings[show_as]"]').on('change', function() {
                 if ($(this).val() === 'toggle') {
-                    $('#wct-preview-toggle').show();
-                    $('#wct-preview-radio').hide();
+                    $('#marwchto-preview-toggle').show();
+                    $('#marwchto-preview-radio').hide();
                 } else {
-                    $('#wct-preview-toggle').hide();
-                    $('#wct-preview-radio').show();
+                    $('#marwchto-preview-toggle').hide();
+                    $('#marwchto-preview-radio').show();
                 }
             });
         },
@@ -305,36 +305,36 @@
          */
         initDeliveryInstructionsSettings: function() {
             // Enable/disable options based on enabled checkbox
-            $('#wct-di-enabled').on('change', function() {
+            $('#marwchto-di-enabled').on('change', function() {
                 if ($(this).is(':checked')) {
-                    $('#wct-di-options').removeClass('wct-field-options-disabled');
+                    $('#marwchto-di-options').removeClass('marwchto-field-options-disabled');
                 } else {
-                    $('#wct-di-options').addClass('wct-field-options-disabled');
+                    $('#marwchto-di-options').addClass('marwchto-field-options-disabled');
                 }
             });
 
             // Update preview when labels change
             $('#wct_di_field_label').on('input', function() {
-                $('#wct-preview-field-label').text($(this).val() || 'Delivery Instructions');
+                $('#marwchto-preview-field-label').text($(this).val() || 'Delivery Instructions');
             });
 
             $('#wct_di_preset_label').on('input', function() {
-                $('#wct-preview-preset-label').text($(this).val() || 'Common Instructions');
+                $('#marwchto-preview-preset-label').text($(this).val() || 'Common Instructions');
             });
 
             $('#wct_di_custom_label').on('input', function() {
-                $('#wct-preview-custom-label').text($(this).val() || 'Additional Instructions');
+                $('#marwchto-preview-custom-label').text($(this).val() || 'Additional Instructions');
             });
 
             $('#wct_di_custom_placeholder').on('input', function() {
-                $('#wct-preview-custom-textarea').attr('placeholder', $(this).val() || 'Any other delivery instructions...');
+                $('#marwchto-preview-custom-textarea').attr('placeholder', $(this).val() || 'Any other delivery instructions...');
             });
 
             // Add preset option
-            $('#wct-add-preset-option').on('click', function(e) {
+            $('#marwchto-add-preset-option').on('click', function(e) {
                 e.preventDefault();
-                var wrapper = $('.wct-preset-options-list');
-                var index = wrapper.find('.wct-preset-option-row').length;
+                var wrapper = $('.marwchto-preset-options-list');
+                var index = wrapper.find('.marwchto-preset-option-row').length;
 
                 var newRow = '<div class="wct-preset-option-row">' +
                     '<input type="text" name="checkout_toolkit_delivery_instructions_settings[preset_options][' + index + '][label]" value="" placeholder="' + (marwchtoAdmin.i18n.labelShownToCustomer || 'Label (shown to customer)') + '" class="regular-text">' +
@@ -346,13 +346,13 @@
             });
 
             // Remove preset option
-            $(document).on('click', '.wct-remove-preset-option', function(e) {
+            $(document).on('click', '.marwchto-remove-preset-option', function(e) {
                 e.preventDefault();
-                var wrapper = $(this).closest('.wct-preset-options-list');
+                var wrapper = $(this).closest('.marwchto-preset-options-list');
 
                 // Keep at least one option row
-                if (wrapper.find('.wct-preset-option-row').length > 1) {
-                    $(this).closest('.wct-preset-option-row').remove();
+                if (wrapper.find('.marwchto-preset-option-row').length > 1) {
+                    $(this).closest('.marwchto-preset-option-row').remove();
                 }
             });
         },
@@ -364,29 +364,29 @@
             const self = this;
 
             // Enable/disable options based on enabled checkbox
-            $('#wct-sl-enabled').on('change', function() {
+            $('#marwchto-sl-enabled').on('change', function() {
                 if ($(this).is(':checked')) {
-                    $('#wct-sl-options').removeClass('wct-field-options-disabled');
+                    $('#marwchto-sl-options').removeClass('marwchto-field-options-disabled');
                 } else {
-                    $('#wct-sl-options').addClass('wct-field-options-disabled');
+                    $('#marwchto-sl-options').addClass('marwchto-field-options-disabled');
                 }
             });
 
             // Update preview when field label changes
             $('#wct_sl_field_label').on('input', function() {
-                $('#wct-preview-field-label').text($(this).val() || 'Pickup Location');
+                $('#marwchto-preview-field-label').text($(this).val() || 'Pickup Location');
             });
 
             // Update preview dropdown when location names change
-            $(document).on('input', '.wct-location-name', function() {
+            $(document).on('input', '.marwchto-location-name', function() {
                 self.updateLocationPreview();
             });
 
             // Add location
-            $('#wct-add-location').on('click', function(e) {
+            $('#marwchto-add-location').on('click', function(e) {
                 e.preventDefault();
-                var wrapper = $('.wct-locations-list');
-                var index = wrapper.find('.wct-location-row').length;
+                var wrapper = $('.marwchto-locations-list');
+                var index = wrapper.find('.marwchto-location-row').length;
 
                 var newRow = '<div class="wct-location-row">' +
                     '<div class="wct-location-header">' +
@@ -424,13 +424,13 @@
             });
 
             // Remove location
-            $(document).on('click', '.wct-remove-location', function(e) {
+            $(document).on('click', '.marwchto-remove-location', function(e) {
                 e.preventDefault();
-                var wrapper = $(this).closest('.wct-locations-list');
+                var wrapper = $(this).closest('.marwchto-locations-list');
 
                 // Keep at least one location row
-                if (wrapper.find('.wct-location-row').length > 1) {
-                    $(this).closest('.wct-location-row').remove();
+                if (wrapper.find('.marwchto-location-row').length > 1) {
+                    $(this).closest('.marwchto-location-row').remove();
                     self.updateLocationNumbers();
                     self.updateLocationPreview();
                 }
@@ -441,14 +441,14 @@
          * Update location preview dropdown
          */
         updateLocationPreview: function() {
-            var $select = $('#wct-preview-location-select');
+            var $select = $('#marwchto-preview-location-select');
             if (!$select.length) return;
 
             var currentValue = $select.val();
             $select.find('option:not(:first)').remove();
 
-            $('.wct-location-row').each(function() {
-                var name = $(this).find('.wct-location-name').val();
+            $('.marwchto-location-row').each(function() {
+                var name = $(this).find('.marwchto-location-name').val();
                 var id = $(this).find('input[name*="[id]"]').val();
                 if (name) {
                     $select.append($('<option>', {
@@ -467,8 +467,8 @@
          * Update location numbers
          */
         updateLocationNumbers: function() {
-            $('.wct-location-row').each(function(index) {
-                $(this).find('.wct-location-number').text(index + 1);
+            $('.marwchto-location-row').each(function(index) {
+                $(this).find('.marwchto-location-number').text(index + 1);
             });
         },
 
@@ -482,7 +482,7 @@
             // Toggle form fields based on enabled state
             $('#time_window_enabled').on('change', function() {
                 var enabled = $(this).is(':checked');
-                var $fields = $(this).closest('.wct-settings-section').find('input:not(#time_window_enabled), select, button:not([type="submit"])');
+                var $fields = $(this).closest('.marwchto-settings-section').find('input:not(#time_window_enabled), select, button:not([type="submit"])');
 
                 if (enabled) {
                     $fields.prop('disabled', false);

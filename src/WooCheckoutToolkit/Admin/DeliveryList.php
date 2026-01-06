@@ -402,13 +402,13 @@ class DeliveryList extends \WP_List_Table
             $badge = '';
 
             if ($date < $today) {
-                $class = 'wct-date-past';
+                $class = 'marwchto-date-past';
                 $badge = '<span class="wct-date-badge past">' . esc_html__('Past', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $today->format('Y-m-d')) {
-                $class = 'wct-date-today';
+                $class = 'marwchto-date-today';
                 $badge = '<span class="wct-date-badge today">' . esc_html__('Today', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
             } elseif ($date->format('Y-m-d') === $tomorrow->format('Y-m-d')) {
-                $class = 'wct-date-tomorrow';
+                $class = 'marwchto-date-tomorrow';
                 $badge = '<span class="wct-date-badge tomorrow">' . esc_html__('Tomorrow', 'marwen-checkout-toolkit-for-woocommerce') . '</span>';
             }
 
@@ -437,7 +437,7 @@ class DeliveryList extends \WP_List_Table
             '<div class="wct-status-wrapper" data-order-id="%d">%s %s</div>',
             $order->get_id(),
             DeliveryStatus::get_badge_html($status),
-            DeliveryStatus::get_dropdown_html($status, 'delivery_status_' . $order->get_id(), 'wct-quick-status-' . $order->get_id())
+            DeliveryStatus::get_dropdown_html($status, 'delivery_status_' . $order->get_id(), 'marwchto-quick-status-' . $order->get_id())
         );
     }
 

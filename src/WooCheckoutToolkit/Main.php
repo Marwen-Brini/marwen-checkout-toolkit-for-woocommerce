@@ -270,7 +270,7 @@ final class Main
         // Flatpickr for date picker
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
-                'checkout-toolkit-flatpickr',
+                'marwchto-flatpickr',
                 MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
                 [],
                 '4.6.13',
@@ -278,7 +278,7 @@ final class Main
             );
 
             wp_enqueue_style(
-                'checkout-toolkit-flatpickr',
+                'marwchto-flatpickr',
                 MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
                 [],
                 '4.6.13'
@@ -287,7 +287,7 @@ final class Main
 
         // Blocks checkout script
         wp_enqueue_script(
-            'checkout-toolkit-blocks',
+            'marwchto-blocks',
             MARWCHTO_PLUGIN_URL . 'public/js/blocks-checkout.js',
             [
                 'wp-plugins',
@@ -301,11 +301,11 @@ final class Main
 
         // Pass settings to JavaScript
         $script_data = $this->get_blocks_script_data();
-        wp_localize_script('checkout-toolkit-blocks', 'marwchtoData', $script_data);
+        wp_localize_script('marwchto-blocks', 'marwchtoData', $script_data);
 
         // Blocks checkout styles
         wp_enqueue_style(
-            'checkout-toolkit-blocks-style',
+            'marwchto-blocks-style',
             MARWCHTO_PLUGIN_URL . 'public/css/blocks-checkout.css',
             [],
             MARWCHTO_VERSION
@@ -615,7 +615,7 @@ final class Main
             );
 
             wp_enqueue_style(
-                'wct-flatpickr-theme',
+                'marwchto-flatpickr-theme',
                 MARWCHTO_PLUGIN_URL . 'public/css/flatpickr-theme.css',
                 ['flatpickr'],
                 MARWCHTO_VERSION
@@ -624,7 +624,7 @@ final class Main
 
         // Main checkout CSS
         wp_enqueue_style(
-            'wct-checkout',
+            'marwchto-checkout',
             MARWCHTO_PLUGIN_URL . 'public/css/checkout.css',
             [],
             MARWCHTO_VERSION
@@ -647,7 +647,7 @@ final class Main
 
         // Main checkout JS
         wp_enqueue_script(
-            'wct-checkout',
+            'marwchto-checkout',
             MARWCHTO_PLUGIN_URL . 'public/js/checkout.js',
             $checkout_js_deps,
             MARWCHTO_VERSION,
@@ -655,7 +655,7 @@ final class Main
         );
 
         // Localize script with configuration
-        wp_localize_script('wct-checkout', 'marwchtoConfig', $this->get_frontend_config());
+        wp_localize_script('marwchto-checkout', 'marwchtoConfig', $this->get_frontend_config());
     }
 
     /**

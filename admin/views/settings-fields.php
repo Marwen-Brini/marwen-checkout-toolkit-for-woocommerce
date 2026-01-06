@@ -48,7 +48,7 @@ if (is_wp_error($marwchto_product_categories)) {
                 </td>
             </tr>
         </tbody>
-        <tbody id="wct-field-1-options" class="<?php echo empty($marwchto_field_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
+        <tbody id="wct-field-1-options" class="<?php echo empty($marwchto_field_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Field Type -->
             <tr>
                 <th scope="row">
@@ -384,7 +384,7 @@ if (is_wp_error($marwchto_product_categories)) {
                 </td>
             </tr>
         </tbody>
-        <tbody id="wct-field-2-options" class="<?php echo empty($marwchto_field_2_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
+        <tbody id="wct-field-2-options" class="<?php echo empty($marwchto_field_2_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Field Type 2 -->
             <tr>
                 <th scope="row">

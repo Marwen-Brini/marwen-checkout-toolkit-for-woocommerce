@@ -82,7 +82,7 @@ class OrderFields2
         $args = [
             'label' => $settings['field_label'],
             'required' => $settings['required'] ?? false,
-            'class' => ['form-row-wide', 'wct-custom-field', 'wct-custom-field-2'],
+            'class' => ['form-row-wide', 'marwchto-custom-field', 'marwchto-custom-field-2'],
         ];
 
         switch ($field_type) {

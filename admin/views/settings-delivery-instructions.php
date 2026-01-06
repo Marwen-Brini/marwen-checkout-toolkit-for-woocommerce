@@ -39,7 +39,7 @@ defined('ABSPATH') || exit;
             </tr>
         </tbody>
 
-        <tbody id="wct-di-options" class="<?php echo empty($marwchto_delivery_instructions_settings['enabled']) ? 'wct-field-options-disabled' : ''; ?>">
+        <tbody id="wct-di-options" class="<?php echo empty($marwchto_delivery_instructions_settings['enabled']) ? 'marwchto-field-options-disabled' : ''; ?>">
             <!-- Required -->
             <tr>
                 <th scope="row">

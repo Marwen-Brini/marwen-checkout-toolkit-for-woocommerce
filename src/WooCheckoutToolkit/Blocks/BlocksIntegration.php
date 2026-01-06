@@ -282,7 +282,7 @@ class BlocksIntegration implements IntegrationInterface
         }
 
         wp_register_script(
-            'checkout-toolkit-blocks',
+            'marwchto-blocks',
             $script_url,
             [
                 'wp-plugins',
@@ -297,7 +297,7 @@ class BlocksIntegration implements IntegrationInterface
 
         // Flatpickr for date picker
         wp_register_script(
-            'checkout-toolkit-flatpickr',
+            'marwchto-flatpickr',
             MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
             [],
             '4.6.13',
@@ -305,16 +305,16 @@ class BlocksIntegration implements IntegrationInterface
         );
 
         wp_register_style(
-            'checkout-toolkit-flatpickr',
+            'marwchto-flatpickr',
             MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
             [],
             '4.6.13'
         );
 
         wp_register_style(
-            'checkout-toolkit-blocks-style',
+            'marwchto-blocks-style',
             MARWCHTO_PLUGIN_URL . 'public/css/blocks-checkout.css',
-            ['checkout-toolkit-flatpickr'],
+            ['marwchto-flatpickr'],
             MARWCHTO_VERSION
         );
     }

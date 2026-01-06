@@ -240,7 +240,7 @@ class DeliveryCalendar
                                 $is_today = $date_str === $data['today'];
                                 $is_past = $date_str < $data['today'];
 
-                                $classes = ['wct-calendar-day'];
+                                $classes = ['marwchto-calendar-day'];
                                 if ($is_today) {
                                     $classes[] = 'today';
                                 }

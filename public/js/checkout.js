@@ -69,7 +69,7 @@
                 },
                 onReady: function(selectedDates, dateStr, instance) {
                     // Add custom class to calendar
-                    $(instance.calendarContainer).addClass('wct-calendar');
+                    $(instance.calendarContainer).addClass('marwchto-calendar');
                 }
             });
         },
@@ -143,14 +143,14 @@
          */
         initDeliveryMethodToggle: function() {
             // Toggle style
-            $('.wct-toggle-option input[type="radio"]').off('change.wct').on('change.wct', function() {
-                $('.wct-toggle-option').removeClass('active');
-                $(this).closest('.wct-toggle-option').addClass('active');
+            $('.marwchto-toggle-option input[type="radio"]').off('change.wct').on('change.wct', function() {
+                $('.marwchto-toggle-option').removeClass('active');
+                $(this).closest('.marwchto-toggle-option').addClass('active');
                 $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
             });
 
             // Radio style
-            $('.wct-radio-option input[type="radio"]').off('change.wct').on('change.wct', function() {
+            $('.marwchto-radio-option input[type="radio"]').off('change.wct').on('change.wct', function() {
                 $(document.body).trigger('wct_delivery_method_changed', [$(this).val()]);
             });
         },
@@ -164,9 +164,9 @@
             // Handle delivery method change - show/hide instructions
             $(document.body).off('wct_delivery_method_changed.instructions').on('wct_delivery_method_changed.instructions', function(e, method) {
                 if (method === 'pickup') {
-                    $('#wct-delivery-instructions-wrapper').slideUp(200);
+                    $('#marwchto-delivery-instructions-wrapper').slideUp(200);
                 } else {
-                    $('#wct-delivery-instructions-wrapper').slideDown(200);
+                    $('#marwchto-delivery-instructions-wrapper').slideDown(200);
                 }
             });
 
@@ -179,7 +179,7 @@
          */
         initDeliveryInstructionsCounter: function() {
             var $customField = $('#checkout_toolkit_delivery_instructions_custom');
-            var $counter = $('.wct-di-char-counter');
+            var $counter = $('.marwchto-di-char-counter');
 
             if (!$customField.length || !$counter.length) {
                 return;
@@ -214,15 +214,15 @@
             // Handle delivery method change - show/hide store location (OPPOSITE of delivery fields)
             $(document.body).off('wct_delivery_method_changed.storelocation').on('wct_delivery_method_changed.storelocation', function(e, method) {
                 if (method === 'pickup') {
-                    $('#wct-store-location-wrapper').slideDown(200);
+                    $('#marwchto-store-location-wrapper').slideDown(200);
                 } else {
-                    $('#wct-store-location-wrapper').slideUp(200);
+                    $('#marwchto-store-location-wrapper').slideUp(200);
                 }
             });
 
             // Show location details when a location is selected
             var $select = $('#checkout_toolkit_store_location');
-            var $details = $('#wct-store-location-details');
+            var $details = $('#marwchto-store-location-details');
 
             $select.off('change.wct').on('change.wct', function() {
                 var $selected = $(this).find('option:selected');
@@ -231,14 +231,14 @@
                 var hours = $selected.data('hours');
 
                 if ($(this).val() && (address || phone || hours)) {
-                    $('.wct-location-address').toggle(!!address);
-                    $('.wct-location-address .wct-detail-value').text(address || '');
+                    $('.marwchto-location-address').toggle(!!address);
+                    $('.marwchto-location-address .marwchto-detail-value').text(address || '');
 
-                    $('.wct-location-phone').toggle(!!phone);
-                    $('.wct-location-phone .wct-detail-value').text(phone || '');
+                    $('.marwchto-location-phone').toggle(!!phone);
+                    $('.marwchto-location-phone .marwchto-detail-value').text(phone || '');
 
-                    $('.wct-location-hours').toggle(!!hours);
-                    $('.wct-location-hours .wct-detail-value').text(hours || '');
+                    $('.marwchto-location-hours').toggle(!!hours);
+                    $('.marwchto-location-hours .marwchto-detail-value').text(hours || '');
 
                     $details.slideDown(200);
                 } else {

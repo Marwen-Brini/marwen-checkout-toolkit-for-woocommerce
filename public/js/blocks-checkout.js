@@ -305,7 +305,7 @@
 
         const renderToggle = () => {
             if (deliveryMethod.showAs === 'radio') {
-                return el('div', { className: 'wct-delivery-method-radio' },
+                return el('div', { className: 'marwchto-delivery-method-radio' },
                     el('label', { style: { marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' } },
                         el('input', {
                             type: 'radio',
@@ -329,7 +329,7 @@
                 );
             }
 
-            return el('div', { className: 'wct-delivery-method-toggle', style: toggleStyles },
+            return el('div', { className: 'marwchto-delivery-method-toggle', style: toggleStyles },
                 el('button', {
                     type: 'button',
                     style: optionStyles(selectedMethod === 'delivery'),
@@ -343,7 +343,7 @@
             );
         };
 
-        return el('div', { className: 'checkout-toolkit-delivery-method-block wc-block-components-checkout-step', style: { marginTop: '16px', marginBottom: '16px' } },
+        return el('div', { className: 'marwchto-delivery-method-block wc-block-components-checkout-step', style: { marginTop: '16px', marginBottom: '16px' } },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
                 el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
                     deliveryMethod.fieldLabel || 'Fulfillment Method'
@@ -412,7 +412,7 @@
         const presetOptions = deliveryInstructions.presetOptions || [];
 
         return el('div', {
-            className: 'checkout-toolkit-delivery-instructions-block wc-block-components-checkout-step',
+            className: 'marwchto-delivery-instructions-block wc-block-components-checkout-step',
             style: { marginTop: '16px', marginBottom: '16px' }
         },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
@@ -426,11 +426,11 @@
                     // Preset dropdown
                     el('div', { style: { marginBottom: '15px' } },
                         el('label', {
-                            htmlFor: 'wct-delivery-instructions-preset',
+                            htmlFor: 'marwchto-delivery-instructions-preset',
                             style: { display: 'block', marginBottom: '5px', fontWeight: '500' }
                         }, deliveryInstructions.presetLabel || 'Common Instructions'),
                         el('select', {
-                            id: 'wct-delivery-instructions-preset',
+                            id: 'marwchto-delivery-instructions-preset',
                             value: presetValue,
                             onChange: handlePresetChange,
                             required: deliveryInstructions.required,
@@ -445,11 +445,11 @@
                     // Custom textarea
                     el('div', null,
                         el('label', {
-                            htmlFor: 'wct-delivery-instructions-custom',
+                            htmlFor: 'marwchto-delivery-instructions-custom',
                             style: { display: 'block', marginBottom: '5px', fontWeight: '500' }
                         }, deliveryInstructions.customLabel || 'Additional Instructions'),
                         el('textarea', {
-                            id: 'wct-delivery-instructions-custom',
+                            id: 'marwchto-delivery-instructions-custom',
                             placeholder: deliveryInstructions.customPlaceholder || '',
                             value: customValue,
                             onChange: handleCustomChange,
@@ -518,7 +518,7 @@
         };
 
         return el('div', {
-            className: 'checkout-toolkit-time-window-block wc-block-components-checkout-step',
+            className: 'marwchto-time-window-block wc-block-components-checkout-step',
             style: { marginTop: '16px', marginBottom: '16px' }
         },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
@@ -597,7 +597,7 @@
         const selectedLocationData = locations.find(loc => loc.id === selectedLocation);
 
         return el('div', {
-            className: 'checkout-toolkit-store-location-block wc-block-components-checkout-step',
+            className: 'marwchto-store-location-block wc-block-components-checkout-step',
             style: { marginTop: '16px', marginBottom: '16px' }
         },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
@@ -702,7 +702,7 @@
         }
 
         return el('p', {
-            className: 'wct-estimated-delivery-message',
+            className: 'marwchto-estimated-delivery-message',
             style: {
                 margin: '0 0 16px 0',
                 padding: '12px 16px',
@@ -795,7 +795,7 @@
         if (!delivery || !delivery.enabled) return null;
         if (!isVisible) return null;
 
-        return el('div', { className: 'checkout-toolkit-delivery-date-block wc-block-components-checkout-step', style: { marginTop: '16px', marginBottom: '16px' } },
+        return el('div', { className: 'marwchto-delivery-date-block wc-block-components-checkout-step', style: { marginTop: '16px', marginBottom: '16px' } },
             el('div', { className: 'wc-block-components-checkout-step__heading' },
                 el('h2', { className: 'wc-block-components-title wc-block-components-checkout-step__title' },
                     delivery.label || 'Preferred Delivery Date',
@@ -809,7 +809,7 @@
                     el('input', {
                         ref: inputRef,
                         type: 'text',
-                        className: 'checkout-toolkit-datepicker',
+                        className: 'marwchto-datepicker',
                         placeholder: i18n?.selectDate || 'Select a date',
                         required: delivery.required,
                         readOnly: true,
@@ -930,8 +930,8 @@
     };
 
     // Create field components
-    const CustomFieldComponent = createCustomFieldComponent(customField, 'custom_field', 'checkout-toolkit-custom-field');
-    const CustomField2Component = createCustomFieldComponent(customField2, 'custom_field_2', 'checkout-toolkit-custom-field-2');
+    const CustomFieldComponent = createCustomFieldComponent(customField, 'custom_field', 'marwchto-custom-field');
+    const CustomField2Component = createCustomFieldComponent(customField2, 'custom_field_2', 'marwchto-custom-field-2');
 
     /**
      * Render a field at its configured position
@@ -954,7 +954,7 @@
 
         const container = document.createElement('div');
         container.id = containerId;
-        container.className = 'checkout-toolkit-positioned-field';
+        container.className = 'marwchto-positioned-field';
 
         const inserted = insertAtPosition(container, posConfig.selector, posConfig.insertPosition);
         if (!inserted) {
@@ -981,37 +981,37 @@
     const initPositionedFields = () => {
         // Render delivery method
         if (deliveryMethod && deliveryMethod.enabled) {
-            renderFieldAtPosition(DeliveryMethodComponent, 'wct-delivery-method-container', 'woocommerce_before_order_notes');
+            renderFieldAtPosition(DeliveryMethodComponent, 'marwchto-delivery-method-container', 'woocommerce_before_order_notes');
         }
 
         // Render delivery instructions (after delivery method, before order notes)
         if (deliveryInstructions && deliveryInstructions.enabled) {
-            renderFieldAtPosition(DeliveryInstructionsComponent, 'wct-delivery-instructions-container', 'woocommerce_before_order_notes');
+            renderFieldAtPosition(DeliveryInstructionsComponent, 'marwchto-delivery-instructions-container', 'woocommerce_before_order_notes');
         }
 
         // Render time window (after delivery instructions, before order notes)
         if (timeWindow && timeWindow.enabled) {
-            renderFieldAtPosition(TimeWindowComponent, 'wct-time-window-container', 'woocommerce_before_order_notes');
+            renderFieldAtPosition(TimeWindowComponent, 'marwchto-time-window-container', 'woocommerce_before_order_notes');
         }
 
         // Render store location selector (after delivery method, only shows when pickup is selected)
         if (storeLocations && storeLocations.enabled) {
-            renderFieldAtPosition(StoreLocationComponent, 'wct-store-location-container', 'woocommerce_before_order_notes');
+            renderFieldAtPosition(StoreLocationComponent, 'marwchto-store-location-container', 'woocommerce_before_order_notes');
         }
 
         // Render delivery date at its position
         if (delivery && delivery.enabled) {
-            renderFieldAtPosition(DeliveryDateField, 'wct-delivery-date-container', delivery.position || 'woocommerce_after_order_notes');
+            renderFieldAtPosition(DeliveryDateField, 'marwchto-delivery-date-container', delivery.position || 'woocommerce_after_order_notes');
         }
 
         // Render custom field 1 at its position
         if (customField && customField.enabled) {
-            renderFieldAtPosition(CustomFieldComponent, 'wct-custom-field-container', customField.position || 'woocommerce_after_order_notes');
+            renderFieldAtPosition(CustomFieldComponent, 'marwchto-custom-field-container', customField.position || 'woocommerce_after_order_notes');
         }
 
         // Render custom field 2 at its position
         if (customField2 && customField2.enabled) {
-            renderFieldAtPosition(CustomField2Component, 'wct-custom-field-2-container', customField2.position || 'woocommerce_after_order_notes');
+            renderFieldAtPosition(CustomField2Component, 'marwchto-custom-field-2-container', customField2.position || 'woocommerce_after_order_notes');
         }
     };
 
@@ -1104,7 +1104,7 @@
     /**
      * Register empty plugin (required for WooCommerce to recognize the integration)
      */
-    registerPlugin('checkout-toolkit-blocks', {
+    registerPlugin('marwchto-blocks', {
         render: () => null,
         scope: 'woocommerce-checkout'
     });
