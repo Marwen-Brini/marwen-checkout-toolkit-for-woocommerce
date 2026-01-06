@@ -83,7 +83,7 @@ class DeliveryManager
             wp_die(esc_html__('You do not have permission to access this page.', 'marwen-checkout-toolkit-for-woocommerce'));
         }
 
-        include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/delivery-dashboard.php';
+        include MARWCHTO_PLUGIN_DIR . 'admin/views/delivery-dashboard.php';
     }
 
     /**
@@ -115,16 +115,16 @@ class DeliveryManager
 
         wp_enqueue_style(
             'wct-delivery-admin',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/css/delivery-admin.css',
+            MARWCHTO_PLUGIN_URL . 'admin/css/delivery-admin.css',
             [],
-            CHECKOUT_TOOLKIT_VERSION
+            MARWCHTO_VERSION
         );
 
         wp_enqueue_script(
             'wct-delivery-admin',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/js/delivery-admin.js',
+            MARWCHTO_PLUGIN_URL . 'admin/js/delivery-admin.js',
             ['jquery'],
-            CHECKOUT_TOOLKIT_VERSION,
+            MARWCHTO_VERSION,
             true
         );
 
@@ -273,7 +273,7 @@ class DeliveryManager
      */
     private function get_email_content(\WC_Order $order, string $status): string
     {
-        $template_path = CHECKOUT_TOOLKIT_PLUGIN_DIR . 'templates/emails/delivery-status-change.php';
+        $template_path = MARWCHTO_PLUGIN_DIR . 'templates/emails/delivery-status-change.php';
 
         if (!file_exists($template_path)) {
             // Fallback content
@@ -525,7 +525,7 @@ class DeliveryManager
             $status_counts[$status] = ($status_counts[$status] ?? 0) + 1;
         }
 
-        include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/delivery-widget.php';
+        include MARWCHTO_PLUGIN_DIR . 'admin/views/delivery-widget.php';
     }
 
     /**

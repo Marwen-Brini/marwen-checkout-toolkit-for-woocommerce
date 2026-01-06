@@ -144,7 +144,7 @@ $checkout_toolkit_weekdays = [
                 <?php esc_html_e('Blocked Dates', 'marwen-checkout-toolkit-for-woocommerce'); ?>
             </th>
             <td>
-                <?php include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/blocked-dates-manager.php'; ?>
+                <?php include MARWCHTO_PLUGIN_DIR . 'admin/views/blocked-dates-manager.php'; ?>
             </td>
         </tr>
 

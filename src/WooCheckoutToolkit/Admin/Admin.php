@@ -32,7 +32,7 @@ class Admin
         $this->settings->init();
 
         add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
-        add_filter('plugin_action_links_' . CHECKOUT_TOOLKIT_PLUGIN_BASENAME, [$this, 'add_action_links']);
+        add_filter('plugin_action_links_' . MARWCHTO_PLUGIN_BASENAME, [$this, 'add_action_links']);
     }
 
     /**
@@ -44,9 +44,9 @@ class Admin
         if (in_array($hook, ['woocommerce_page_wct-settings', 'index.php'], true)) {
             wp_enqueue_style(
                 'wct-admin',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/css/admin.css',
+                MARWCHTO_PLUGIN_URL . 'admin/css/admin.css',
                 [],
-                CHECKOUT_TOOLKIT_VERSION
+                MARWCHTO_VERSION
             );
         }
 
@@ -57,9 +57,9 @@ class Admin
 
         wp_enqueue_script(
             'wct-admin',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'admin/js/admin.js',
+            MARWCHTO_PLUGIN_URL . 'admin/js/admin.js',
             ['jquery'],
-            CHECKOUT_TOOLKIT_VERSION,
+            MARWCHTO_VERSION,
             true
         );
 
@@ -70,14 +70,14 @@ class Admin
         // Flatpickr for blocked dates manager
         wp_enqueue_style(
             'flatpickr',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+            MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
             [],
             '4.6.13'
         );
 
         wp_enqueue_script(
             'flatpickr',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+            MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
             [],
             '4.6.13',
             true

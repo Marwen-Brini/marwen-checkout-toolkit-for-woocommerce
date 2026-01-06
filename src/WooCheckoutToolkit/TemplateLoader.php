@@ -78,7 +78,7 @@ class TemplateLoader
         }
 
         // Fall back to plugin templates
-        $plugin_template = CHECKOUT_TOOLKIT_PLUGIN_DIR . 'templates/' . $template_name;
+        $plugin_template = MARWCHTO_PLUGIN_DIR . 'templates/' . $template_name;
 
         if (file_exists($plugin_template)) {
             return $plugin_template;

@@ -41,7 +41,7 @@ class Activator
     {
         // Check PHP version
         if (version_compare(PHP_VERSION, '8.1', '<')) {
-            deactivate_plugins(plugin_basename(CHECKOUT_TOOLKIT_PLUGIN_FILE));
+            deactivate_plugins(plugin_basename(MARWCHTO_PLUGIN_FILE));
             wp_die(
                 esc_html__(
                     'Checkout Toolkit for WooCommerce requires PHP 8.1 or higher.',
@@ -54,7 +54,7 @@ class Activator
 
         // Check WordPress version
         if (version_compare(get_bloginfo('version'), '5.8', '<')) {
-            deactivate_plugins(plugin_basename(CHECKOUT_TOOLKIT_PLUGIN_FILE));
+            deactivate_plugins(plugin_basename(MARWCHTO_PLUGIN_FILE));
             wp_die(
                 esc_html__(
                     'Checkout Toolkit for WooCommerce requires WordPress 5.8 or higher.',
@@ -92,6 +92,6 @@ class Activator
             add_option('checkout_toolkit_activated_at', time());
         }
 
-        update_option('checkout_toolkit_version', CHECKOUT_TOOLKIT_VERSION);
+        update_option('checkout_toolkit_version', MARWCHTO_VERSION);
     }
 }

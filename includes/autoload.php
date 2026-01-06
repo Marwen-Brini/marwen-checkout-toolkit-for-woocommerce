@@ -12,7 +12,7 @@ spl_autoload_register(function ($class) {
     $prefix = 'WooCheckoutToolkit\\';
 
     // Base directory for the namespace prefix
-    $base_dir = CHECKOUT_TOOLKIT_PLUGIN_DIR . 'src/WooCheckoutToolkit/';
+    $base_dir = MARWCHTO_PLUGIN_DIR . 'src/WooCheckoutToolkit/';
 
     // Check if the class uses the namespace prefix
     $len = strlen($prefix);

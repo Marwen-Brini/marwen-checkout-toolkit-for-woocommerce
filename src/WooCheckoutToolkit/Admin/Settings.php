@@ -643,7 +643,7 @@ class Settings
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation, no data processing.
         $active_tab = isset($_GET['tab']) ? sanitize_key(wp_unslash($_GET['tab'])) : 'delivery-method';
 
-        include CHECKOUT_TOOLKIT_PLUGIN_DIR . 'admin/views/settings-page.php';
+        include MARWCHTO_PLUGIN_DIR . 'admin/views/settings-page.php';
     }
 
     /**

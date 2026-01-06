@@ -274,8 +274,8 @@ class BlocksIntegration implements IntegrationInterface
      */
     private function register_block_scripts(): void
     {
-        $script_path = CHECKOUT_TOOLKIT_PLUGIN_DIR . 'public/js/blocks-checkout.js';
-        $script_url = CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/blocks-checkout.js';
+        $script_path = MARWCHTO_PLUGIN_DIR . 'public/js/blocks-checkout.js';
+        $script_url = MARWCHTO_PLUGIN_URL . 'public/js/blocks-checkout.js';
 
         if (!file_exists($script_path)) {
             return;
@@ -291,14 +291,14 @@ class BlocksIntegration implements IntegrationInterface
                 'wc-blocks-checkout',
                 'wc-settings',
             ],
-            CHECKOUT_TOOLKIT_VERSION,
+            MARWCHTO_VERSION,
             true
         );
 
         // Flatpickr for date picker
         wp_register_script(
             'checkout-toolkit-flatpickr',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+            MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
             [],
             '4.6.13',
             true
@@ -306,16 +306,16 @@ class BlocksIntegration implements IntegrationInterface
 
         wp_register_style(
             'checkout-toolkit-flatpickr',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+            MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
             [],
             '4.6.13'
         );
 
         wp_register_style(
             'checkout-toolkit-blocks-style',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/blocks-checkout.css',
+            MARWCHTO_PLUGIN_URL . 'public/css/blocks-checkout.css',
             ['checkout-toolkit-flatpickr'],
-            CHECKOUT_TOOLKIT_VERSION
+            MARWCHTO_VERSION
         );
     }
 

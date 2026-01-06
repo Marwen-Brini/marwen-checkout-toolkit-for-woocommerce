@@ -137,7 +137,7 @@ final class Main
     public function init(): void
     {
         Logger::info('Initializing Checkout Toolkit for WooCommerce', [
-            'version' => CHECKOUT_TOOLKIT_VERSION,
+            'version' => MARWCHTO_VERSION,
             'php_version' => PHP_VERSION,
             'checkout_type' => CheckoutDetector::get_checkout_type(),
         ]);
@@ -271,7 +271,7 @@ final class Main
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
                 'checkout-toolkit-flatpickr',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+                MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
                 [],
                 '4.6.13',
                 true
@@ -279,7 +279,7 @@ final class Main
 
             wp_enqueue_style(
                 'checkout-toolkit-flatpickr',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+                MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
                 [],
                 '4.6.13'
             );
@@ -288,14 +288,14 @@ final class Main
         // Blocks checkout script
         wp_enqueue_script(
             'checkout-toolkit-blocks',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/blocks-checkout.js',
+            MARWCHTO_PLUGIN_URL . 'public/js/blocks-checkout.js',
             [
                 'wp-plugins',
                 'wp-element',
                 'wp-data',
                 'wc-blocks-checkout',
             ],
-            CHECKOUT_TOOLKIT_VERSION,
+            MARWCHTO_VERSION,
             true
         );
 
@@ -306,9 +306,9 @@ final class Main
         // Blocks checkout styles
         wp_enqueue_style(
             'checkout-toolkit-blocks-style',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/blocks-checkout.css',
+            MARWCHTO_PLUGIN_URL . 'public/css/blocks-checkout.css',
             [],
-            CHECKOUT_TOOLKIT_VERSION
+            MARWCHTO_VERSION
         );
     }
 
@@ -609,25 +609,25 @@ final class Main
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_style(
                 'flatpickr',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
+                MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.css',
                 [],
                 '4.6.13'
             );
 
             wp_enqueue_style(
                 'wct-flatpickr-theme',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/flatpickr-theme.css',
+                MARWCHTO_PLUGIN_URL . 'public/css/flatpickr-theme.css',
                 ['flatpickr'],
-                CHECKOUT_TOOLKIT_VERSION
+                MARWCHTO_VERSION
             );
         }
 
         // Main checkout CSS
         wp_enqueue_style(
             'wct-checkout',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/css/checkout.css',
+            MARWCHTO_PLUGIN_URL . 'public/css/checkout.css',
             [],
-            CHECKOUT_TOOLKIT_VERSION
+            MARWCHTO_VERSION
         );
 
         // Build dependencies array - flatpickr only needed if delivery date enabled
@@ -637,7 +637,7 @@ final class Main
         if (!empty($delivery_settings['enabled'])) {
             wp_enqueue_script(
                 'flatpickr',
-                CHECKOUT_TOOLKIT_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
+                MARWCHTO_PLUGIN_URL . 'assets/vendor/flatpickr/flatpickr.min.js',
                 [],
                 '4.6.13',
                 true
@@ -648,9 +648,9 @@ final class Main
         // Main checkout JS
         wp_enqueue_script(
             'wct-checkout',
-            CHECKOUT_TOOLKIT_PLUGIN_URL . 'public/js/checkout.js',
+            MARWCHTO_PLUGIN_URL . 'public/js/checkout.js',
             $checkout_js_deps,
-            CHECKOUT_TOOLKIT_VERSION,
+            MARWCHTO_VERSION,
             true
         );
 
