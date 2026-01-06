@@ -35,9 +35,11 @@ define('CHECKOUT_TOOLKIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CHECKOUT_TOOLKIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('CHECKOUT_TOOLKIT_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-// Composer autoloader
+// Autoloader - use Composer if available, otherwise custom PSR-4 autoloader
 if (file_exists(CHECKOUT_TOOLKIT_PLUGIN_DIR . 'vendor/autoload.php')) {
     require_once CHECKOUT_TOOLKIT_PLUGIN_DIR . 'vendor/autoload.php';
+} else {
+    require_once CHECKOUT_TOOLKIT_PLUGIN_DIR . 'includes/autoload.php';
 }
 
 /**
