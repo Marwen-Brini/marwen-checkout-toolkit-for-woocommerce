@@ -34,7 +34,7 @@
     let settings = {};
 
     if (typeof window.wc !== 'undefined' && typeof window.wc.wcSettings !== 'undefined' && typeof window.wc.wcSettings.getSetting === 'function') {
-        settings = window.wc.wcSettings.getSetting('checkout-toolkit_data', {});
+        settings = window.wc.wcSettings.getSetting('marwchto_data', {});
     }
 
     if (!settings || Object.keys(settings).length === 0) {
