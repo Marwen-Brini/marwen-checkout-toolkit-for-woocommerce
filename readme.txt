@@ -72,7 +72,7 @@ Need more? Upgrade to Checkout Toolkit Pro for WooCommerce for:
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/checkout-toolkit-for-woo/`
+1. Upload the plugin files to `/wp-content/plugins/marwen-checkout-toolkit-for-woocommerce/`
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Go to WooCommerce > Checkout Toolkit to configure settings
 4. Enable the features you want and customize to your needs
@@ -81,7 +81,7 @@ Need more? Upgrade to Checkout Toolkit Pro for WooCommerce for:
 
 = Does this work with WooCommerce blocks checkout? =
 
-Currently, the plugin works with the classic WooCommerce checkout. Block checkout support is planned for a future release.
+Yes! The plugin fully supports both classic (shortcode) checkout and WooCommerce Blocks checkout. It auto-detects which checkout type you're using and renders fields appropriately.
 
 = Can I change where the fields appear on checkout? =
 
@@ -97,16 +97,13 @@ Yes, the plugin is fully translation-ready with a .pot file included.
 
 = How do I override the templates? =
 
-Copy templates from `checkout-toolkit-for-woo/templates/` to `your-theme/woocommerce/checkout-toolkit-for-woo/` and modify as needed.
+Copy templates from `marwen-checkout-toolkit-for-woocommerce/templates/` to `your-theme/woocommerce/marwen-checkout-toolkit-for-woocommerce/` and modify as needed.
 
 == Screenshots ==
 
-1. Delivery date picker on checkout
-2. Custom field for special instructions
-3. Admin settings - Delivery Date tab
-4. Admin settings - Custom Field tab
-5. Order details in admin
-6. Order information in customer email
+1. Checkout page with Delivery selected - delivery/pickup toggle, delivery instructions, preferred time, custom fields, and delivery date picker
+2. Checkout page with Pickup selected - fulfillment toggle, store location selector, and custom fields
+3. Admin settings - Pickup/Delivery tab with toggle configuration, labels, display style, and live preview
 
 == Changelog ==
 

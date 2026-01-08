@@ -23,7 +23,7 @@ $marwchto_store_locations_settings = get_option('marwchto_store_locations_settin
 ?>
 
 <div class="wrap marwchto-settings-wrap">
-    <h1><?php esc_html_e('Checkout Toolkit for WooCommerce', 'marwen-checkout-toolkit-for-woocommerce'); ?></h1>
+    <h1><?php esc_html_e('Marwen Checkout Toolkit for WooCommerce', 'marwen-checkout-toolkit-for-woocommerce'); ?></h1>
 
     <nav class="nav-tab-wrapper marwchto-nav-tabs">
         <a href="?page=marwchto-settings&tab=delivery-method"

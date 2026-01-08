@@ -14,10 +14,15 @@ Comprehensive expansion of the Marwen Checkout Toolkit for WooCommerce plugin wi
 
 **Plugin Name:** Marwen Checkout Toolkit for WooCommerce
 **Text Domain:** `marwen-checkout-toolkit-for-woocommerce`
-**WordPress.org Submission:** Resubmitted after review fixes (January 4, 2026)
-**Slug Request:** Requested `marwen-checkout-toolkit-for-woocommerce`
+**Unique Prefix:** `marwchto` (WordPress.org compliant)
+**WordPress.org Status:** ✅ **APPROVED** (January 7, 2026)
 
-**Next Phase:** Pro version development (after approval)
+**WordPress.org URLs:**
+- **SVN Repository:** https://plugins.svn.wordpress.org/marwen-checkout-toolkit-for-woocommerce
+- **Public Plugin Page:** https://wordpress.org/plugins/marwen-checkout-toolkit-for-woocommerce
+- **SVN Username:** marwenbrini
+
+**Next Phase:** Pro version development
 
 ---
 
@@ -25,15 +30,25 @@ Comprehensive expansion of the Marwen Checkout Toolkit for WooCommerce plugin wi
 
 ### Settings Storage
 Each feature uses its own WordPress option for clean separation:
-- Pattern: `checkout_toolkit_{feature}_settings`
+- Pattern: `marwchto_{feature}_settings`
 - All options registered via `Settings::register_settings()`
 - Sanitization callbacks handle null input (for tab-based saving)
 
 ### Order Meta Storage
-Custom order data stored with `_wct_` prefix:
-- Pattern: `_wct_{field_name}`
+Custom order data stored with `_marwchto_` prefix:
+- Pattern: `_marwchto_{field_name}`
 - Compatible with WooCommerce HPOS (High-Performance Order Storage)
 - Accessed via `$order->get_meta()` / `$order->update_meta_data()`
+
+### Prefix Convention (WordPress.org Compliant)
+All plugin identifiers use the unique `marwchto` prefix:
+- Constants: `MARWCHTO_*`
+- Options: `marwchto_*`
+- Hooks/Filters: `marwchto_*`
+- Script/Style handles: `marwchto-*`
+- CSS classes: `marwchto-*`
+- JS objects: `marwchto*`
+- Store API namespace: `marwchto`
 
 ### Dual Checkout Support
 All features must work in both checkout types:
@@ -1426,18 +1441,18 @@ templates/checkout/gift-options.php
 
 ### Coding Standards
 
-All template variables in `admin/views/*.php` files must use the `$checkout_toolkit_` prefix to comply with WordPress Plugin Check requirements.
+All template variables in `admin/views/*.php` files must use the `$marwchto_` prefix to comply with WordPress Plugin Check requirements.
 
 Example:
 ```php
 // Correct - uses plugin prefix
-$checkout_toolkit_settings = get_option('checkout_toolkit_delivery_settings');
-foreach ($checkout_toolkit_positions as $checkout_toolkit_hook => $checkout_toolkit_label) {
+$marwchto_settings = get_option('marwchto_delivery_settings');
+foreach ($marwchto_positions as $marwchto_hook => $marwchto_label) {
     // ...
 }
 
 // Incorrect - will fail plugin check
-$settings = get_option('checkout_toolkit_delivery_settings');
+$settings = get_option('marwchto_delivery_settings');
 foreach ($positions as $hook => $label) {
     // ...
 }
@@ -1464,14 +1479,14 @@ foreach ($positions as $hook => $label) {
 // Schema registration
 woocommerce_store_api_register_endpoint_data([
     'endpoint' => 'checkout',
-    'namespace' => 'checkout-toolkit',
+    'namespace' => 'marwchto',
     'schema_callback' => [$this, 'get_store_api_schema'],
     'schema_type' => ARRAY_A,
 ]);
 
 // Schema definition
 'field_name' => [
-    'description' => __('Description', 'checkout-toolkit-for-woo'),
+    'description' => __('Description', 'marwen-checkout-toolkit-for-woocommerce'),
     'type' => ['string', 'null'],  // Allow null for optional
     'context' => ['view', 'edit'],
     'default' => '',
@@ -1489,7 +1504,7 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
     const handleChange = (e) => {
         const newValue = e.target.value;
         setValue(newValue);
-        setExtensionData('checkout-toolkit', 'field_key', newValue);
+        setExtensionData('marwchto', 'field_key', newValue);
     };
 
     if (!settings.myField?.enabled) return null;
@@ -1503,6 +1518,94 @@ const MyFieldComponent = ({ cart, extensions, setExtensionData }) => {
 ---
 
 ## Changelog
+
+### 2026-01-08 (Session 11) - SVN Deployment & Screenshots
+
+**Initial deployment to WordPress.org SVN completed!**
+
+- Deployed plugin to SVN trunk/
+- Created version tag: tags/1.0.0
+- Added 3 screenshots to assets/:
+  - `screenshot-1.png` - Checkout with Delivery selected
+  - `screenshot-2.png` - Checkout with Pickup selected
+  - `screenshot-3.png` - Admin settings page
+- Updated readme.txt screenshot descriptions
+- Fixed outdated plugin name references in readme.txt and .pot file
+- Documented Git & SVN sync workflow in PROGRESS.md
+
+**Plugin is now LIVE on WordPress.org!**
+
+---
+
+### 2026-01-07 (Session 10) - WordPress.org Approval
+
+**Plugin APPROVED on WordPress.org!**
+
+- Plugin hosting request approved by WordPress.org review team
+- SVN repository created: https://plugins.svn.wordpress.org/marwen-checkout-toolkit-for-woocommerce
+- Public plugin page: https://wordpress.org/plugins/marwen-checkout-toolkit-for-woocommerce
+- SVN username: marwenbrini
+
+---
+
+### 2026-01-06 (Session 9) - WordPress.org Review Fixes Round 2
+
+**Review Response:** Addressed second review from WordPress.org plugin review team.
+
+#### Issue 1: Autoloader Error
+- Fixed `Class "WooCheckoutToolkit\Activator" not found` error
+- Added fallback to custom PSR-4 autoloader when `vendor/autoload.php` doesn't exist
+- Plugin now loads correctly without Composer vendor directory
+
+#### Issue 2: Generic Prefixes
+Renamed all prefixes from generic names to unique `marwchto` prefix:
+
+| Old Prefix | New Prefix | Count |
+|------------|------------|-------|
+| `CHECKOUT_TOOLKIT_*` | `MARWCHTO_*` | Constants |
+| `checkout_toolkit_*` | `marwchto_*` | Options, hooks, filters |
+| `checkoutToolkitData` | `marwchtoData` | JS objects |
+| `wctConfig`, `wctAdmin`, `wctDelivery` | `marwchtoConfig`, `marwchtoAdmin`, `marwchtoDelivery` | JS objects |
+| `checkout-toolkit-*`, `wct-*` | `marwchto-*` | Script/style handles |
+| `.wct-*` | `.marwchto-*` | CSS classes |
+| `wct-settings` | `marwchto-settings` | Menu slug |
+| `checkout-toolkit` (Store API) | `marwchto` | Store API namespace |
+| `wct_*` | `marwchto_*` | Event names, nonces |
+
+**Files changed:** 30+ PHP files, 3 JS files, 3 CSS files
+
+#### Issue 3: Text Domain Fix
+- Fixed accidental text domain corruption during sed replacement
+- Restored `marwen-checkout-toolkit-for-woocommerce` text domain across all files
+
+#### Settings Migration
+- Created migration for existing installations (old options to new prefixes)
+- Old: `checkout_toolkit_*_settings` → New: `marwchto_*_settings`
+
+#### Production Build
+- Created clean production copy without dev files
+- Production zip: `marwen-checkout-toolkit-for-woocommerce.zip` (160KB)
+- Location: `/home/gilgamesch/Desktop/repos/projects/wordpress/checkout/`
+
+#### Plugin Check Results
+- **0 Errors**
+- **Only Warnings:** Slow DB queries (unavoidable for WooCommerce order meta)
+
+**Commits (11 total):**
+1. Fix autoloader to load custom PSR-4 autoloader fallback
+2. Rename constants CHECKOUT_TOOLKIT_* to MARWCHTO_*
+3. Rename options/hooks checkout_toolkit_* to marwchto_*
+4. Rename JS objects to marwchto prefix
+5. Rename script handles and CSS classes to marwchto- prefix
+6. Rename checkout-toolkit CSS classes and Store API namespace to marwchto
+7. Rename wct_ event names and nonces to marwchto_
+8. Rename all remaining wct- and wct_ prefixes to marwchto
+9. Fix blocks JS settings key to marwchto_data
+10. Fix text domain back to marwen-checkout-toolkit-for-woocommerce
+
+**Status:** Awaiting WordPress.org team review
+
+---
 
 ### 2026-01-04 (Session 8) - WordPress.org Review Fixes
 

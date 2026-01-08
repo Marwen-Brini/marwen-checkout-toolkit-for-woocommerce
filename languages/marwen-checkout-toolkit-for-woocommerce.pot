@@ -17,12 +17,12 @@ msgstr ""
 #. Plugin Name of the plugin
 #: marwen-checkout-toolkit-for-woocommerce.php
 #: admin/views/settings-page.php:17
-msgid "Checkout Toolkit for WooCommerce"
+msgid "Marwen Checkout Toolkit for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
 #: marwen-checkout-toolkit-for-woocommerce.php
-msgid "https://github.com/Marwen-Brini/checkout-toolkit-for-woo"
+msgid "https://github.com/Marwen-Brini/marwen-checkout-toolkit-for-woocommerce"
 msgstr ""
 
 #. Description of the plugin
